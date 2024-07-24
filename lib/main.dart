@@ -2,6 +2,7 @@ import 'package:app_gemini/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:app_gemini/pages/chat.dart';
 import 'package:app_gemini/pages/topics.dart';
+import 'package:app_gemini/pages/detailT.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -20,6 +21,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home:  Menu(),
+          routes: {
+      '/detail': (context) => DetailScreen(),
+    },
     );
   }
 }
