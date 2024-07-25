@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:app_gemini/pages/chat.dart';
 import 'package:app_gemini/pages/topics.dart';
 import 'package:app_gemini/pages/detailT.dart';
+import 'package:app_gemini/pages/storage.dart';
+import 'package:app_gemini/pages/quiz.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -23,6 +25,9 @@ class MyApp extends StatelessWidget {
       home:  Menu(),
           routes: {
       '/detail': (context) => DetailScreen(),
+      '/storage': (context) => Storagepage(),
+      '/quiz': (context) => Quizpage(),
+
     },
     );
   }
