@@ -62,27 +62,6 @@ class _QuizPageState extends State<QuizPage> {
       }
     });
   }
-  /*
-  void _nextQuestion() {
-    if (_optionSelected && _isCorrect) {
-      setState(() {
-    if (_currentStep < _questions.length - 1) {
-            _currentStep++;
-          } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ResultsPage(correctAnswers, _questions.length),
-            ),
-          );
-          }       _selectedOption = null;
-            _optionSelected = false;
-            _feedbackMessage = null;
-                  correctAnswers++;
-          });
-        }
-      }*/
-
         void _nextQuestion() async {
     if (_answerSubmitted) {
       if (_questions[_currentStep].isAnswerEvaluatedByAPI) {
@@ -220,7 +199,7 @@ Widget _buildQuestion(Question question) {
 }
 Widget _buildButton() {
   return ElevatedButton(
-    onPressed: _answerSubmitted
+    onPressed: _answerSubmitted 
         ? () {
             setState(() {
               _showResult = !_showResult; 
@@ -292,8 +271,12 @@ class ResultsPage extends StatelessWidget {
              TextButton(
               onPressed: () {
           
-                Navigator.pop(context); 
-              },
+Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => QuizPage(dato: "",),
+        ),
+      );              },
               child: Text('Continuar'),
             ),
             TextButton(
