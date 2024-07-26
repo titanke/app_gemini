@@ -12,19 +12,18 @@ class DetailScreen extends StatelessWidget {
         title: Text('Temas: $dato'),
         actions: [
           IconButton(
-            icon: Icon(Icons.play_arrow),
-            onPressed: () {
-              // Navigate to play screen, passing the dato
-              Navigator.pushNamed(context, '/quiz', arguments: dato);
-            },
-          ),
-          IconButton(
             icon: Icon(Icons.storage),
             onPressed: () {
-              // Navigate to storage screen, passing the dato
               Navigator.pushNamed(context, '/storage', arguments: dato);
             },
           ),
+          IconButton(
+            icon: Icon(Icons.play_arrow),
+            onPressed: () {
+              Navigator.pushNamed(context, '/quiz', arguments: dato);
+            },
+          ),
+
         ],
       ),
       body: Center(
