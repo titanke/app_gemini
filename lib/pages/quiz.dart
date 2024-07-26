@@ -17,6 +17,8 @@ class _QuizPageState extends State<QuizPage> {
   int correctAnswers = 0;
   String? _answerText;
   bool _answerSubmitted = false;
+  bool _showResult = false;
+  bool _hasSubmitted = false;
 
   final String _apiUrl = 'YOUR_API_URL'; 
   final http.Client _httpClient = http.Client();
@@ -86,11 +88,11 @@ class _QuizPageState extends State<QuizPage> {
       if (_questions[_currentStep].isAnswerEvaluatedByAPI) {
         final response = await _evaluateAnswer(_answerText!);
         setState(() {
-          _isCorrect = response['isCorrect']; // Parse the response to determine correctness
+          _isCorrect = response['isCorrect']; 
+          _showResult = false;
         });
       } else {
-        _isCorrect =
-            _answerText == _questions[_currentStep].correctAnswer; // Local evaluation
+        _isCorrect = _answerText == _questions[_currentStep].correctAnswer; // Local evaluation
       }
 
       setState(() {
@@ -138,7 +140,6 @@ class _QuizPageState extends State<QuizPage> {
     });
   }
     Future<Map<String, dynamic>> _evaluateAnswer(String answer) async {
-    // Make an HTTP POST request to your API endpoint for evaluation
     final uri = Uri.parse(_apiUrl + '/evaluate'); // Adjust endpoint URL if needed
     final response = await _httpClient.post(uri, body: {'answer': answer});
 
@@ -156,67 +157,6 @@ class _QuizPageState extends State<QuizPage> {
       //
 
   @override
-  /*
-  Widget build(BuildContext context) {
-       return Scaffold(
-      appBar: AppBar(title: Text('Temas: ${widget.dato}')),
-      body: Stepper(
-      controlsBuilder: (BuildContext context, ControlsDetails controls) {
-      return SizedBox.shrink(); 
-    },
-        type: StepperType.horizontal,
-        currentStep: _currentStep,
-        
-        onStepTapped: (step) {
-          if (step == _currentStep + 1 && _isCorrect && _optionSelected) {
-            
-            setState(() {
-              _currentStep = step;
-            });
-          }
-        },        steps: _questions.map((question) {
-          return Step(
-            title: Text(''),
-              state: question.isCompleted ? StepState.complete : StepState.disabled,
-
-            content: Column(
-              children: [
-                Text(question.question),
-                ...question.options.map((option) {
-                  return RadioListTile(
-                    title: Text(option),
-                    value: option,
-                    groupValue: _selectedOption,
-                    onChanged: _answerSelected,
-                  );
-                }),
-                if (_feedbackMessage != null) Text(_feedbackMessage!),
-                ElevatedButton(
-                  onPressed: _nextQuestion,
-                  child: Text('Confirmar'),
-                ),
-              ],
-              
-            ),
-            
-          );
-        }).toList(),
-        
-      ),
-    );
-  }
-}
-
-class Question {
-  final String question;
-  final List<String> options;
-  final String correctAnswer;
-  bool isCompleted = false;
-
-  Question({required this.question, required this.options, required this.correctAnswer});
-}*/
-
- 
 
 Widget build(BuildContext context) {
        return Scaffold(
@@ -245,11 +185,7 @@ Widget build(BuildContext context) {
               children: [
                 Text(question.question),
                  _buildQuestion(question),
-                if (_feedbackMessage != null) Text(_feedbackMessage!),
-                ElevatedButton(
-                  onPressed: _nextQuestion,
-                  child: Text('Siguiente'),
-                ),
+               _buildButton()
               ],
               
             ),
@@ -269,7 +205,7 @@ Widget _buildQuestion(Question question) {
                   title: Text(option),
                   value: option,
                   groupValue: _selectedOption,
-                  onChanged: _answerSelected,
+                  onChanged: _hasSubmitted ? null : _answerSelected,
                 ))
             .toList(),
       );
@@ -282,9 +218,39 @@ Widget _buildQuestion(Question question) {
       return Text('Tipo de pregunta no soportado');
   }
 }
+Widget _buildButton() {
+  return ElevatedButton(
+    onPressed: _answerSubmitted
+        ? () {
+            setState(() {
+              _showResult = !_showResult; 
+              _hasSubmitted = !_hasSubmitted;
 
-
-
+              if (_showResult) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          _isCorrect
+                              ? '¡Respuesta correcta!'
+                              : '¡Respuesta incorrecta!',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              } else {
+                _nextQuestion();
+              }
+            });
+          }
+        : null,
+    child: Text(_showResult ? 'Siguiente' : 'Comprobar'),
+  );
+}
 
 
 }
