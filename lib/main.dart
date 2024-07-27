@@ -6,7 +6,17 @@ import 'package:app_gemini/pages/detailT.dart';
 import 'package:app_gemini/pages/storage.dart';
 import 'package:app_gemini/pages/quiz.dart';
 import 'package:app_gemini/login/login.dart';
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // This is the last thing you need to add.
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 final colorper = Color.fromRGBO(7, 3, 49, 1);
@@ -23,13 +33,14 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
       ),
-      home:  Menu(),
-          routes: {
-      '/detail': (context) => DetailScreen(),
-      '/storage': (context) => Storagepage(),
-      '/quiz': (context) => QuizPage(dato: ""),
-
-    },
+      //home:  Menu(),
+      home: LoginPage(),
+      routes: {
+        '/home': (context) => Menu(),
+        '/detail': (context) => DetailScreen(),
+        '/storage': (context) => Storagepage(),
+        '/quiz': (context) => QuizPage(dato: ""),
+      },
     );
   }
 }
