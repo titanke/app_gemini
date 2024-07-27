@@ -11,21 +11,35 @@ import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
 
-  // This is the last thing you need to add.
+
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
 }
+
+
 final colorper = Color.fromRGBO(7, 3, 49, 1);
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+
+        print('User is currently signed out!');
+      } else {
+        print('User is signed in!');
+
+      }
+    });
+
     return MaterialApp(
       title: 'App gemini',
       theme: ThemeData(
@@ -34,7 +48,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       //home:  Menu(),
-      home: LoginPage(),
+      home: AuthenticationWrapper(),
       routes: {
         '/home': (context) => Menu(),
         '/detail': (context) => DetailScreen(),
@@ -44,6 +58,26 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+class AuthenticationWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasData) {
+          return Menu();
+        }
+        return LoginPage();
+      },
+    );
+  }
+}
+
+
 class Menu extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
