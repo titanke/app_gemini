@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:app_gemini/widgets/customcard.dart';
+import 'package:app_gemini/main.dart';
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
 
@@ -9,8 +10,6 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  // Lista dinámica para el contenido
-  List<String> datos = ['Dato 1', 'Dato 2', 'Dato 3', 'Dato 4', 'Dato 5', 'Dato 6'];
 
   // Ruta para la pantalla de detalle
   final String detailScreenRoute = '/detail';
@@ -61,6 +60,8 @@ CarouselSlider.builder(
     );
   },
 ),
+          Text("Temas favoritos",textAlign:TextAlign.left,),
+
 SizedBox(
   child: GridView.builder(
     shrinkWrap: true,
@@ -85,6 +86,6 @@ SizedBox(
   }
 
   void _navigateToDetailScreen(String dato) {
-    Navigator.pushNamed(context, detailScreenRoute, arguments: dato);
+    Navigator.pushNamed(context, '/detail', arguments: dato);
   }
 }

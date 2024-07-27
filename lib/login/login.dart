@@ -17,7 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
  bool _isSigning = false;
  final FirebaseAuthService _auth = FirebaseAuthService();
- final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
  TextEditingController _emailController = TextEditingController();
  TextEditingController _passwordController = TextEditingController();
 
@@ -33,7 +33,6 @@ class _LoginPageState extends State<LoginPage> {
   return Scaffold(
    appBar: AppBar(
     automaticallyImplyLeading: false,
-    title: Text("Login"),
    ),
    body: Center(
     child: Padding(
@@ -179,33 +178,14 @@ class _LoginPageState extends State<LoginPage> {
  }
 
 
- _signInWithGoogle()async{
+ _signInWithGoogle() async{
+  User? user = await _auth.signInWithGoogle();
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-
-  try {
-
-   final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
-
-   if(googleSignInAccount != null ){
-    final GoogleSignInAuthentication googleSignInAuthentication = await
-    googleSignInAccount.authentication;
-
-    final AuthCredential credential = GoogleAuthProvider.credential(
-     idToken: googleSignInAuthentication.idToken,
-     accessToken: googleSignInAuthentication.accessToken,
-    );
-
-    await _firebaseAuth.signInWithCredential(credential);
-    Navigator.pushNamed(context, "/home");
-   }
-
-  }catch(e) {
-   showToast(message: "some error occured $e");
+  if (user != null) {
+   showToast(message: "User is successfully signed in");
+   Navigator.pushNamed(context, "/home");
+  } else {
+   showToast(message: "some error occured");
   }
-
-
  }
-
-
 }

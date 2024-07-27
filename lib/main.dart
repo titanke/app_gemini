@@ -1,4 +1,5 @@
 import 'package:app_gemini/pages/home.dart';
+import 'package:app_gemini/pages/perfil.dart';
 import 'package:flutter/material.dart';
 import 'package:app_gemini/pages/chat.dart';
 import 'package:app_gemini/pages/topics.dart';
@@ -12,9 +13,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async{
 
-
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
+  await Firebase. initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
@@ -22,7 +22,7 @@ void main() async{
 
 
 final colorper = Color.fromRGBO(7, 3, 49, 1);
-
+List<String> datos = ['Dato 1', 'Dato 2', 'Dato 3', 'Dato 4', 'Dato 5', 'Dato 6'];
 
 
 class MyApp extends StatelessWidget {
@@ -47,12 +47,11 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
       ),
-      //home:  Menu(),
       home: AuthenticationWrapper(),
       routes: {
         '/home': (context) => Menu(),
         '/detail': (context) => DetailScreen(),
-        '/storage': (context) => Storagepage(),
+       /* '/storage': (context) => StoragePage(storagePath: "",),*/
         '/quiz': (context) => QuizPage(dato: ""),
       },
     );
@@ -85,19 +84,17 @@ class Menu extends StatefulWidget {
 
 class _MyHomePageState extends State<Menu> {
 
-  int _currentIndex = 1;
-  final List<Widget> _children = [Topicspage(),Homepage(), Chatpage()];
-  final _titles = ['Temas', 'Inicio', 'Chat'];
+  int _currentIndex = 0;
+  final List<Widget> _children = [Homepage(),Topicspage(), Chatpage(), PerfilPage() ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-                                  backgroundColor: Color.fromARGB(255, 58, 89, 127),
-
+      /*appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 58, 89, 127),
         title: Text(_titles[_currentIndex],style: TextStyle(color: Colors.white),),
        
-      ),
+      ),*/
       body: IndexedStack(
         index: _currentIndex,
         children: _children,
@@ -106,19 +103,25 @@ class _MyHomePageState extends State<Menu> {
         currentIndex: _currentIndex,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.book), 
-            label: 'Temas',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Inicio',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.book), 
+            label: 'Temas',
+          ),
+
+          BottomNavigationBarItem(
             icon: Icon(Icons.chat),
             label: 'Chat',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Perfil',
+          ),
         ],
-        selectedItemColor: colorper, 
+        selectedItemColor: colorper,
+        unselectedItemColor: Colors.grey,
         onTap: (index) {
           setState(() {
             _currentIndex = index;

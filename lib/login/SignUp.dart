@@ -18,6 +18,9 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _ageController = TextEditingController();
+  TextEditingController _countryController = TextEditingController();
+  TextEditingController _interestController = TextEditingController();
 
   bool isSigningUp = false;
 
@@ -69,6 +72,27 @@ class _SignUpPageState extends State<SignUpPage> {
                 controller: _passwordController,
                 hintText: "Password",
                 isPasswordField: true,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              FormContainerWidget(
+                controller: _ageController,
+                hintText: "Age",
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              FormContainerWidget(
+                controller: _interestController,
+                hintText: "Interest",
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              FormContainerWidget(
+                controller: _countryController,
+                hintText: "Country",
               ),
               SizedBox(
                 height: 30,
@@ -134,8 +158,11 @@ class _SignUpPageState extends State<SignUpPage> {
     String username = _usernameController.text;
     String email = _emailController.text;
     String password = _passwordController.text;
+    String age = _ageController.text;
+    String country = _countryController.text;
+    String interest = _interestController.text;
 
-    User? user = await _auth.signUpWithEmail(email, password);
+    User? user = await _auth.signUpWithEmail(email, password, age, interest, country);
 
     setState(() {
       isSigningUp = false;
@@ -144,7 +171,7 @@ class _SignUpPageState extends State<SignUpPage> {
       showToast(message: "User is successfully created");
       Navigator.pushNamed(context, "/home");
     } else {
-      showToast(message: "Some error happend");
+      showToast(message: "Some error happend in register");
     }
   }
 }
