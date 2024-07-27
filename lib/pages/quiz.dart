@@ -281,7 +281,12 @@ Navigator.push(
             ),
             TextButton(
               onPressed:() {
-                Navigator.pop(context); 
+       Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => QuizPage(dato: "",),
+        ),
+      );  
               },
               child: Text('Salir'),
             ),
