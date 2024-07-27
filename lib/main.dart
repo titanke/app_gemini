@@ -12,14 +12,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-
-  // This is the last thing you need to add.
-  await Firebase.initializeApp(
+/*
+  await Firebase. initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  );
+  );*/
   runApp(const MyApp());
 }
 final colorper = Color.fromRGBO(7, 3, 49, 1);
+List<String> datos = ['Dato 1', 'Dato 2', 'Dato 3', 'Dato 4', 'Dato 5', 'Dato 6'];
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -33,12 +33,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
       ),
-      //home:  Menu(),
-      home: LoginPage(),
+      home:  Menu(),
+     // home: LoginPage(),
       routes: {
         '/home': (context) => Menu(),
         '/detail': (context) => DetailScreen(),
-        '/storage': (context) => Storagepage(),
+       /* '/storage': (context) => StoragePage(storagePath: "",),*/
         '/quiz': (context) => QuizPage(dato: ""),
       },
     );
