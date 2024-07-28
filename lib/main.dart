@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (context) => Menu(),
         '/detail': (context) => DetailScreen(),
-       /* '/storage': (context) => StoragePage(storagePath: "",),*/
+        /*'/storage': (context) => StoragePage(storagePath: "",)*/
         '/quiz': (context) => QuizPage(dato: ""),
       },
     );

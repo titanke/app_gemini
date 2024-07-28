@@ -46,7 +46,7 @@ class _TopicspageState extends State<Topicspage> {
                 }
 
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Center(child: Text('No themes found'));
+                  return Center(child: Text('No tienes ningun tema, Agrega uno'));
                 }
 
                 List<String> datos = snapshot.data!;

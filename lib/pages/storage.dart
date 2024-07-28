@@ -1,4 +1,67 @@
+
+
+import 'package:app_gemini/services/Firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+class FileStorageScreen extends StatefulWidget {
+  final String topicId;
+
+  FileStorageScreen({required this.topicId});
+
+  @override
+  _FileStorageScreenState createState() => _FileStorageScreenState();
+}
+
+class _FileStorageScreenState extends State<FileStorageScreen> {
+
+  final FirebaseDatabase db = FirebaseDatabase();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('File Storage Example'),
+      ),
+      body: Column(
+        children: [
+          ElevatedButton(
+            onPressed: ()=>db.pickAndUploadFile(widget.topicId),
+            child: Text('Upload File'),
+          ),
+          Expanded(
+            child: FutureBuilder<List<Map<String, dynamic>>>(
+              future: db.loadDocuments(widget.topicId),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(child: Text('No documents uploaded yet'));
+                }
+
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    Map<String, dynamic> docData = snapshot.data![index];
+                    return ListTile(
+                      title: Text(docData['fileName']),
+
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+
 /*
 import 'package:firebase_storage/firebase_storage.dart';
 

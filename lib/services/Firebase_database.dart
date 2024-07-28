@@ -1,15 +1,21 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FirebaseDatabase {
 
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   void saveTopic(String name) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final userId= prefs.getString('user_id');
 
     if (name.isNotEmpty) {
-      DocumentReference userRef = FirebaseFirestore.instance.collection('users').doc(userId);
+      DocumentReference userRef = _firestore.collection('users').doc(userId);
       await userRef.collection('topics').add({'name': name});
 
     }
@@ -19,12 +25,7 @@ class FirebaseDatabase {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final userId= prefs.getString('user_id');
     try {
-      CollectionReference themesCollection = FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .collection('topics');
-
-
+      CollectionReference themesCollection = _firestore.collection('users').doc(userId).collection('topics');
       QuerySnapshot querySnapshot = await themesCollection.get();
 
       List<String> topics = querySnapshot.docs.map((doc) {
@@ -36,6 +37,45 @@ class FirebaseDatabase {
       print('Error getting themes: $e');
       return [];
     }
+  }
+
+  Future<void> pickAndUploadFile(String topicId) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final userId= prefs.getString('user_id');
+
+    if (result != null) {
+      File file = File(result.files.single.path!);
+
+      String? uid = userId;
+      String fileName = result.files.single.name;
+      String filePath = 'users/$uid/topics/${topicId}/$fileName';
+
+      try {
+        await _storage.ref(filePath).putFile(file);
+
+        String downloadURL = await _storage.ref(filePath).getDownloadURL();
+
+        await _firestore.collection('users').doc(uid).collection('themes').doc(topicId).collection('documents').add({
+          'fileName': fileName,
+          'url': downloadURL,
+          'uploadedAt': Timestamp.now(),
+        });
+
+        //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('File uploaded successfully')));
+      } catch (e) {
+        print(e);
+        //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to upload file')));
+      }
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> loadDocuments(String topicId) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? uid = prefs.getString('user_id');
+    QuerySnapshot querySnapshot = await _firestore.collection('users').doc(uid).collection('themes').doc(topicId).collection('documents').orderBy('uploadedAt', descending: true).get();
+
+    return querySnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
   }
 
 }
