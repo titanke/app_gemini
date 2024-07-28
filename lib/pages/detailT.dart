@@ -1,3 +1,4 @@
+import 'package:app_gemini/interfaces/topicInterface.dart';
 import 'package:flutter/material.dart';
 
 class DetailScreen extends StatelessWidget {
@@ -5,16 +6,16 @@ class DetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String dato = ModalRoute.of(context)?.settings.arguments as String;
+    final Topic dato = ModalRoute.of(context)?.settings.arguments as Topic;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Temas: $dato'),
+        title: Text('Temas: ${dato.name}'),
         actions: [
           IconButton(
             icon: Icon(Icons.storage),
             onPressed: () {
-              Navigator.pushNamed(context, '/storage', arguments: dato);
+              Navigator.pushNamed(context, '/storage', arguments: dato.uid);
             },
           ),
           IconButton(
@@ -27,7 +28,7 @@ class DetailScreen extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: Text(dato),
+        child: Text(dato.name),
       ),
     );
   }

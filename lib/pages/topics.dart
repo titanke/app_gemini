@@ -1,3 +1,4 @@
+import 'package:app_gemini/interfaces/topicInterface.dart';
 import 'package:app_gemini/services/Firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:app_gemini/main.dart';
@@ -34,7 +35,7 @@ class _TopicspageState extends State<Topicspage> {
         children: [
           Expanded(
           child:
-            FutureBuilder<List<String>>(
+            FutureBuilder<List<Topic>>(
               future: db.getTopicsUser(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -49,12 +50,12 @@ class _TopicspageState extends State<Topicspage> {
                   return Center(child: Text('No tienes ningun tema, Agrega uno'));
                 }
 
-                List<String> datos = snapshot.data!;
+                List<Topic> datos = snapshot.data!;
 
                 return ListView.builder(
                   itemCount: datos.length,
                   itemBuilder: (context, index) {
-                    final topic = datos[index];
+                    final topic = datos[index].name;
                     return InkWell(
                       onTap: () => _navigateToDetailScreen(datos[index]),
                       child: Padding(
@@ -81,7 +82,7 @@ class _TopicspageState extends State<Topicspage> {
     );
     
   }
-    void _navigateToDetailScreen(String dato) {
+    void _navigateToDetailScreen(Object dato) {
     Navigator.pushNamed(context, '/detail', arguments: dato);
   }
 }
