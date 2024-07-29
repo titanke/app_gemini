@@ -11,7 +11,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart'; 
-
+import 'package:provider/provider.dart';
+import 'package:app_gemini/theme/theme.dart';
+import 'package:app_gemini/widgets/theme_provider.dart';
 void main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +22,12 @@ void main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await dotenv.load();
-  runApp(const MyApp());
+  runApp(    
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: MyApp(),
+      ),
+    );
 }
 
 
@@ -45,11 +52,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'App gemini',
-      theme: ThemeData(
-
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
-        useMaterial3: true,
-      ),
+      theme: Provider.of<ThemeProvider>(context).themeData,
       home: AuthenticationWrapper(),
       routes: <String, WidgetBuilder>{
         '/home': (context) => Menu(),
