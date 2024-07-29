@@ -1,8 +1,8 @@
-import 'package:app_gemini/interfaces/topicInterface.dart';
+import 'package:app_gemini/interfaces/TopicInterface.dart';
 import 'package:app_gemini/services/Firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:app_gemini/main.dart';
-import 'package:app_gemini/pages/home.dart';
+import 'package:app_gemini/pages/HomePage.dart';
 class Topicspage extends StatefulWidget {
   const Topicspage({Key? key}) : super(key: key);
 
@@ -35,42 +35,42 @@ class _TopicspageState extends State<Topicspage> {
         children: [
           Expanded(
           child:
-            FutureBuilder<List<Topic>>(
-              future: db.getTopicsUser(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
+          StreamBuilder<List<Topic>>(
+            stream: db.getTopicsUser(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
 
-                if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
 
-                if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Center(child: Text('No tienes ningun tema, Agrega uno'));
-                }
+              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Center(child: Text('No tienes ningun tema, Agrega uno'));
+              }
 
-                List<Topic> datos = snapshot.data!;
+              List<Topic> datos = snapshot.data!;
 
-                return ListView.builder(
-                  itemCount: datos.length,
-                  itemBuilder: (context, index) {
-                    final topic = datos[index].name;
-                    return InkWell(
-                      onTap: () => _navigateToDetailScreen(datos[index]),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          topic,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 20),
-                        ),
+              return ListView.builder(
+                itemCount: datos.length,
+                itemBuilder: (context, index) {
+                  final topic = datos[index].name;
+                  return InkWell(
+                    onTap: () => _navigateToDetailScreen(datos[index]),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        topic,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 20),
                       ),
-                    );
-                  },
-                );
-              },
-            ),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
           ),
 
           ElevatedButton(

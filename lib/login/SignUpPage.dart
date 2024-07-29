@@ -1,5 +1,5 @@
 import 'package:app_gemini/global/common/toast.dart';
-import 'package:app_gemini/login/login.dart';
+import 'package:app_gemini/login/LoginPage.dart';
 import 'package:app_gemini/services/Firebase_auth_service.dart';
 import 'package:app_gemini/widgets/FormContainerWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';

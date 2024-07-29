@@ -2,6 +2,7 @@
 
 import 'package:app_gemini/interfaces/DocumentInterface.dart';
 import 'package:app_gemini/services/Firebase_database.dart';
+import 'package:app_gemini/services/Gemini_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,17 +24,17 @@ class _FileStorageScreenState extends State<FileStorageScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('File Storage Example'),
+        title: Text('Documentos'),
       ),
       body: Column(
         children: [
           ElevatedButton(
-            onPressed: ()=>db.pickAndUploadFile(topicId),
+            onPressed: ()=>db.pickAndUploadFiles(topicId),
             child: Text('Upload File'),
           ),
           Expanded(
-            child: FutureBuilder<List<Document>>(
-              future: db.loadDocuments(topicId),
+            child: StreamBuilder<List<Document>>(
+              stream: db.loadDocuments(topicId),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -53,13 +54,13 @@ class _FileStorageScreenState extends State<FileStorageScreen> {
                     Document doc = snapshot.data![index];
                     return GestureDetector(
                       /*onTap: () async {
-                        final Uri url = Uri.parse(doc.url);
-                        if (await canLaunchUrl(url)) {
-                          await launchUrl(url);
-                        } else {
-                          throw 'Could not launch $url';
-                        }
-                      },*/
+            final Uri url = Uri.parse(doc.url);
+            if (await canLaunchUrl(url)) {
+              await launchUrl(url);
+            } else {
+              throw 'Could not launch $url';
+            }
+          },*/
                       child: Card(
                         margin: EdgeInsets.all(16),
                         child: Column(

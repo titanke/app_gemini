@@ -1,22 +1,25 @@
-import 'package:app_gemini/pages/home.dart';
-import 'package:app_gemini/pages/perfil.dart';
+import 'package:app_gemini/pages/HomePage.dart';
+import 'package:app_gemini/pages/PerfilPage.dart';
 import 'package:flutter/material.dart';
-import 'package:app_gemini/pages/chat.dart';
-import 'package:app_gemini/pages/topics.dart';
-import 'package:app_gemini/pages/detailT.dart';
-import 'package:app_gemini/pages/storage.dart';
-import 'package:app_gemini/pages/quiz.dart';
-import 'package:app_gemini/login/login.dart';
+import 'package:app_gemini/pages/ChatPage.dart';
+import 'package:app_gemini/pages/TopicsPage.dart';
+import 'package:app_gemini/pages/DetailTopicPage.dart';
+import 'package:app_gemini/pages/StorageDetailPage.dart';
+import 'package:app_gemini/pages/Quiz/QuizPage.dart';
+import 'package:app_gemini/login/LoginPage.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase. initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await dotenv.load();
   runApp(const MyApp());
 }
 
@@ -48,7 +51,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: AuthenticationWrapper(),
-      routes: {
+      routes: <String, WidgetBuilder>{
         '/home': (context) => Menu(),
         '/detail': (context) => DetailScreen(),
         '/storage': (context) => FileStorageScreen(),
@@ -64,13 +67,10 @@ class AuthenticationWrapper extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasData) {
+        if (snapshot.data != null) {
           return Menu();
-        }
-        return LoginPage();
+        } else
+          return LoginPage();
       },
     );
   }
