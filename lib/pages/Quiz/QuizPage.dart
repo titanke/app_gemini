@@ -98,7 +98,7 @@ class _QuizPageState extends State<QuizPage> {
     final response = await _httpClient.get(Uri.parse(_apiUrl));
 
     if (response.statusCode == 200) {
-      final questionData = jsonDecode(response.body); // Parse the JSON response
+      final questionData = jsonDecode(response.body); 
       final question = Question(
           question: questionData['question'],
           options: questionData['options'].cast<String>(),

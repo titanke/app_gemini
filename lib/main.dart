@@ -32,8 +32,6 @@ void main() async{
 
 
 final colorper = Color.fromRGBO(7, 3, 49, 1);
-List<String> datos = ['Dato 1', 'Dato 2', 'Dato 3', 'Dato 4', 'Dato 5', 'Dato 6'];
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
