@@ -13,8 +13,10 @@ import 'package:app_gemini/login/LoginPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'firebase_options.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:firebase_auth/firebase_auth.dart'; 
+import 'package:provider/provider.dart';
+import 'package:app_gemini/widgets/theme_provider.dart';
+import 'package:app_gemini/widgets/FirstTPage.dart';
 void main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,13 +25,13 @@ void main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await dotenv.load();
-  runApp(const MyApp());
+  runApp(    
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: MyApp(),
+      ),
+    );
 }
-
-
-final colorper = Color.fromRGBO(7, 3, 49, 1);
-List<String> datos = ['Dato 1', 'Dato 2', 'Dato 3', 'Dato 4', 'Dato 5', 'Dato 6'];
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -48,11 +50,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'App gemini',
-      theme: ThemeData(
-
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
-        useMaterial3: true,
-      ),
+      theme: Provider.of<ThemeProvider>(context).themeData,
       home: AuthenticationWrapper(),
       routes: <String, WidgetBuilder>{
         '/home': (context) => Menu(),
@@ -62,7 +60,8 @@ class MyApp extends StatelessWidget {
         '/quiz/introduction': (context) => QuizIntroduction(),
         '/quiz/start': (context) => QuizPage(),
         '/quiz/result': (context) => ResultsPage(),
-
+        '/login': (context) => LoginPage(),
+        '/ftpage': (context) => FirstTopicsPage(),
       },
     );
   }
@@ -92,7 +91,7 @@ class Menu extends StatefulWidget {
 class _MyHomePageState extends State<Menu> {
 
   int _currentIndex = 0;
-  final List<Widget> _children = [Homepage(),Topicspage(), Chatpage(), PerfilPage() ];
+  final List<Widget> _children = [Homepage(),Topicspage(), Chatpage(), PerfilPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -126,8 +125,8 @@ class _MyHomePageState extends State<Menu> {
             icon: Icon(Icons.person),
             label: 'Perfil',
           ),
+          
         ],
-        selectedItemColor: colorper,
         unselectedItemColor: Colors.grey,
         onTap: (index) {
           setState(() {
