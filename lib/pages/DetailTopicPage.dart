@@ -1,5 +1,6 @@
 import 'package:app_gemini/interfaces/TopicInterface.dart';
-import 'package:app_gemini/pages/Quiz/QuizPage.dart';
+import 'package:app_gemini/pages/quiz/IntrodutionPage.dart';
+import 'package:app_gemini/pages/quiz/QuizPage.dart';
 import 'package:app_gemini/pages/StorageDetailPage.dart';
 import 'package:app_gemini/pages/TopicOverview.dart';
 import 'package:flutter/material.dart';
@@ -9,49 +10,28 @@ class DetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Topic dato = ModalRoute.of(context)?.settings.arguments as Topic;
+    final Topic topic = ModalRoute.of(context)?.settings.arguments as Topic;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(dato.name),
+        title: Text(topic.name),
         actions: [
           IconButton(
             icon: Icon(Icons.storage),
             onPressed: () {
-              Navigator.pushNamed(context, '/storage', arguments: dato.uid);
+              Navigator.pushNamed(context, '/storage', arguments: topic.uid);
             },
           ),
           IconButton(
             icon: Icon(Icons.play_arrow),
             onPressed: () {
-              Navigator.pushNamed(context, '/quiz', arguments: dato);
+              Navigator.pushNamed(context, '/quiz', arguments: topic);
             },
           ),
 
         ],
       ),
-      body: Navigator(
-        onGenerateRoute: (RouteSettings settings) {
-          WidgetBuilder builder;
-          switch (settings.name) {
-            case 'content':
-              builder = (BuildContext context) => TopicOverviewScreen(dato: dato);
-              break;
-            case 'storage':
-              final String uid = settings.arguments as String;
-              builder = (BuildContext context) => FileStorageScreen();
-              break;
-            case 'detail/quiz':
-              final Topic dato = settings.arguments as Topic;
-              builder = (BuildContext context) => QuizPage(dato: dato.name);
-              break;
-            default:
-              throw Exception('Ruta no válida: ${settings.name}');
-          }
-          return MaterialPageRoute(builder: builder, settings: settings);
-        },
-        initialRoute: 'content',
-      ),
+      body: TopicOverviewScreen(dato: topic),
     );
   }
 }

@@ -1,11 +1,14 @@
 import 'package:app_gemini/pages/HomePage.dart';
 import 'package:app_gemini/pages/PerfilPage.dart';
+import 'package:app_gemini/pages/quiz/IntrodutionPage.dart';
+import 'package:app_gemini/pages/quiz/QuizStack.dart';
+import 'package:app_gemini/pages/quiz/ResultPage.dart';
 import 'package:flutter/material.dart';
 import 'package:app_gemini/pages/ChatPage.dart';
 import 'package:app_gemini/pages/TopicsPage.dart';
 import 'package:app_gemini/pages/DetailTopicPage.dart';
 import 'package:app_gemini/pages/StorageDetailPage.dart';
-import 'package:app_gemini/pages/Quiz/QuizPage.dart';
+import 'package:app_gemini/pages/quiz/QuizPage.dart';
 import 'package:app_gemini/login/LoginPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -55,7 +58,11 @@ class MyApp extends StatelessWidget {
         '/home': (context) => Menu(),
         '/detail': (context) => DetailScreen(),
         '/storage': (context) => FileStorageScreen(),
-        '/quiz': (context) => QuizPage(dato: ""),
+        '/quiz': (context) => QuizIntroduction(),
+        '/quiz/introduction': (context) => QuizIntroduction(),
+        '/quiz/start': (context) => QuizPage(),
+        '/quiz/result': (context) => ResultsPage(),
+
       },
     );
   }
