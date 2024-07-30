@@ -12,8 +12,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart'; 
 import 'package:provider/provider.dart';
-import 'package:app_gemini/theme/theme.dart';
 import 'package:app_gemini/widgets/theme_provider.dart';
+import 'package:app_gemini/widgets/FirstTPage.dart';
 void main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,9 +29,6 @@ void main() async{
       ),
     );
 }
-
-
-final colorper = Color.fromRGBO(7, 3, 49, 1);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -57,6 +54,8 @@ class MyApp extends StatelessWidget {
         '/detail': (context) => DetailScreen(),
         '/storage': (context) => FileStorageScreen(),
         '/quiz': (context) => QuizPage(dato: ""),
+        '/login': (context) => LoginPage(),
+        '/ftpage': (context) => FirstTopicsPage(),
       },
     );
   }
@@ -86,7 +85,7 @@ class Menu extends StatefulWidget {
 class _MyHomePageState extends State<Menu> {
 
   int _currentIndex = 0;
-  final List<Widget> _children = [Homepage(),Topicspage(), Chatpage(), PerfilPage() ];
+  final List<Widget> _children = [Homepage(),Topicspage(), Chatpage(), PerfilPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -120,8 +119,8 @@ class _MyHomePageState extends State<Menu> {
             icon: Icon(Icons.person),
             label: 'Perfil',
           ),
+          
         ],
-        selectedItemColor: colorper,
         unselectedItemColor: Colors.grey,
         onTap: (index) {
           setState(() {

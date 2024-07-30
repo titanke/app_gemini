@@ -119,7 +119,14 @@ class _PerfilPageState extends State<PerfilPage> {
                 ),
               ],
               ),
-            ],
+                GestureDetector(
+                  onTap: () {
+                    _signOut(context);
+                    Navigator.pushNamed(context, '/login');
+                  },
+                  child: Text('Cerrar Sesión', style: TextStyle(fontWeight: FontWeight.bold)),
+                ),            
+              ],
           ),
         ),
       ),

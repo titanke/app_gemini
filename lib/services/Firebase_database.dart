@@ -10,6 +10,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
+String lastSavedTopicId = ''; 
+
 class FirebaseDatabase {
 
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -22,8 +25,8 @@ class FirebaseDatabase {
 
     if (name.isNotEmpty) {
       DocumentReference userRef = _firestore.collection('users').doc(userId);
-      await userRef.collection('topics').add({'name': name});
-
+      DocumentReference topicRef = await userRef.collection('topics').add({'name': name});
+      lastSavedTopicId = topicRef.id;
     }
   }
 
