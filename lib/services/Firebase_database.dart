@@ -48,6 +48,61 @@ class FirebaseDatabase {
     }
   }
 
+  Future<void> pickAndUploadFiles2(String topicId, Function(double) onProgress) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
+      allowMultiple: true,
+    );
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('user_id');
+
+    String fileTxtPath = 'users/$userId/topics/$topicId/';
+    String markdownContent = '';
+
+    if (result != null && userId != null) {
+      int totalFiles = result.files.length;
+      int processedFiles = 0;
+
+      for (var file in result.files) {
+        if (file.path != null) {
+          File selectedFile = File(file.path!);
+
+          String fileName = file.name;
+          String filePath = 'users/$userId/topics/$topicId/$fileName';
+
+          try {
+            // Subir archivo
+            await _storage.ref(filePath).putFile(selectedFile);
+
+            String downloadURL = await _storage.ref(filePath).getDownloadURL();
+
+            markdownContent = '$markdownContent\n${await gem.transcriptDocument(selectedFile, downloadURL)}';
+
+            await _firestore.collection('users').doc(userId).collection('topics').doc(topicId).collection('documents').add({
+              'fileName': fileName,
+              'url': downloadURL,
+              'uploadedAt': Timestamp.now(),
+            });
+
+            processedFiles++;
+            onProgress(processedFiles / totalFiles);
+
+          } catch (e) {
+            showToast(message: 'Error in save document $e');
+            print(e);
+          }
+        }
+      }
+
+      gem.SaveTranscript(markdownContent, fileTxtPath);
+    } else {
+      showToast(message: 'No files selected');
+    }
+  }
+
+
   Future<void> pickAndUploadFiles(String topicId) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -129,6 +184,20 @@ class FirebaseDatabase {
       }
     } catch (e) {
       return 'No tienes archivos en este tema, agrega algunos';
+    }
+  }
+
+  Future<void> deleteDocument(String topicId, String documentId, String fileName) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('user_id');
+    try {
+      DocumentReference documentRef = FirebaseFirestore.instance.collection('users').doc(userId).collection('topics').doc(topicId).collection('documents').doc(documentId);
+      Reference fileRef = _storage.ref().child('users/$userId/topics/$topicId/$fileName');
+      await documentRef.delete();
+      await fileRef.delete();
+      print('Documento eliminado exitosamente');
+    } catch (e) {
+      print('Error al eliminar el documento: $e');
     }
   }
 

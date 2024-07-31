@@ -28,7 +28,7 @@ class GeminiService {
       final existingData = await storageRef.getData();
       if (existingData != null) {
         // Append new content to the existing content
-        final existingContent = String.fromCharCodes(existingData);
+        final existingContent = utf8.decode(existingData);
         newContent = '$existingContent\n$markdownContent';
       }
     } catch (e) {
