@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:app_gemini/pages/HomePage.dart';
 import 'package:app_gemini/pages/PerfilPage.dart';
 import 'package:app_gemini/pages/quiz/IntrodutionPage.dart';
@@ -95,6 +97,7 @@ class _MyHomePageState extends State<Menu> {
 
   @override
   Widget build(BuildContext context) {
+    //_currentIndex = ModalRoute.of(context)?.settings.arguments as int??0;
     return Scaffold(
       /*appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 58, 89, 127),

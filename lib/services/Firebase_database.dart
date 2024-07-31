@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:app_gemini/global/common/toast.dart';
@@ -9,6 +10,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 
 String lastSavedTopicId = ''; 
@@ -107,6 +109,26 @@ class FirebaseDatabase {
     } catch (e) {
       print('Error getting documents: $e');
       yield [];
+    }
+  }
+
+  Future<String> getDocumentMarkdown(String topicId) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString('user_id');
+
+    try {
+      String documentPath = 'users/$userId/topics/$topicId/transcript.txt';
+      final storageRef = FirebaseStorage.instance.ref().child(documentPath);
+      final url = await storageRef.getDownloadURL();
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final decodedBody = utf8.decode(response.bodyBytes);
+        return decodedBody;
+      } else {
+        throw Exception('Failed to load document from Firebase Storage');
+      }
+    } catch (e) {
+      return 'No tienes archivos en este tema, agrega algunos';
     }
   }
 
