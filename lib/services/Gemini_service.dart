@@ -28,7 +28,7 @@ class GeminiService {
       final existingData = await storageRef.getData();
       if (existingData != null) {
         // Append new content to the existing content
-        final existingContent = String.fromCharCodes(existingData);
+        final existingContent = utf8.decode(existingData);
         newContent = '$existingContent\n$markdownContent';
       }
     } catch (e) {
@@ -57,11 +57,13 @@ class GeminiService {
     String mimeType = lookupMimeType(file.path)!;
     final fileBytes = await file.readAsBytes();
 
+    String newurl = url.replaceAll('%2F', '*75');
+
     final prompt = """
     Transcribe the following file into Markdown format unless
-    if the file is an image and it hasn't text, generate a title and below it the URL: $url in this format:
+    if the file is an image and it hasn't text, generate a title and below it the URL: $newurl in this format:
     title
-    ![title]($url)
+    ![title]($newurl)
     if the file isn't an image only transcribe it into Markdown format without include the previous format of url.
     """;
 

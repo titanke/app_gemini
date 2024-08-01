@@ -15,6 +15,12 @@ class DetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(topic.name),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamed(context, '/home', arguments: 1);
+          }
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.storage),
@@ -31,7 +37,7 @@ class DetailScreen extends StatelessWidget {
 
         ],
       ),
-      body: TopicOverviewScreen(dato: topic),
+      body: TopicOverviewScreen(topic: topic),
     );
   }
 }
