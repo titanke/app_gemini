@@ -96,11 +96,7 @@ class _MyHomePageState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 58, 89, 127),
-        title: Text(_titles[_currentIndex],style: TextStyle(color: Colors.white),),
-       
-      ),*/
+     
       body: IndexedStack(
         index: _currentIndex,
         children: _children,

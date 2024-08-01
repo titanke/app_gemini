@@ -53,14 +53,7 @@ class _FileStorageScreenState extends State<FileStorageScreen> {
                   itemBuilder: (context, index) {
                     Document doc = snapshot.data![index];
                     return GestureDetector(
-                      /*onTap: () async {
-            final Uri url = Uri.parse(doc.url);
-            if (await canLaunchUrl(url)) {
-              await launchUrl(url);
-            } else {
-              throw 'Could not launch $url';
-            }
-          },*/
+             
                       child: Card(
                         margin: EdgeInsets.all(16),
                         child: Column(

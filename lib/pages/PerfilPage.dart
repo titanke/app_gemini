@@ -105,20 +105,31 @@ class _PerfilPageState extends State<PerfilPage> {
                     ),
                   ],
               ),
-              ExpansionTile(
-                title: Text('Ajustes de Aplicacion'),
-                children: [
-                ListTile(
-                  title: Text('Tema oscuro'),
-                  trailing: Switch(
-                    value: _isDarkTheme, 
-                    onChanged: (value) {
-                    Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
-                    },
-                  ),
+                ExpansionTile(
+                  title: Text('Ajustes de Aplicacion'),
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Text("Cambiar Tema"),
+                        ),
+                        Consumer<ThemeProvider>(
+                          builder: (context, themeProvider, child) {
+                            return Switch(
+                              value: themeProvider.isDarkTheme,
+                              onChanged: (value) {
+                                themeProvider.isDarkTheme = value;
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-              ),
+
                 GestureDetector(
                   onTap: () {
                     _signOut(context);

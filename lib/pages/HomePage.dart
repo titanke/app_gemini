@@ -1,10 +1,12 @@
 import 'package:app_gemini/widgets/customcard.dart';
+import 'package:app_gemini/widgets/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:app_gemini/services/Firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:app_gemini/interfaces/TopicInterface.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
 
@@ -13,11 +15,20 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  
   final String detailScreenRoute = '/detail';
   final FirebaseDatabase db = FirebaseDatabase();
 
+ 
+   @override
+  void initState() {
+    super.initState();
+  }
+
   @override
 Widget build(BuildContext context) {
+    final favoriteTopics = Provider.of<ThemeProvider>(context).favoriteTopics;
+
     return Scaffold(
       body: Column(
         children: [
@@ -40,10 +51,10 @@ Widget build(BuildContext context) {
                         'No tienes ningún tema, agrega uno',
                         textAlign: TextAlign.center,
                       ),
-                    );                  }
-
-                  final topics = snapshot.data!;
-
+                    );                  
+                    
+                  }
+                  final topics = snapshot.data!..sort((a, b) => b.lastInteracted.compareTo(a.lastInteracted));
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -54,7 +65,7 @@ Widget build(BuildContext context) {
                         ),
                       ),
                       Text("Temas recientes", textAlign: TextAlign.left),
-
+                      
                       CarouselSlider.builder(
                         options: CarouselOptions(
                           height: 120.0,
@@ -68,29 +79,42 @@ Widget build(BuildContext context) {
                           return CustomCard(
                             title: topic.name,
                             bgcolor: Colors.blueGrey,
-                            onTap: () => _navigateToDetailScreen(topic),
+                            onTap: (){
+                              setState(() {
+                                  topic.lastInteracted = DateTime.now();
+                                });
+                        _navigateToDetailScreen(topic);
+                            } 
                           );
                         },
                       ),
 
                       Text("Temas favoritos", textAlign: TextAlign.left),
 
-                      GridView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                        ),
-                        itemCount: topics.length,
-                        itemBuilder: (context, index) {
-                          final topic = topics[index];
-                          return CustomCard(
-                            title: topic.name,
-                            bgcolor: Colors.grey,
-                            onTap: () => _navigateToDetailScreen(topic),
-                          );
-                        },
-                      ),
+                       favoriteTopics.isNotEmpty
+                          ? GridView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount( 
+                                crossAxisCount: 2,
+                              ),
+                              itemCount: favoriteTopics.length,
+                              itemBuilder: (context, index) {
+                                final topicId = favoriteTopics[index];
+                                final topic = topics.firstWhere((t) => t.uid == topicId); 
+
+                                if (topic != null) {
+                                  return CustomCard(
+                                    title: topic.name,
+                                    bgcolor: Colors.grey,
+                                    onTap: () => _navigateToDetailScreen(topic),
+                                  );
+                                } else {
+                                  return SizedBox(child: Text('No tienes ningún tema favorito'),);
+                                }
+                              },
+                            )
+                          : Text('No tienes ningún tema favorito'), 
                     ],
                   );
                 },
@@ -107,3 +131,20 @@ Widget build(BuildContext context) {
   }
 }
 
+/*
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                        ),
+                        itemCount: topics.length,
+                        itemBuilder: (context, index) {
+                          final topic = topics[index];
+                          return CustomCard(
+                            title: topic.name,
+                            bgcolor: Colors.grey,
+                            onTap: () => _navigateToDetailScreen(topic),
+                          );
+                        },
+                      ),*/
