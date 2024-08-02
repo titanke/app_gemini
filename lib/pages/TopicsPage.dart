@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:app_gemini/widgets/theme_provider.dart';
-
+import 'package:app_gemini/pages/DetailTopicPage.dart';
 final List<String> favoriteTopics = []; 
 class Topicspage extends StatefulWidget {
   const Topicspage({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class Topicspage extends StatefulWidget {
 }
 
 class _TopicspageState extends State<Topicspage> {
-
+  final TextEditingController _nameController = TextEditingController();
   final FirebaseDatabase db = FirebaseDatabase();
   Future<void> _loadFavoriteTopics() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -24,17 +24,6 @@ class _TopicspageState extends State<Topicspage> {
         favoriteTopics.addAll(savedFavorites);
       });
     }
-  }
- 
-  void _showTemaModal(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          child: TemaModal(),
-        );
-      },
-    );
   }
 
   @override
@@ -122,58 +111,52 @@ void _toggleFavorite(String topicId) {
       ),
     );
     
-  }
+  }/*
     void _navigateToDetailScreen(Object dato) {
     Navigator.pushNamed(context, '/detail', arguments: dato);
-  }
+  }*/
+
+  void _navigateToDetailScreen(Object dato) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: dato as Topic)));
 }
-
-
-class TemaModal extends StatefulWidget {
-  @override
-  _TemaModalState createState() => _TemaModalState();
-}
-
-class _TemaModalState extends State<TemaModal> {
-
-  final TextEditingController _nameController = TextEditingController();
-  final FirebaseDatabase _db = FirebaseDatabase();
-
-  void _guardarTema() async {
+    void _guardarTema() async {
     String name = _nameController.text;
     try {
-      _db.saveTopic(name);
+      db.saveTopic(name);
     }catch(e){
       print("Error en crear el tema $e");
     }
 
     Navigator.of(context).pop();
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Card(
-        margin: EdgeInsets.all(20),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: _nameController,
-                decoration: InputDecoration(labelText: 'Nombre'),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _guardarTema,
-                child: Text('Guardar'),
-              ),
-            ],
-          ),
+  void _showTemaModal(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Agregar Tema'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(labelText: 'Nombre'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _guardarTema,
+              child: Text('Guardar'),
+            ),
+          ],
         ),
-      ),
-    );
-  }
+      );
+    },
+  );
 }
+
+}
+
+
+
+
 

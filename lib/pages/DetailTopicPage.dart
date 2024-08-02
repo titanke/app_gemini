@@ -3,18 +3,39 @@ import 'package:app_gemini/pages/quiz/IntrodutionPage.dart';
 import 'package:app_gemini/pages/quiz/QuizPage.dart';
 import 'package:app_gemini/pages/StorageDetailPage.dart';
 import 'package:app_gemini/pages/TopicOverview.dart';
+import 'package:app_gemini/services/Firebase_database.dart';
 import 'package:flutter/material.dart';
 
-class DetailScreen extends StatelessWidget {
-  const DetailScreen({Key? key}) : super(key: key);
+class DetailScreen extends StatefulWidget {
+  final Topic topic;
 
+  const DetailScreen({required this.topic});
   @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+    bool _isLoading = true; 
+    FirebaseDatabase db = FirebaseDatabase();
+
+    @override
+    void initState() {
+      super.initState();
+      _fetchData();
+    }
+
+    Future<void> _fetchData() async {
+      final String documentMarkdown = await db.getDocumentMarkdown(widget.topic.uid);
+      setState(() {
+      _isLoading = documentMarkdown == 'No tienes archivos en este tema, agrega algunos';
+      });
+    }
+      @override
   Widget build(BuildContext context) {
-    final Topic topic = ModalRoute.of(context)?.settings.arguments as Topic;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(topic.name),
+        title: Text(widget.topic.name),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -25,19 +46,18 @@ class DetailScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.storage),
             onPressed: () {
-              Navigator.pushNamed(context, '/storage', arguments: topic.uid);
+              Navigator.pushNamed(context, '/storage', arguments: widget.topic.uid);
             },
           ),
-          IconButton(
+              IconButton(
             icon: Icon(Icons.play_arrow),
-            onPressed: () {
-              Navigator.pushNamed(context, '/quiz', arguments: topic);
+            onPressed: _isLoading ? null : () {
+              Navigator.pushNamed(context, '/quiz', arguments: widget.topic);
             },
           ),
-
         ],
       ),
-      body: TopicOverviewScreen(topic: topic),
+      body: TopicOverviewScreen(topic: widget.topic),
     );
   }
 }

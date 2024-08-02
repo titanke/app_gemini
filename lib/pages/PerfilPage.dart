@@ -115,16 +115,17 @@ class _PerfilPageState extends State<PerfilPage> {
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Text("Cambiar Tema"),
                         ),
-                        Consumer<ThemeProvider>(
-                          builder: (context, themeProvider, child) {
-                            return Switch(
-                              value: themeProvider.isDarkTheme,
-                              onChanged: (value) {
-                                themeProvider.isDarkTheme = value;
-                              },
-                            );
+                     Consumer<ThemeProvider>(
+                      builder: (context, themeProvider, child) {
+                        return Switch(
+                          value: themeProvider.isDarkTheme,
+                          onChanged: (value) {
+                            themeProvider.toggleTheme();
                           },
-                        ),
+                        );
+                      },
+                    ),
+
                       ],
                     ),
                   ],

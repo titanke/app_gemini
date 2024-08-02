@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:app_gemini/interfaces/TopicInterface.dart';
 import 'package:app_gemini/pages/HomePage.dart';
 import 'package:app_gemini/pages/PerfilPage.dart';
 import 'package:app_gemini/pages/quiz/IntrodutionPage.dart';
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
       home: AuthenticationWrapper(),
       routes: <String, WidgetBuilder>{
         '/home': (context) => Menu(),
-        '/detail': (context) => DetailScreen(),
+        //'/detail': (context) => DetailScreen(topic: Topic(name: 'name', uid: 'uid'),),
         '/storage': (context) => FileStorageScreen(),
         '/quiz': (context) => QuizIntroduction(),
         '/quiz/introduction': (context) => QuizIntroduction(),

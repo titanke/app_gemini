@@ -1,104 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-const String chatApiUrl = 'https://your-api-endpoint.com/chat';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Chatpage extends StatefulWidget {
+  const Chatpage({super.key});
+
   @override
-  _ChatpageState createState() => _ChatpageState();
+  State<Chatpage> createState() => _ChatpageState();
 }
 
 class _ChatpageState extends State<Chatpage> {
-  bool _isSendingMessage = false;
-  final _messageController = TextEditingController();
-  List<String> _messages = []; 
-  Future<void> _sendMessage(String message) async {
-    try {
-      final response = await http.post(
-        Uri.parse(chatApiUrl),
-        body: {'message': message},
-      );
-
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
-        final receivedMessage = responseData['message']; 
-        setState(() {
-          _messages.add(message);
-          _messages.add(receivedMessage);
-        });
-        _messageController.clear(); 
-      } else {
-        print('Error sending message: ${response.statusCode}');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error sending message. Please try again.'),
-          ),
-        );
-      }
-    } catch (error) {
-      print('Error sending message: $error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('An error occurred. Please try again.'),
-        ),
-      );
-    }
-  }
+  String text = '';
+  TextEditingController prompt = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    getRes(String prompt) async {
+      var apiKey = dotenv.env['API_KEY'];
+      final model = GenerativeModel(model: 'gemini-1.5-pro-latest', apiKey: apiKey!);
+      final content = [Content.text(prompt)];
+      final response = await model.generateContent(content);
+      setState(() {
+        text = response.text!;
+      });
+    }
+
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat'),
+        title: const Text("Gemini Chatpage"),
       ),
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                final message = _messages[index];
-                return Align(
-                  alignment: message == _messageController.text
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft,
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: message == _messageController.text
-                          ? Colors.blue[200]
-                          : Colors.grey[200],
-                    ),
-                    child: Text(message),
-                  ),
-                );
-              },
-            ),
+            child: MarkdownBody(data: text),
           ),
-          Form(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
-                    controller: _messageController,
+                    controller: prompt,
                     decoration: InputDecoration(
-                      hintText: 'Enter message',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                      hintText: 'Escribe un mensaje...',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send),
                   onPressed: () {
-                    final message = _messageController.text.trim();
-                    if (message.isNotEmpty) {
-                      _sendMessage(message);
-                    }
+                    getRes(prompt.text);
                   },
+                  icon: const Icon(Icons.arrow_circle_right_rounded),
                 ),
               ],
             ),

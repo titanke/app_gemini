@@ -3,7 +3,12 @@ import 'package:app_gemini/theme/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider with ChangeNotifier {
-  bool _isDarkTheme = false; 
+    bool _isDarkTheme = false;
+
+  ThemeProvider() {
+    _loadThemeFromSharedPreferences();
+    loadFavorites();
+  }
 
   ThemeData get themeData => _isDarkTheme ? darkMode : lightMode;
 
@@ -26,11 +31,12 @@ class ThemeProvider with ChangeNotifier {
     await prefs.setBool('isDarkTheme', isDarkTheme);
   }
 
-  Future<void> loadThemeFromSharedPreferences() async {
+  Future<void> _loadThemeFromSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    _isDarkTheme = prefs.getBool('isDarkTheme') ?? false; 
+    _isDarkTheme = prefs.getBool('isDarkTheme') ?? false;
     notifyListeners();
   }
+
   List<String> _favoriteTopics = [];
 
   List<String> get favoriteTopics => _favoriteTopics;
