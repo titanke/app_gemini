@@ -62,9 +62,7 @@ class _PerfilPageState extends State<PerfilPage> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Perfil"),
-      ),
+      //appBar: AppBar(title: Text("Perfil"),),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

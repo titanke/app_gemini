@@ -30,11 +30,12 @@ class _HomepageState extends State<Homepage> {
 Widget build(BuildContext context) {
     final favoriteTopics = Provider.of<ThemeProvider>(context).favoriteTopics;
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height; 
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Column(
         children: [
-          Expanded(
+          mounted?Expanded(
             child: SingleChildScrollView(
               child: StreamBuilder<List<Topic>>(
                 stream: db.getTopicsUser(),
@@ -133,14 +134,15 @@ Widget build(BuildContext context) {
                 },
               ),
             ),
-          ),
+          ):Text('cargando'),
         ],
       ),
     );
   }
 
 void _navigateToDetailScreen(Object dato) {
-  Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: dato as Topic)));
+  Navigator.pushNamed(context, '/detail', arguments: dato);
+  //Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: dato as Topic)));
 }
 }
 

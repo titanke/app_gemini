@@ -179,13 +179,22 @@ class _LoginPageState extends State<LoginPage> {
 
 
  _signInWithGoogle() async{
-  User? user = await _auth.signInWithGoogle();
+  Map<String, Object?>? data = await _auth.signInWithGoogle();
+  if (data != null) {
+   User? user = data['user'] as User?;
+   bool newUser = data['newUser'] as bool;
 
-  if (user != null) {
-   showToast(message: "User is successfully signed in");
-   Navigator.pushNamed(context, "/ftpage");
+   if (user != null) {
+    showToast(message: "User is successfully signed in");
+    if (newUser)
+     Navigator.pushNamed(context, "/ftpage");
+    else
+     Navigator.pushNamed(context, "/home");
+   } else {
+    showToast(message: "Some error occurred");
+   }
   } else {
-   showToast(message: "some error occured");
+   showToast(message: "Failed to sign in with Google");
   }
  }
 }

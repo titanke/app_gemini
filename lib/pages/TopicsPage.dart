@@ -117,9 +117,11 @@ void _toggleFavorite(String topicId) {
   }*/
 
   void _navigateToDetailScreen(Object dato) {
-  Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: dato as Topic)));
-}
-    void _guardarTema() async {
+    Navigator.pushNamed(context, '/detail', arguments: dato);
+    //Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: dato as Topic)));
+  }
+
+  void _guardarTema() async {
     String name = _nameController.text;
     try {
       db.saveTopic(name);

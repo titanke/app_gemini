@@ -71,7 +71,7 @@ class _ChatpageState extends State<Chatpage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("CHAT COMPANION"),
+        title: const Text("Gemini Chatpage"),
       ),
       body: Column(
         children: [

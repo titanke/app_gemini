@@ -1,3 +1,4 @@
+import 'package:app_gemini/global/common/toast.dart';
 import 'package:app_gemini/interfaces/QuestionInterface.dart';
 import 'package:app_gemini/interfaces/TopicInterface.dart';
 import 'package:app_gemini/services/Gemini_service.dart';
@@ -24,14 +25,18 @@ class _QuizIntroductionState extends State<QuizIntroduction> {
       try {
         List<Question> _questions = await gem.generateQuestions(topic.uid);
 
-        Navigator.pushNamed(
-          context,
-          '/quiz/start',
-          arguments: {
-            'topic': topic,
-            'questions': _questions
-          },
-        );
+        if (_questions.length>0){
+          Navigator.pushNamed(
+            context,
+            '/quiz/start',
+            arguments: {
+              'topic': topic,
+              'questions': _questions
+            },
+          );
+        }else{
+          showToast(message: 'Error al generar preguntas intentelo denuevo');
+        }
 
       } catch (e) {
         print('Error generating questions: $e');
@@ -44,7 +49,7 @@ class _QuizIntroductionState extends State<QuizIntroduction> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('Quiz Introduction')),
+      //appBar: AppBar(title: Text('Quiz Introduction')),
       body: Center(
         child: _isLoading
             ? CircularProgressIndicator()
@@ -67,7 +72,7 @@ class _QuizIntroductionState extends State<QuizIntroduction> {
                 SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Navigator.pushNamed(context, '/detail', arguments: topic);
                   },
                   child: Text('Cancelar'),
                 ),
