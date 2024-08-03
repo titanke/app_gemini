@@ -23,14 +23,29 @@ class Chatpage extends StatefulWidget {
     Message(this.text, this.isUserMessage);
   }
 
-class _ChatpageState extends State<Chatpage> {
+class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin{
   List<Message> messages = [];
   TextEditingController prompt = TextEditingController();
   bool isLoading = false;
   final String initialPrompt = "Eres un chatbot que ayuda al usuario a repasar.";
+  late AnimationController _animationController;
 
   final ScrollController _scrollController = ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    )..repeat(reverse: true);
+  }
 
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+  
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
@@ -69,35 +84,55 @@ class _ChatpageState extends State<Chatpage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+   return Scaffold(
       appBar: AppBar(
-        title: const Text("Gemini Chatpage"),
+        title: const Text("CHAT COMPANION"),
       ),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
+              controller: _scrollController, 
               reverse: false,
-              itemCount: messages.length,
+              itemCount: messages.length + (isLoading ? 1 : 0),
               itemBuilder: (context, index) {
+                if (index == messages.length) {
+                  return FadeTransition(
+                    opacity: _animationController,
+                    child: const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Escribiendo respuesta..."),
+                      ),
+                    ),
+                  );
+                }
                 final message = messages[index];
                 return Align(
                   alignment: message.isUserMessage ? Alignment.centerRight : Alignment.centerLeft,
-                  child: Container(
-                    padding: const EdgeInsets.all(8.0),
-                    margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    decoration: BoxDecoration(
-                      color: message.isUserMessage ? const Color.fromARGB(255, 25, 43, 58) : const Color.fromARGB(255, 223, 88, 88),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Text(message.text),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+             
+                      Flexible(
+                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                              decoration: BoxDecoration(
+                                color: message.isUserMessage ? const Color.fromARGB(255, 25, 43, 58) : const Color.fromARGB(255, 223, 88, 88),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: Text(message.text),
+                            ),
+                          ),
+                   
+                    ],
                   ),
                 );
               },
             ),
           ),
-          if (isLoading)
-            const Center(child: CircularProgressIndicator()),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -115,7 +150,9 @@ class _ChatpageState extends State<Chatpage> {
                   onPressed: () {
                     final text = prompt.text;
                     if (text.isNotEmpty) {
-                      messages.add(Message(text, true));
+                      setState(() {
+                        messages.add(Message(text, true));
+                      });
                       prompt.clear();
                       getRes(text);
                       _scrollToBottom();
