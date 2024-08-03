@@ -7,6 +7,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:app_gemini/interfaces/TopicInterface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:app_gemini/pages/DetailTopicPage.dart';
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
 
@@ -28,7 +29,8 @@ class _HomepageState extends State<Homepage> {
   @override
 Widget build(BuildContext context) {
     final favoriteTopics = Provider.of<ThemeProvider>(context).favoriteTopics;
-
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height; 
     return Scaffold(
       body: Column(
         children: [
@@ -61,7 +63,7 @@ Widget build(BuildContext context) {
                       Card(
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: Text('Texto inicial'),
+                          child: Text('Bienvenido empieza a practiar :)'),
                         ),
                       ),
                       Text("Temas recientes", textAlign: TextAlign.left),
@@ -110,11 +112,22 @@ Widget build(BuildContext context) {
                                     onTap: () => _navigateToDetailScreen(topic),
                                   );
                                 } else {
-                                  return SizedBox(child: Text('No tienes ningún tema favorito'),);
-                                }
+                                  return SizedBox(
+                                    child: Container(
+                                      padding: EdgeInsets.all(16.0), // Ajusta el valor de padding según tus necesidades
+                                      child: Text('No tienes ningún tema favorito, Empieza agregando uno.'),
+                                    ),
+                                  );                                
+                                  }
                               },
                             )
-                          : Text('No tienes ningún tema favorito'), 
+                          : Container(
+                            width: screenWidth,
+                            height: screenHeight/2,
+                            child: Center(
+                              child: Text('No tienes ningún tema favorito\n Empieza agregando uno.'),
+                            ),
+                          ),
                     ],
                   );
                 },
@@ -126,9 +139,9 @@ Widget build(BuildContext context) {
     );
   }
 
-    void _navigateToDetailScreen(Object dato) {
-    Navigator.pushNamed(context, '/detail', arguments: dato);
-  }
+void _navigateToDetailScreen(Object dato) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: dato as Topic)));
+}
 }
 
 /*

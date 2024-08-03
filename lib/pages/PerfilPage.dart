@@ -62,9 +62,7 @@ class _PerfilPageState extends State<PerfilPage> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Perfil"),
-      ),
+      //appBar: AppBar(title: Text("Perfil"),),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -115,16 +113,17 @@ class _PerfilPageState extends State<PerfilPage> {
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Text("Cambiar Tema"),
                         ),
-                        Consumer<ThemeProvider>(
-                          builder: (context, themeProvider, child) {
-                            return Switch(
-                              value: themeProvider.isDarkTheme,
-                              onChanged: (value) {
-                                themeProvider.isDarkTheme = value;
-                              },
-                            );
+                     Consumer<ThemeProvider>(
+                      builder: (context, themeProvider, child) {
+                        return Switch(
+                          value: themeProvider.isDarkTheme,
+                          onChanged: (value) {
+                            themeProvider.toggleTheme();
                           },
-                        ),
+                        );
+                      },
+                    ),
+
                       ],
                     ),
                   ],

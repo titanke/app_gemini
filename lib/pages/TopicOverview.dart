@@ -14,8 +14,6 @@ class TopicOverviewScreen extends StatefulWidget {
   @override
   _TopicOverviewScreen createState() => _TopicOverviewScreen();
 }
-
-
 class _TopicOverviewScreen extends State<TopicOverviewScreen> {
 
   String data ='';

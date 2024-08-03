@@ -40,6 +40,7 @@ class CustomCard extends StatelessWidget {
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
+               overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
