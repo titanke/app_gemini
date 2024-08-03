@@ -15,34 +15,89 @@ class Chatpage extends StatefulWidget {
   State<Chatpage> createState() => _ChatpageState();
 }
 
+
+  class Message {
+    final String text;
+    final bool isUserMessage;
+
+    Message(this.text, this.isUserMessage);
+  }
+
 class _ChatpageState extends State<Chatpage> {
-  String text = '';
+  List<Message> messages = [];
   TextEditingController prompt = TextEditingController();
+  bool isLoading = false;
+  final String initialPrompt = "Eres un chatbot que ayuda al usuario a repasar.";
+
+  final ScrollController _scrollController = ScrollController();
+
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  Future<void> getRes(String prompt) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      var apiKey = dotenv.env['API_KEY'];
+      final model = GenerativeModel(model: 'gemini-1.5-pro-latest', apiKey: apiKey!);
+      final content = [Content.text("$initialPrompt $prompt")];
+      final response = await model.generateContent(content);
+
+      setState(() {
+        messages.add(Message(response.text!, false));
+        isLoading = false;
+      });
+      _scrollToBottom();
+    } catch (error) {
+      // Handle errors here
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    getRes(String prompt) async {
-      var apiKey = dotenv.env['API_KEY'];
-      final model = GenerativeModel(model: 'gemini-1.5-pro-latest', apiKey: apiKey!);
-      final content = [Content.text(prompt)];
-      final response = await model.generateContent(content);
-      setState(() {
-        text = response.text!;
-      });
-    }
-
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Gemini Chatpage"),
+        title: const Text("CHAT COMPANION"),
       ),
       body: Column(
         children: [
           Expanded(
-            child: MarkdownBody(data: text),
+            child: ListView.builder(
+              reverse: false,
+              itemCount: messages.length,
+              itemBuilder: (context, index) {
+                final message = messages[index];
+                return Align(
+                  alignment: message.isUserMessage ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    decoration: BoxDecoration(
+                      color: message.isUserMessage ? const Color.fromARGB(255, 25, 43, 58) : const Color.fromARGB(255, 223, 88, 88),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Text(message.text),
+                  ),
+                );
+              },
+            ),
           ),
+          if (isLoading)
+            const Center(child: CircularProgressIndicator()),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -58,7 +113,13 @@ class _ChatpageState extends State<Chatpage> {
                 ),
                 IconButton(
                   onPressed: () {
-                    getRes(prompt.text);
+                    final text = prompt.text;
+                    if (text.isNotEmpty) {
+                      messages.add(Message(text, true));
+                      prompt.clear();
+                      getRes(text);
+                      _scrollToBottom();
+                    }
                   },
                   icon: const Icon(Icons.arrow_circle_right_rounded),
                 ),
