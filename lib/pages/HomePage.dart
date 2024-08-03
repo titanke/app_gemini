@@ -5,6 +5,7 @@ import 'package:app_gemini/services/Firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:app_gemini/interfaces/TopicInterface.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:app_gemini/pages/DetailTopicPage.dart';
