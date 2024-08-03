@@ -24,9 +24,10 @@ class ResultsPage extends StatelessWidget {
                 Navigator.pushNamed(
                   context,
                   '/quiz/introduction',
+                  arguments: topic
                 );
               },
-              child: Text(''),
+              child: Text('Hacer otra prueba'),
             ),
             TextButton(
               onPressed:() {

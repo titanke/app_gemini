@@ -35,10 +35,11 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      resizeToAvoidBottomInset: false,
+      /*appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text("SignUp"),
-      ),
+        //title: Text("SignUp"),
+      ),*/
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -52,14 +53,14 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(
                 height: 30,
               ),
-              FormContainerWidget(
+              /*FormContainerWidget(
                 controller: _usernameController,
                 hintText: "Username",
                 isPasswordField: false,
               ),
               SizedBox(
                 height: 10,
-              ),
+              ),*/
               FormContainerWidget(
                 controller: _emailController,
                 hintText: "Email",
@@ -155,23 +156,33 @@ class _SignUpPageState extends State<SignUpPage> {
       isSigningUp = true;
     });
 
-    String username = _usernameController.text;
+    //String username = _usernameController.text;
     String email = _emailController.text;
     String password = _passwordController.text;
     String age = _ageController.text;
     String country = _countryController.text;
     String interest = _interestController.text;
 
-    User? user = await _auth.signUpWithEmail(email, password, age, interest, country);
+    try {
+      User? user = await _auth.signUpWithEmail(
+          email, password, age, interest, country);
 
-    setState(() {
-      isSigningUp = false;
-    });
-    if (user != null) {
-      showToast(message: "User is successfully created");
-      Navigator.pushNamed(context, "/ftpage");
-    } else {
-      showToast(message: "Some error happend in register");
+      setState(() {
+        isSigningUp = false;
+      });
+      if (user != null) {
+        showToast(message: "User is successfully created");
+        Navigator.pushNamed(context, "/ftpage");
+      } else {
+        showToast(message: "Some error happend in register");
+      }
+    }catch(e){
+      showToast(message: e.toString());
+      setState(() {
+        isSigningUp = false;
+      });
     }
+
+
   }
 }

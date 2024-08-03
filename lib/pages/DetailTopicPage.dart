@@ -7,9 +7,9 @@ import 'package:app_gemini/services/Firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class DetailScreen extends StatefulWidget {
-  final Topic topic;
+  //final Topic topic;
 
-  const DetailScreen({required this.topic});
+  //const DetailScreen({required this.topic});
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
@@ -18,24 +18,25 @@ class _DetailScreenState extends State<DetailScreen> {
     bool _isLoading = true; 
     FirebaseDatabase db = FirebaseDatabase();
 
+
+    @override
+  Widget build(BuildContext context) {
+    final Topic topic = ModalRoute.of(context)?.settings.arguments as Topic;
+    Future<void> _fetchData() async {
+      final String documentMarkdown = await db.getDocumentMarkdown(topic.uid);
+      setState(() {
+        _isLoading = documentMarkdown == 'No tienes archivos en este tema, agrega algunos';
+      });
+    }
     @override
     void initState() {
       super.initState();
       _fetchData();
     }
 
-    Future<void> _fetchData() async {
-      final String documentMarkdown = await db.getDocumentMarkdown(widget.topic.uid);
-      setState(() {
-      _isLoading = documentMarkdown == 'No tienes archivos en este tema, agrega algunos';
-      });
-    }
-      @override
-  Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.topic.name),
+        title: Text(topic.name),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -46,18 +47,18 @@ class _DetailScreenState extends State<DetailScreen> {
           IconButton(
             icon: Icon(Icons.storage),
             onPressed: () {
-              Navigator.pushNamed(context, '/storage', arguments: widget.topic.uid);
+              Navigator.pushNamed(context, '/storage', arguments: topic.uid);
             },
           ),
               IconButton(
             icon: Icon(Icons.play_arrow),
             onPressed: _isLoading ? null : () {
-              Navigator.pushNamed(context, '/quiz', arguments: widget.topic);
+              Navigator.pushNamed(context, '/quiz', arguments: topic);
             },
           ),
         ],
       ),
-      body: TopicOverviewScreen(topic: widget.topic),
+      body: TopicOverviewScreen(topic: topic),
     );
   }
 }

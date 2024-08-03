@@ -94,7 +94,7 @@ void _handleFileUpload() async {
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'Antes de empezar, primero agrega con un curso y su material.',
+                  'Antes de empezar, primero agrega un curso y su material.',
                   style: TextStyle(fontSize: 18),
                   textAlign: TextAlign.center,
                   

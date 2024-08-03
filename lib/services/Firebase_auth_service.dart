@@ -30,7 +30,7 @@ class FirebaseAuthService {
       return credential.user;
 
     }catch(e){
-      print("Error in authentication $e");
+      throw("Error in authentication $e");
     }
 
   }
@@ -52,11 +52,11 @@ class FirebaseAuthService {
 
   }
 
-  Future<User?> signInWithGoogle() async {
+  Future<Map<String, Object?>?> signInWithGoogle() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     final GoogleSignIn _googleSignIn = GoogleSignIn();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
+    bool newUser = false;
     try {
       final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
 
@@ -80,11 +80,13 @@ class FirebaseAuthService {
             'age': "",
             'country': "",
             'interest': "",
+            'newUser': true,
           });
+          newUser = true;
         }
 
         await prefs.setString('user_id', uid);
-        return credentialUser.user;
+        return { "user":credentialUser.user,"newUser":newUser};
       }
     } catch (e) {
       showToast(message: "some error occurred: $e");

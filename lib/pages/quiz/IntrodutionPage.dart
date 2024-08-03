@@ -72,7 +72,7 @@ class _QuizIntroductionState extends State<QuizIntroduction> {
                 SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Navigator.pushNamed(context, '/detail', arguments: topic);
                   },
                   child: Text('Cancelar'),
                 ),
