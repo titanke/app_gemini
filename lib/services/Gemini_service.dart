@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:app_gemini/interfaces/QuestionInterface.dart';
+import 'package:app_gemini/services/ErrorService.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -16,6 +17,7 @@ class GeminiService {
   final String? apiKey = dotenv.env['API_KEY'];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
+  final Errorservice err = Errorservice();
 
 
   void SaveTranscript (String markdownContent, String filePath) async{
@@ -108,18 +110,16 @@ class GeminiService {
 
       final prompt = """
         Dame 5 preguntas aleatorias basadas en este documento, las preguntas deben 
-        ser del tipo de alternativa y respuesta abierta, además deben tener el siguiente formato JSON:
+        ser del tipo de alternativa y respuesta abierta, además deben tener el siguiente formato JSON obligatorio:
         [
           {
             question: ,
-            options: ["a) opcion",],
+            options: ["opcion",],
             type: "multipleChoice" o "open",
             answer: 
           }
         ]
       """;
-
-
 
       final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: apiKey!);
       final content = [
@@ -132,10 +132,7 @@ class GeminiService {
       String responseText = response.text!;
 
       if (responseText.startsWith('```json')) {
-        responseText = responseText.substring(7);
-      }
-      if (responseText.endsWith('```')) {
-        responseText = responseText.substring(0, responseText.length - 3);
+        responseText = responseText.replaceAll('```json', '').replaceAll('```', '');
       }
       final List<dynamic> questionsJson = json.decode(responseText);
 
@@ -144,13 +141,40 @@ class GeminiService {
     }
     catch(e){
       print(e);
+      err.writeError(e.toString());
       return [];
     }
 
   }
 
-  bool evaluateAnswer(String question, String answer) {
+  Future<bool> evaluateAnswer(String question, String answer, String correctAnswer) async{
+    print(question +'\n' + answer+'\n' + correctAnswer);
+    final prompt = """Con esta pregunta: $question y su respuesta: $correctAnswer 
+    Evalua la respuesta del usuario: $answer, dame solo true o false en este objeto JSON:
+    {
+      isCorrect = true o false,
+    }
+      """;
 
-    return true;
+    final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: apiKey!);
+    final content = [
+      Content.multi([
+        TextPart(prompt),
+      ])
+    ];
+    try {
+      final response = await model.generateContent(content);
+      String responseText = response.text!;
+      if (responseText.startsWith('```json')) {
+        responseText =
+            responseText.replaceAll('```json', '').replaceAll('```', '');
+      }
+
+      final dynamic questionsJson = json.decode(responseText);
+      print(questionsJson);
+      return questionsJson.isCorrect;
+    } catch(e) {
+      return false;
+    }
   }
 }

@@ -12,7 +12,7 @@ class ResultsPage extends StatelessWidget {
     Topic topic = args['topic'] as Topic;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Resultados')),
+      //appBar: AppBar(title: Text('Resultados')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -26,7 +26,7 @@ class ResultsPage extends StatelessWidget {
                   '/quiz/introduction',
                 );
               },
-              child: Text('Continuar'),
+              child: Text(''),
             ),
             TextButton(
               onPressed:() {
