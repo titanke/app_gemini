@@ -1,5 +1,5 @@
 import 'dart:ffi';
-
+import 'dart:io';
 import 'package:app_gemini/interfaces/TopicInterface.dart';
 import 'package:app_gemini/pages/HomePage.dart';
 import 'package:app_gemini/pages/PerfilPage.dart';
@@ -20,19 +20,32 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:app_gemini/widgets/theme_provider.dart';
 import 'package:app_gemini/widgets/FirstTPage.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 void main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
 
   await Firebase. initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await dotenv.load();
+  final String defaultLocale = Platform.localeName;
+  final localeList = defaultLocale.split('_');
+  final deviceLocale = Locale(localeList[0], localeList.length > 1 ? localeList[1] : '');
+
   runApp(    
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
-      child: MyApp(),
-      ),
+    EasyLocalization(
+          supportedLocales: [Locale('en', 'US'), Locale('es', 'ES')],
+          path: 'assets/trans',
+          fallbackLocale: Locale('en', 'US'),
+          child: ChangeNotifierProvider(
+          create: (context) => ThemeProvider(),
+          child: MyApp(),
+          ),
+        ),
+
     );
 }
 
@@ -50,10 +63,34 @@ class MyApp extends StatelessWidget {
 
       }
     });
-
-    return MaterialApp(
+          return MaterialApp(
+            title: 'App gemini',
+            theme: Provider.of<ThemeProvider>(context).themeData,
+            //localizationsDelegates: context.localizationDelegates,
+            //supportedLocales: context.supportedLocales,
+            //locale: Provider.of<ThemeProvider>(context).locale ?? context.locale, 
+            home: AuthenticationWrapper(),
+            routes: <String, WidgetBuilder>{
+              '/home': (context) => Menu(),
+              '/detail': (context) => DetailScreen(),
+              '/storage': (context) => FileStorageScreen(),
+              '/quiz': (context) => QuizIntroduction(),
+              '/quiz/introduction': (context) => QuizIntroduction(),
+              '/quiz/start': (context) => QuizPage(),
+              '/quiz/result': (context) => ResultsPage(),
+              '/login': (context) => LoginPage(),
+              '/ftpage': (context) => FirstTopicsPage(),
+            },
+          );
+      
+    /*
+        return MaterialApp(
+      
       title: 'App gemini',
       theme: Provider.of<ThemeProvider>(context).themeData,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: provider.locale ?? context.locale,
       home: AuthenticationWrapper(),
       routes: <String, WidgetBuilder>{
         '/home': (context) => Menu(),
@@ -67,6 +104,7 @@ class MyApp extends StatelessWidget {
         '/ftpage': (context) => FirstTopicsPage(),
       },
     );
+    */
   }
 }
 
@@ -110,7 +148,7 @@ class _MyHomePageState extends State<Menu> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Inicio',
+            label: 'Inicio',       
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.book), 
