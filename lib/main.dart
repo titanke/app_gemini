@@ -52,24 +52,38 @@ void main() async{
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+
+  Future<User?> _getUser() async {
+    return FirebaseAuth.instance.currentUser;
+  }
+  
+  /*
+  Future<ThemeProvider?> _getUser() async {
+  final user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    final userId = user.uid;
+    final themeProvider = ThemeProvider(userId);
+    return themeProvider;  
+  }
+  return null;
+}*/
+
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-
-        print('User is currently signed out!');
-      } else {
-        print('User is signed in!');
-
-      }
-    });
+        return FutureBuilder<User?>(
+    //return FutureBuilder<ThemeProvider?>(
+      future: _getUser(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else {
           return MaterialApp(
             title: 'App gemini',
             theme: Provider.of<ThemeProvider>(context).themeData,
-            //localizationsDelegates: context.localizationDelegates,
-            //supportedLocales: context.supportedLocales,
-            //locale: Provider.of<ThemeProvider>(context).locale ?? context.locale, 
-            home: AuthenticationWrapper(),
+            locale: context.locale,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            home: snapshot.hasData ? Menu() : LoginPage(),
             routes: <String, WidgetBuilder>{
               '/home': (context) => Menu(),
               '/detail': (context) => DetailScreen(),
@@ -82,46 +96,12 @@ class MyApp extends StatelessWidget {
               '/ftpage': (context) => FirstTopicsPage(),
             },
           );
-      
-    /*
-        return MaterialApp(
-      
-      title: 'App gemini',
-      theme: Provider.of<ThemeProvider>(context).themeData,
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            locale: provider.locale ?? context.locale,
-      home: AuthenticationWrapper(),
-      routes: <String, WidgetBuilder>{
-        '/home': (context) => Menu(),
-        '/detail': (context) => DetailScreen(),
-        '/storage': (context) => FileStorageScreen(),
-        '/quiz': (context) => QuizIntroduction(),
-        '/quiz/introduction': (context) => QuizIntroduction(),
-        '/quiz/start': (context) => QuizPage(),
-        '/quiz/result': (context) => ResultsPage(),
-        '/login': (context) => LoginPage(),
-        '/ftpage': (context) => FirstTopicsPage(),
+        }
       },
     );
-    */
   }
 }
 
-class AuthenticationWrapper extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.data != null) {
-          return Menu();
-        } else
-          return LoginPage();
-      },
-    );
-  }
-}
 
 
 class Menu extends StatefulWidget {
@@ -175,3 +155,20 @@ class _MyHomePageState extends State<Menu> {
     );
   }
 }
+
+/*
+class AuthenticationWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.data != null) {
+          return Menu();
+        } else
+          return LoginPage();
+      },
+    );
+  }
+}
+*/

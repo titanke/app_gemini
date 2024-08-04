@@ -37,6 +37,7 @@ class ThemeProvider with ChangeNotifier {
     _isDarkTheme = prefs.getBool('isDarkTheme') ?? false;
     notifyListeners();
   }
+
 //favorites 
   List<String> _favoriteTopics = [];
 
@@ -93,4 +94,9 @@ class ThemeProvider with ChangeNotifier {
     await prefs.setString('locale', '${locale.languageCode}_${locale.countryCode}');
     notifyListeners();
   }
+
+    Future<void> signOut() async {
+
+    _favoriteTopics.clear();
+    }
 }
