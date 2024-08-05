@@ -15,6 +15,7 @@ class Topicspage extends StatefulWidget {
 }
 
 class _TopicspageState extends State<Topicspage> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final FirebaseDatabase db = FirebaseDatabase();
   Future<void> _loadFavoriteTopics() async {
@@ -106,31 +107,31 @@ void _toggleFavorite(String topicId) {
 
           ElevatedButton(
             onPressed: () => _showTemaModal(context),
-            child: Text("Add Topic").tr(),
+            child: Text("Add Topic".tr()),
           ),
         ]
       ),
     );
     
-  }/*
-    void _navigateToDetailScreen(Object dato) {
-    Navigator.pushNamed(context, '/detail', arguments: dato);
-  }*/
-
+  }
   void _navigateToDetailScreen(Object dato) {
-    Navigator.pushNamed(context, '/detail', arguments: dato);
-    //Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: dato as Topic)));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: dato as Topic)));
   }
 
   void _guardarTema() async {
-    String name = _nameController.text;
-    try {
-      db.saveTopic(name);
-    }catch(e){
-      print("Error creating topic $e".tr());
+    if (_formKey.currentState!.validate()) {
+          String name = _nameController.text;
+          try {
+            db.saveTopic(name); 
+            _nameController.clear();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Topic succesfully saved").tr()),
+            );
+            Navigator.of(context).pop();
+          } catch (e) {
+            print("Error creating topic".tr());
+          }      
     }
-
-    Navigator.of(context).pop();
   }
   void _showTemaModal(BuildContext context) {
   showDialog(
@@ -138,11 +139,19 @@ void _toggleFavorite(String topicId) {
     builder: (BuildContext context) {
       return AlertDialog(
         title: Text("Topic Name").tr(),
-        content: Column(
+        content: Form(
+          key: _formKey,
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(
+            TextFormField(
               controller: _nameController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Please enter a topic name".tr();
+                }
+                return null;
+              },
             ),
             SizedBox(height: 20),
             ElevatedButton(
@@ -151,6 +160,7 @@ void _toggleFavorite(String topicId) {
             ),
           ],
         ),
+       )
       );
     },
   );

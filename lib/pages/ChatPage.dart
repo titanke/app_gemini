@@ -16,7 +16,6 @@ class Chatpage extends StatefulWidget {
   State<Chatpage> createState() => _ChatpageState();
 }
 
-
   class Message {
     final String text;
     final bool isUserMessage;
@@ -86,9 +85,7 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Chat Companion").tr(),
-      ),
+   
       body: Column(
         children: [
           Expanded(
@@ -104,7 +101,7 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
                       alignment: Alignment.centerLeft,
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text("Writting...").tr(),
+                        child: Text("Writting...".tr()),
                       ),
                     ),
                   );

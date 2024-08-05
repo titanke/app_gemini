@@ -44,7 +44,7 @@ class FirebaseDatabase {
         }).toList();
       });
     } catch (e) {
-      print("Error getting topics: $e".tr());
+      print("${"Error getting topics: ".tr()} $e");
       yield [];
     }
   }
@@ -91,7 +91,7 @@ class FirebaseDatabase {
             onProgress(processedFiles / totalFiles);
 
           } catch (e) {
-            showToast(message: "Error in save document $e".tr());
+            showToast(message: "${"Error in save document".tr()} $e");
             print(e);
           }
         }
@@ -140,7 +140,7 @@ class FirebaseDatabase {
             });
 
           } catch (e) {
-            showToast(message: "Error in save document $e".tr());
+            showToast(message: "${"Error in save document: ".tr()} $e");
             print(e);
           }
         }
@@ -163,7 +163,7 @@ class FirebaseDatabase {
         return snapshot.docs.map((doc) => Document.fromFirestore(doc)).toList();
       });
     } catch (e) {
-      print("Error getting documents: $e".tr());
+      print("${"Error getting documents: ".tr()} $e".tr());
       yield [];
     }
   }
@@ -181,7 +181,7 @@ class FirebaseDatabase {
         final decodedBody = utf8.decode(response.bodyBytes);
         return decodedBody;
       } else {
-        throw Exception("Failed to load document from Firebase Storage".tr());
+        throw Exception('Failed to load document from Firebase Storage');
       }
     } catch (e) {
       return "You don't have files in this theme, add some".tr();
@@ -198,7 +198,7 @@ class FirebaseDatabase {
       await fileRef.delete();
       print("Document succesfully removed".tr());
     } catch (e) {
-      print("Error removing: $e".tr());
+      print("${"Error removing: ".tr()} $e".tr());
     }
   }
 

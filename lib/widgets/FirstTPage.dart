@@ -9,6 +9,8 @@ class FirstTopicsPage extends StatefulWidget {
 }
 
 class _FirstTopicsPageState extends State<FirstTopicsPage> {
+  final _formKey = GlobalKey<FormState>();
+  bool _isUploading = false;
   final TextEditingController _nameController = TextEditingController();
   final FirebaseDatabase _db = FirebaseDatabase();
   int _currentStep = 0;
@@ -17,28 +19,33 @@ class _FirstTopicsPageState extends State<FirstTopicsPage> {
   bool _step2Completed = false;
   bool _step3Completed = false;
 
-void _guardarTema() async {
-  String name = _nameController.text;
-  try {
-     _db.saveTopic(name); 
-    _nameController.clear();
-    ScaffoldMessenger.of(context).showSnackBar(
-       SnackBar(content: Text("Topic succesfully saved").tr()),
-    );
-       setState(() {
-      _currentStep++;
-    });
-  } catch (e) {
-    print("Error en crear el tema $e");
+  void _guardarTema() {
+  
+    if (_formKey.currentState!.validate()) {
+          String name = _nameController.text;
+          try {
+            _db.saveTopic(name); 
+            _nameController.clear();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Topic succesfully saved").tr()),
+            );
+              setState(() {
+              _currentStep++;
+            });
+          } catch (e) {
+            print("Error en crear el tema $e");
+          }      setState(() {
+        _step1Completed = true;
+      });
+    }
   }
-}
+
 void nexts() async {
        setState(() {
       _currentStep++;
     });
 
 }
-bool _isUploading = false;
 
 void _handleFileUpload() async {
   setState(() {
@@ -69,7 +76,9 @@ void _handleFileUpload() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stepper(
+      body: Form(
+      key: _formKey,
+      child: Stepper(
         type: StepperType.horizontal,
         currentStep: _currentStep,
         onStepTapped: null,
@@ -114,8 +123,14 @@ void _handleFileUpload() async {
             content: Column(
               children: <Widget>[
                 Text("Topic name").tr(),
-                  TextField(
+                  TextFormField(
                     controller: _nameController,
+                     validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter a topic name".tr();
+                    }
+                    return null;
+                  },
                     onChanged: (value) {
                       setState(() => _step1Completed = value.isNotEmpty);
                       },
@@ -131,7 +146,7 @@ void _handleFileUpload() async {
             state: _step1Completed ? StepState.complete : StepState.indexed,
           ),
           Step(
-            title: Text('Mate'),
+            title: Text("File".tr()),
             content: Column(
               children: <Widget>[
                 Text("Add files (PDF / JPG)").tr(),
@@ -189,6 +204,7 @@ void _handleFileUpload() async {
             return SizedBox.shrink();
           },
       ),
+    ),
     );
   }
 }
