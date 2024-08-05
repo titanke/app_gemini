@@ -82,17 +82,30 @@ class _PerfilPageState extends State<PerfilPage> {
                 ],
               ),
               SizedBox(height: 20),
-              Text('Datos de cuenta', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text("Account Data", style: TextStyle(fontWeight: FontWeight.bold)).tr(),
               ExpansionTile(
-                title: Text('title').tr(),
+                title: Text("Personal information").tr(),
                 children: [
-                  ListTile(title: Text('Edad: ${_userData['age']}')),
-                  ListTile(title: Text('País: ${_userData['country']}')),
-                  ListTile(title: Text('Intereses: ${_userData['interests']}')),
+                    ListTile(
+                      title: Text(
+                        '${("Age: ").tr()} ${_userData['age']}',
+                      ),
+                    ),     
+                    ListTile(
+                      title: Text(
+                        '${("Country: ").tr()} ${_userData['country']}',
+                      ),
+                    ), 
+                    ListTile(
+                      title: Text(
+                        '${("Interests: ").tr()} ${_userData['interests']}',
+                      ),
+                    ),              
+              
                 ],
               ),
-                  Text('Ajustes', style: TextStyle(fontWeight: FontWeight.bold)),
-              ExpansionTile(
+                  Text("Settings", style: TextStyle(fontWeight: FontWeight.bold)).tr(),
+             /* ExpansionTile(
                 title: Text('Ajustes de Conocimiento'),
                 children: [
                     ExpansionTile(
@@ -104,9 +117,9 @@ class _PerfilPageState extends State<PerfilPage> {
                       ],
                     ),
                   ],
-              ),
+              ),*/
                 ExpansionTile(
-                  title: Text('Ajustes de Aplicacion'),
+                  title: Text('App Settings').tr(),
                   children: [
             Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -115,7 +128,7 @@ class _PerfilPageState extends State<PerfilPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text("Cambiar Tema"),
+                  child: Text("Change Theme").tr(),
                 ),
                 Consumer<ThemeProvider>(
                   builder: (context, themeProvider, child) {
@@ -133,7 +146,7 @@ class _PerfilPageState extends State<PerfilPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text("Cambiar Idioma"),
+                  child: Text("Change Languaje").tr(),
                 ),
                 Consumer<ThemeProvider>(
                   builder: (context, provider, child) {
@@ -166,12 +179,12 @@ class _PerfilPageState extends State<PerfilPage> {
                 ),
 
                 GestureDetector(
-                  onTap: () async{
+                  onTap: () {
                     themeProvider.signOut();
-  
+                    _signOut(context);
                     Navigator.pushNamed(context, '/login');
                   },
-                  child: Text('Cerrar Sesión', style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: Text("Sign Out", style: TextStyle(fontWeight: FontWeight.bold)).tr(),
                 ),            
               ],
           ),

@@ -1,5 +1,6 @@
 import 'package:app_gemini/interfaces/TopicInterface.dart';
 import 'package:app_gemini/services/Firebase_database.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
@@ -64,7 +65,7 @@ void _toggleFavorite(String topicId) {
       }
 
       if (!snapshot.hasData || snapshot.data!.isEmpty) {
-        return Center(child: Text('No tienes ningun tema, Agrega uno'));
+        return Center(child: Text("Don't? have a topic, add one").tr());
       }
 
       final List<Topic> topics = snapshot.data!;
@@ -105,7 +106,7 @@ void _toggleFavorite(String topicId) {
 
           ElevatedButton(
             onPressed: () => _showTemaModal(context),
-            child: Text('Agregar Tema'),
+            child: Text("Add Topic").tr(),
           ),
         ]
       ),
@@ -126,7 +127,7 @@ void _toggleFavorite(String topicId) {
     try {
       db.saveTopic(name);
     }catch(e){
-      print("Error en crear el tema $e");
+      print("Error creating topic $e".tr());
     }
 
     Navigator.of(context).pop();
@@ -136,18 +137,17 @@ void _toggleFavorite(String topicId) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Agregar Tema'),
+        title: Text("Topic Name").tr(),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: 'Nombre'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _guardarTema,
-              child: Text('Guardar'),
+              child: Text("Save").tr(),
             ),
           ],
         ),

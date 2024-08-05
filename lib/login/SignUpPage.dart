@@ -2,6 +2,7 @@ import 'package:app_gemini/global/common/toast.dart';
 import 'package:app_gemini/login/LoginPage.dart';
 import 'package:app_gemini/services/Firebase_auth_service.dart';
 import 'package:app_gemini/widgets/FormContainerWidget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -47,7 +48,7 @@ class _SignUpPageState extends State<SignUpPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Sign Up",
+                "Sign Up".tr(),
                 style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
               ),
               SizedBox(
@@ -63,7 +64,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),*/
               FormContainerWidget(
                 controller: _emailController,
-                hintText: "Email",
+                hintText: "Email".tr(),
                 isPasswordField: false,
               ),
               SizedBox(
@@ -71,7 +72,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               FormContainerWidget(
                 controller: _passwordController,
-                hintText: "Password",
+                hintText: "Password".tr(),
                 isPasswordField: true,
               ),
               SizedBox(
@@ -79,21 +80,21 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               FormContainerWidget(
                 controller: _ageController,
-                hintText: "Age",
+                hintText: "Age".tr(),
               ),
               SizedBox(
                 height: 10,
               ),
               FormContainerWidget(
                 controller: _interestController,
-                hintText: "Interest",
+                hintText: "Interest".tr(),
               ),
               SizedBox(
                 height: 10,
               ),
               FormContainerWidget(
                 controller: _countryController,
-                hintText: "Country",
+                hintText: "Country".tr(),
               ),
               SizedBox(
                 height: 30,
@@ -112,7 +113,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   child: Center(
                       child: isSigningUp ? CircularProgressIndicator(color: Colors.white,):Text(
-                        "Sign Up",
+                        "Sign Up".tr(),
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       )),
@@ -124,7 +125,7 @@ class _SignUpPageState extends State<SignUpPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Already have an account?"),
+                  Text("Already have an account?").tr(),
                   SizedBox(
                     width: 5,
                   ),
@@ -137,7 +138,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 (route) => false);
                       },
                       child: Text(
-                        "Login",
+                        "Login".tr(),
                         style: TextStyle(
                             color: Colors.blue, fontWeight: FontWeight.bold),
                       ))
@@ -171,10 +172,10 @@ class _SignUpPageState extends State<SignUpPage> {
         isSigningUp = false;
       });
       if (user != null) {
-        showToast(message: "User is successfully created");
+        showToast(message: "User is successfully created".tr());
         Navigator.pushNamed(context, "/ftpage");
       } else {
-        showToast(message: "Some error happend in register");
+        showToast(message: "Some error happend in register".tr());
       }
     }catch(e){
       showToast(message: e.toString());

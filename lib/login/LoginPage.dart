@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class LoginPage extends StatefulWidget {
  const LoginPage({super.key});
@@ -43,13 +44,13 @@ class _LoginPageState extends State<LoginPage> {
        Text(
         "Login",
         style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
-       ),
+       ).tr(),
        SizedBox(
         height: 30,
        ),
        FormContainerWidget(
         controller: _emailController,
-        hintText: "Email",
+        hintText: "Email".tr(),
         isPasswordField: false,
        ),
        SizedBox(
@@ -57,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
        ),
        FormContainerWidget(
         controller: _passwordController,
-        hintText: "Password",
+        hintText: "Password".tr(),
         isPasswordField: true,
        ),
        SizedBox(
@@ -82,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
             color: Colors.white,
             fontWeight: FontWeight.bold,
            ),
-          ),
+          ).tr(),
          ),
         ),
        ),
@@ -111,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
               color: Colors.white,
               fontWeight: FontWeight.bold,
              ),
-            ),
+            ).tr(),
            ],
           ),
          ),
@@ -126,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
        Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-         Text("Don't have an account?"),
+         Text("account?").tr(),
          SizedBox(
           width: 5,
          ),
@@ -144,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
             color: Colors.blue,
             fontWeight: FontWeight.bold,
            ),
-          ),
+          ).tr(),
          ),
         ],
        ),

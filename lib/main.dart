@@ -125,23 +125,23 @@ class _MyHomePageState extends State<Menu> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Inicio',       
+            label: "Home".tr(),       
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.book), 
-            label: 'Temas',
+            label: "Topics".tr(),
           ),
 
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),
-            label: 'Chat',
+            label: "Chat".tr(),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Perfil',
+            label: "Profile".tr(),
           ),
           
         ],

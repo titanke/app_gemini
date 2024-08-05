@@ -4,6 +4,7 @@ import 'package:app_gemini/pages/quiz/QuizPage.dart';
 import 'package:app_gemini/pages/StorageDetailPage.dart';
 import 'package:app_gemini/pages/TopicOverview.dart';
 import 'package:app_gemini/services/Firebase_database.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class _DetailScreenState extends State<DetailScreen> {
     Future<void> _fetchData() async {
       final String documentMarkdown = await db.getDocumentMarkdown(topic.uid);
       setState(() {
-        _isLoading = documentMarkdown == 'No tienes archivos en este tema, agrega algunos';
+        _isLoading = documentMarkdown == "You don't have files in this theme, add some".tr();
       });
     }
     @override

@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:app_gemini/global/common/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -30,7 +31,7 @@ class FirebaseAuthService {
       return credential.user;
 
     }catch(e){
-      throw("Error in authentication $e");
+      throw("Error in authentication $e".tr());
     }
 
   }
@@ -47,7 +48,7 @@ class FirebaseAuthService {
       return credential.user;
 
     }catch(e){
-      print("Error in authentication");
+      print("Error in authentication".tr());
     }
 
   }
@@ -89,7 +90,7 @@ class FirebaseAuthService {
         return { "user":credentialUser.user,"newUser":newUser};
       }
     } catch (e) {
-      showToast(message: "some error occurred: $e");
+      showToast(message: "Some error occurred: $e".tr());
     }
 
     return null;

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
@@ -86,7 +87,7 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
    return Scaffold(
       appBar: AppBar(
-        title: const Text("CHAT COMPANION"),
+        title: const Text("Chat Companion").tr(),
       ),
       body: Column(
         children: [
@@ -99,11 +100,11 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
                 if (index == messages.length) {
                   return FadeTransition(
                     opacity: _animationController,
-                    child: const Align(
+                    child:  Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text("Escribiendo respuesta..."),
+                        child: Text("Writting...").tr(),
                       ),
                     ),
                   );
@@ -141,7 +142,7 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
                   child: TextField(
                     controller: prompt,
                     decoration: InputDecoration(
-                      hintText: 'Escribe un mensaje...',
+                      hintText: "Writte your answer...".tr(),
                       border: OutlineInputBorder(),
                     ),
                   ),

@@ -2,6 +2,7 @@
 
 import 'package:app_gemini/interfaces/DocumentInterface.dart';
 import 'package:app_gemini/services/Firebase_database.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
@@ -69,7 +70,7 @@ class _FileStorageScreenState extends State<FileStorageScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Documentos'),
+          title: Text("Documents").tr(),
           actions: [
             IconButton(onPressed: onEdit,
                 icon: Icon(isEdit ? Icons.save : Icons.edit, size: 30,)),
@@ -97,7 +98,7 @@ class _FileStorageScreenState extends State<FileStorageScreen> {
 
                         if (!snapshot.hasData || snapshot.data!.isEmpty) {
                           return Center(
-                              child: Text('No documents uploaded yet'));
+                              child: Text("No documents uploaded yet").tr());
                         }
 
                         return GridView.builder(

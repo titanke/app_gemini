@@ -6,6 +6,7 @@ import 'package:app_gemini/interfaces/DocumentInterface.dart';
 import 'package:app_gemini/interfaces/TopicInterface.dart';
 import 'package:app_gemini/services/Gemini_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mime/mime.dart';
@@ -43,7 +44,7 @@ class FirebaseDatabase {
         }).toList();
       });
     } catch (e) {
-      print('Error getting themes: $e');
+      print("Error getting topics: $e".tr());
       yield [];
     }
   }
@@ -90,7 +91,7 @@ class FirebaseDatabase {
             onProgress(processedFiles / totalFiles);
 
           } catch (e) {
-            showToast(message: 'Error in save document $e');
+            showToast(message: "Error in save document $e".tr());
             print(e);
           }
         }
@@ -98,7 +99,7 @@ class FirebaseDatabase {
 
       gem.SaveTranscript(markdownContent, fileTxtPath);
     } else {
-      showToast(message: 'No files selected');
+      showToast(message: "No files selected".tr());
     }
   }
 
@@ -139,7 +140,7 @@ class FirebaseDatabase {
             });
 
           } catch (e) {
-            showToast(message: 'Error in save document $e');
+            showToast(message: "Error in save document $e".tr());
             print(e);
           }
         }
@@ -148,7 +149,7 @@ class FirebaseDatabase {
       gem.SaveTranscript(markdownContent, fileTxtPath);
 
     } else {
-      showToast(message: 'No files selected');
+      showToast(message: "No files selected".tr());
     }
   }
 
@@ -162,7 +163,7 @@ class FirebaseDatabase {
         return snapshot.docs.map((doc) => Document.fromFirestore(doc)).toList();
       });
     } catch (e) {
-      print('Error getting documents: $e');
+      print("Error getting documents: $e".tr());
       yield [];
     }
   }
@@ -180,10 +181,10 @@ class FirebaseDatabase {
         final decodedBody = utf8.decode(response.bodyBytes);
         return decodedBody;
       } else {
-        throw Exception('Failed to load document from Firebase Storage');
+        throw Exception("Failed to load document from Firebase Storage".tr());
       }
     } catch (e) {
-      return 'No tienes archivos en este tema, agrega algunos';
+      return "You don't have files in this theme, add some".tr();
     }
   }
 
@@ -195,9 +196,9 @@ class FirebaseDatabase {
       Reference fileRef = _storage.ref().child('users/$userId/topics/$topicId/$fileName');
       await documentRef.delete();
       await fileRef.delete();
-      print('Documento eliminado exitosamente');
+      print("Document succesfully removed".tr());
     } catch (e) {
-      print('Error al eliminar el documento: $e');
+      print("Error removing: $e".tr());
     }
   }
 
