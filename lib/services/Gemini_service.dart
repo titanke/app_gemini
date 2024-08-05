@@ -18,42 +18,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class GeminiService {
   final String? apiKey = dotenv.env['API_KEY'];
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
-  final Errorservice err = Errorservice();
+  //final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseDatabase db = FirebaseDatabase();
+  //final FirebaseStorage _storage = FirebaseStorage.instance;
+  final Errorservice err = Errorservice();
 
-
-
-  void SaveTranscript (String markdownContent, String filePath) async{
-    String fileName = "transcript.txt";
-    String newContent = markdownContent;
-    final storageRef = _storage.ref().child(filePath).child(fileName);
-
-    try {
-
-      final existingData = await storageRef.getData();
-      if (existingData != null) {
-        // Append new content to the existing content
-        final existingContent = utf8.decode(existingData);
-        newContent = '$existingContent\n$markdownContent';
-      }
-    } catch (e) {
-      print('Error checking existing file: $e');
-    }
-
-    final directory = await getTemporaryDirectory();
-    final localFile = File('${directory.path}/$fileName');
-
-    await localFile.writeAsString(newContent);
-
-    try {
-      await storageRef.putFile(localFile);
-      print('File uploaded successfully');
-    } catch (e) {
-      print('Error uploading file: $e');
-    }
-  }
 
   Future<String> transcriptDocument(File file, String url) async {
     if (apiKey == null) {
@@ -87,28 +56,13 @@ class GeminiService {
 
   }
 
-  Future<File> getDocumentFromFirebase(String documentPath) async {
-    final storageRef = _storage.ref().child(documentPath);
-    final url = await storageRef.getDownloadURL();
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      final directory = await getTemporaryDirectory();
-      final file = File('${directory.path}/document.txt');
-      file.writeAsString(response.body);
-      return file;
-    } else {
-      throw Exception('Failed to load document from Firebase Storage');
-    }
-  }
-
   Future<List<Question>> generateQuestions(String topicId) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final userId = prefs.getString('user_id');
 
       String filePath = 'users/$userId/topics/$topicId/transcript.txt';
-      File file = await getDocumentFromFirebase(filePath);
+      File file = await db.getDocumentFromFirebase(filePath);
 
       String mimeType = lookupMimeType(file.path)!;
       final fileBytes = await file.readAsBytes();
@@ -183,7 +137,7 @@ class GeminiService {
     }
   }
 
-  Future<String> ragResponse(String query) async {
+  Future<RetrievalQAChain> initRag () async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('user_id');
     var apiKey = dotenv.env['API_KEY'];
@@ -217,12 +171,16 @@ class GeminiService {
 
       final chatModel = ChatGoogleGenerativeAI(apiKey: apiKey);
 
-      final docPrompt = PromptTemplate.fromTemplate(
-        'Eres un chatbot que ayuda al usuario a repasar. Utilizando este Content: {page_content}'
+      final docPrompt = ChatPromptTemplate.fromTemplate(
+
+          '''
+          Eres un asistente que ayuda al usuario a repasar temas en base a este contexto: {context}
+          Question: {question}
+          '''
       );
 
       final qaChain = LLMChain(llm: chatModel, prompt: docPrompt);
-      
+
       final finalQAChain = StuffDocumentsChain(
         llmChain: qaChain,
       );
@@ -231,12 +189,21 @@ class GeminiService {
         combineDocumentsChain: finalQAChain,
       );
 
+      return retrievalQA;
+    } catch (error) {
+      throw 'Error loading RAG \n$error';
+    }
+  }
+
+  Future<String> ragResponse(RetrievalQAChain retrievalQA,String query) async {
+    try {
       final res = await retrievalQA(query);
       print(res);
-      return res.toString();
+      return res['result'];
 
-    } catch (error) {
-      return '';
+    } catch(e){
+     print(e);
+     return '';
     }
   }
 

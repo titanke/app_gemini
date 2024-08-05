@@ -56,7 +56,7 @@ dependencies:
   convert: ^3.1.1
   dio: ^5.5.0+1
   flutter_svg: ^2.0.10+1
-  easy_localization:
+  easy_localization: ^3.0.7
   langchain_core: ^0.3.4
   langchain_community: ^0.3.0
 

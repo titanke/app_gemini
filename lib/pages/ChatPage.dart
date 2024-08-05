@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:langchain/langchain.dart';
 
 class Chatpage extends StatefulWidget {
   const Chatpage({super.key});
@@ -16,7 +17,6 @@ class Chatpage extends StatefulWidget {
   @override
   State<Chatpage> createState() => _ChatpageState();
 }
-
 
   class Message {
     final String text;
@@ -29,6 +29,7 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
   List<Message> messages = [];
   TextEditingController prompt = TextEditingController();
   final GeminiService gem = GeminiService();
+  RetrievalQAChain? rag;
   bool isLoading = false;
 
   late AnimationController _animationController;
@@ -36,11 +37,27 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
   final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(seconds: 1),
-      vsync: this,
-    )..repeat(reverse: true);
+    if (mounted) {
+      super.initState();
+      _initializeRag();
+      _animationController = AnimationController(
+        duration: const Duration(seconds: 1),
+        vsync: this,
+      )
+        ..repeat(reverse: true);
+    }
+  }
+
+  Future<void> _initializeRag() async {
+    try {
+      final retrievalQAChain = await gem.initRag();
+      print('initializing RAG');
+      setState(() {
+        rag = retrievalQAChain;
+      });
+    } catch (e) {
+      print('Error initializing RAG: $e');
+    }
   }
 
   @override
@@ -67,8 +84,7 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
     });
 
     try {
-      String response =await gem.ragResponse(query);
-
+      String response =await gem.ragResponse(rag!, query);
       setState(() {
         messages.add(Message(response, false));
         isLoading = false;
@@ -84,11 +100,14 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+
    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Chat Companion").tr(),
-      ),
-      body: Column(
+   
+      body: rag ==null?
+          Center(
+            child: CircularProgressIndicator(),
+          )
+          :Column(
         children: [
           Expanded(
             child: ListView.builder(
@@ -103,7 +122,7 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
                       alignment: Alignment.centerLeft,
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text("Writting...").tr(),
+                        child: Text("Writting...".tr()),
                       ),
                     ),
                   );

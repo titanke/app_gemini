@@ -120,14 +120,14 @@ class _LoginPageState extends State<LoginPage> {
        ),
 
 
-       SizedBox(
+       const SizedBox(
         height: 20,
        ),
 
        Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-         Text("account?").tr(),
+         Text("You don't have an account?").tr(),
          SizedBox(
           width: 5,
          ),
@@ -171,10 +171,10 @@ class _LoginPageState extends State<LoginPage> {
   });
 
   if (user != null) {
-   showToast(message: "User is successfully signed in");
+   showToast(message: "User is successfully signed in".tr());
    Navigator.pushNamed(context, "/home");
   } else {
-   showToast(message: "some error occured");
+   showToast(message: "Some error occured".tr());
   }
  }
 
@@ -186,16 +186,16 @@ class _LoginPageState extends State<LoginPage> {
    bool newUser = data['newUser'] as bool;
 
    if (user != null) {
-    showToast(message: "User is successfully signed in");
+    showToast(message: "User is successfully signed in".tr());
     if (newUser)
      Navigator.pushNamed(context, "/ftpage");
     else
      Navigator.pushNamed(context, "/home");
    } else {
-    showToast(message: "Some error occurred");
+    showToast(message: "Some error occurred".tr());
    }
   } else {
-   showToast(message: "Failed to sign in with Google");
+   showToast(message: "Failed to sign in with Google".tr());
   }
  }
 }

@@ -50,7 +50,7 @@ class _PerfilPageState extends State<PerfilPage> {
       );
     } catch (e) {
       print(e);
-      showToast(message: "some error signing out occured $e");
+      showToast(message: "Some error signing out occured".tr());
     }
   }
 
@@ -98,7 +98,7 @@ class _PerfilPageState extends State<PerfilPage> {
                     ), 
                     ListTile(
                       title: Text(
-                        '${("Interests: ").tr()} ${_userData['interests']}',
+                        '${("Interests: ").tr()} ${_userData['interest']}',
                       ),
                     ),              
               

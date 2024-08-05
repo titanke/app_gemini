@@ -185,8 +185,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   void _navigateToDetailScreen(Object dato) {
-    Navigator.pushNamed(context, '/detail', arguments: dato);
-    //Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: dato as Topic)));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: dato as Topic)));
   }
 }
 

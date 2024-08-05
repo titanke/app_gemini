@@ -1,16 +1,15 @@
-import 'package:app_gemini/interfaces/TopicInterface.dart';
-import 'package:app_gemini/pages/quiz/IntrodutionPage.dart';
 import 'package:app_gemini/pages/quiz/QuizPage.dart';
 import 'package:app_gemini/pages/StorageDetailPage.dart';
 import 'package:app_gemini/pages/TopicOverview.dart';
 import 'package:app_gemini/services/Firebase_database.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:app_gemini/interfaces/TopicInterface.dart';
 
 class DetailScreen extends StatefulWidget {
-  //final Topic topic;
+  final Topic topic;
 
-  //const DetailScreen({required this.topic});
+  const DetailScreen({required this.topic});
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
@@ -19,54 +18,44 @@ class _DetailScreenState extends State<DetailScreen> {
     bool _isLoading = true; 
     FirebaseDatabase db = FirebaseDatabase();
 
-
-    @override
-  Widget build(BuildContext context) {
-    final Topic topic = ModalRoute.of(context)?.settings.arguments as Topic;
-    Future<void> _fetchData() async {
-      final String documentMarkdown = await db.getDocumentMarkdown(topic.uid);
-      setState(() {
-        _isLoading = documentMarkdown == "You don't have files in this theme, add some".tr();
-      });
-    }
     @override
     void initState() {
       super.initState();
       _fetchData();
     }
 
-    return Scaffold(
+    Future<void> _fetchData() async {
+      final String documentMarkdown = await db.getDocumentMarkdown(widget.topic.uid);
+      setState(() {
+      _isLoading = documentMarkdown == "You don't have files in this theme, add some".tr();
+      });
+    }
+      @override
+  Widget build(BuildContext context) {
+ return Scaffold(
       appBar: AppBar(
-        title: Text(topic.name),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushNamed(context, '/home', arguments: 1);
-          }
-        ),
+        title: Text(widget.topic.name),
         actions: [
           IconButton(
             icon: Icon(Icons.storage),
             onPressed: () {
-              Navigator.pushNamed(context, '/storage', arguments: topic.uid);
+            Navigator.pushNamed(context, '/storage', arguments: widget.topic.uid);
             },
           ),
-              IconButton(
+          IconButton(
             icon: Icon(Icons.play_arrow),
-            onPressed: _isLoading ? null : () {
-              Navigator.pushNamed(context, '/quiz', arguments: topic);
+           onPressed: _isLoading ? null : () {
+              Navigator.pushNamed(context, '/quiz', arguments: widget.topic);
             },
           ),
         ],
       ),
-      body: TopicOverviewScreen(topic: topic),
+      body: TopicOverviewScreen(topic: widget.topic),
     );
-  }
 }
-
-
+}
 /*
-* class DetailScreen extends StatefulWidget {
+ class DetailScreen extends StatefulWidget {
   const DetailScreen({Key? key}) : super(key: key);
 
   @override
@@ -114,5 +103,4 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 }
-*
-* */
+*/

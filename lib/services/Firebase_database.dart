@@ -10,6 +10,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mime/mime.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,7 +21,52 @@ class FirebaseDatabase {
 
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final GeminiService gem = GeminiService();
+
+  Future<File> getDocumentFromFirebase(String documentPath) async {
+    final storageRef = _storage.ref().child(documentPath);
+    final url = await storageRef.getDownloadURL();
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final directory = await getTemporaryDirectory();
+      final file = File('${directory.path}/document.txt');
+      file.writeAsString(response.body);
+      return file;
+    } else {
+      throw Exception('Failed to load document from Firebase Storage');
+    }
+  }
+
+
+  void SaveTranscript (String markdownContent, String filePath) async{
+    String fileName = "transcript.txt";
+    String newContent = markdownContent;
+    final storageRef = _storage.ref().child(filePath).child(fileName);
+
+    try {
+
+      final existingData = await storageRef.getData();
+      if (existingData != null) {
+        // Append new content to the existing content
+        final existingContent = utf8.decode(existingData);
+        newContent = '$existingContent\n$markdownContent';
+      }
+    } catch (e) {
+      print('Error checking existing file: $e');
+    }
+
+    final directory = await getTemporaryDirectory();
+    final localFile = File('${directory.path}/$fileName');
+
+    await localFile.writeAsString(newContent);
+
+    try {
+      await storageRef.putFile(localFile);
+      print('File uploaded successfully');
+    } catch (e) {
+      print('Error uploading file: $e');
+    }
+  }
 
   void saveTopic(String name) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -44,12 +90,13 @@ class FirebaseDatabase {
         }).toList();
       });
     } catch (e) {
-      print("Error getting topics: $e".tr());
+      print("${"Error getting topics: ".tr()} $e");
       yield [];
     }
   }
 
   Future<void> pickAndUploadFiles2(String topicId, Function(double) onProgress) async {
+    final GeminiService gem = GeminiService();
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
@@ -91,13 +138,13 @@ class FirebaseDatabase {
             onProgress(processedFiles / totalFiles);
 
           } catch (e) {
-            showToast(message: "Error in save document $e".tr());
+            showToast(message: "${"Error in save document".tr()} $e");
             print(e);
           }
         }
       }
 
-      gem.SaveTranscript(markdownContent, fileTxtPath);
+      SaveTranscript(markdownContent, fileTxtPath);
     } else {
       showToast(message: "No files selected".tr());
     }
@@ -105,6 +152,7 @@ class FirebaseDatabase {
 
 
   Future<void> pickAndUploadFiles(String topicId) async {
+    final GeminiService gem = GeminiService();
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
@@ -140,13 +188,13 @@ class FirebaseDatabase {
             });
 
           } catch (e) {
-            showToast(message: "Error in save document $e".tr());
+            showToast(message: "${"Error in save document: ".tr()} $e");
             print(e);
           }
         }
       }
 
-      gem.SaveTranscript(markdownContent, fileTxtPath);
+      SaveTranscript(markdownContent, fileTxtPath);
 
     } else {
       showToast(message: "No files selected".tr());
@@ -163,7 +211,7 @@ class FirebaseDatabase {
         return snapshot.docs.map((doc) => Document.fromFirestore(doc)).toList();
       });
     } catch (e) {
-      print("Error getting documents: $e".tr());
+      print("${"Error getting documents: ".tr()} $e".tr());
       yield [];
     }
   }
@@ -181,7 +229,7 @@ class FirebaseDatabase {
         final decodedBody = utf8.decode(response.bodyBytes);
         return decodedBody;
       } else {
-        throw Exception("Failed to load document from Firebase Storage".tr());
+        throw Exception('Failed to load document from Firebase Storage');
       }
     } catch (e) {
       return "You don't have files in this theme, add some".tr();
@@ -199,7 +247,7 @@ class FirebaseDatabase {
       await fileRef.delete();
       print("Document succesfully removed".tr());
     } catch (e) {
-      print("Error removing: $e".tr());
+      print("${"Error removing: ".tr()} $e".tr());
     }
   }
 
