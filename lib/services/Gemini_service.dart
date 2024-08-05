@@ -3,11 +3,14 @@ import 'dart:io';
 
 import 'package:app_gemini/interfaces/QuestionInterface.dart';
 import 'package:app_gemini/services/ErrorService.dart';
+import 'package:app_gemini/services/Firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:langchain/langchain.dart';
+import 'package:langchain_community/langchain_community.dart';
+import 'package:langchain_google/langchain_google.dart';
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
@@ -18,6 +21,8 @@ class GeminiService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final Errorservice err = Errorservice();
+  final FirebaseDatabase db = FirebaseDatabase();
+
 
 
   void SaveTranscript (String markdownContent, String filePath) async{
@@ -177,4 +182,62 @@ class GeminiService {
       return false;
     }
   }
+
+  Future<String> ragResponse(String query) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('user_id');
+    var apiKey = dotenv.env['API_KEY'];
+
+    try {
+      //RAG
+      String combinedContent = await db.combineTranscripts(userId!);
+
+      final tempDir = await getTemporaryDirectory();
+      final tempFile = File('${tempDir.path}/combined_transcripts.txt');
+      await tempFile.writeAsString(combinedContent);
+
+      final loader = TextLoader(tempFile.path);
+      final documents = await loader.load();
+
+      const textSplitter = RecursiveCharacterTextSplitter(
+        chunkSize: 800,
+        chunkOverlap: 0,
+      );
+
+      final docs = textSplitter.splitDocuments(documents);
+
+      final embeddings = GoogleGenerativeAIEmbeddings(
+        apiKey: apiKey,
+      );
+
+      final docSearch = await MemoryVectorStore.fromDocuments(
+        documents: docs,
+        embeddings: embeddings,
+      );
+
+      final chatModel = ChatGoogleGenerativeAI(apiKey: apiKey);
+
+      final docPrompt = PromptTemplate.fromTemplate(
+        'Eres un chatbot que ayuda al usuario a repasar. Utilizando este Content: {page_content}'
+      );
+
+      final qaChain = LLMChain(llm: chatModel, prompt: docPrompt);
+      
+      final finalQAChain = StuffDocumentsChain(
+        llmChain: qaChain,
+      );
+      final retrievalQA = RetrievalQAChain(
+        retriever: docSearch.asRetriever(),
+        combineDocumentsChain: finalQAChain,
+      );
+
+      final res = await retrievalQA(query);
+      print(res);
+      return res.toString();
+
+    } catch (error) {
+      return '';
+    }
+  }
+
 }

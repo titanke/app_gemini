@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:app_gemini/services/Firebase_database.dart';
 import 'package:app_gemini/main.dart';
@@ -22,7 +23,7 @@ void _guardarTema() async {
      _db.saveTopic(name); 
     _nameController.clear();
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Tema guardado exitosamente')),
+       SnackBar(content: Text("Topic succesfully saved").tr()),
     );
        setState(() {
       _currentStep++;
@@ -51,14 +52,14 @@ void _handleFileUpload() async {
       _currentStep++;
       _isUploading = false;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Archivo subido correctamente')),
+         SnackBar(content: Text('file uploaded successfully').tr()),
       );
     });
   } catch (e) {
     setState(() {
       _isUploading = false;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al subir el archivo: $e')),
+        SnackBar(content: Text("Error uploading file").tr()),
       );
     });
   }
@@ -90,18 +91,18 @@ void _handleFileUpload() async {
             content: Column(
               children: <Widget>[
                 Text(
-                  '¡Hola!',
+                  "Hi..!".tr(),
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'Antes de empezar, primero agrega un curso y su material.',
+                  "Before you begin, first add a course and its material.".tr(),
                   style: TextStyle(fontSize: 18),
                   textAlign: TextAlign.center,
                   
                 ),
                  ElevatedButton(
                     onPressed:  nexts,
-                    child: Text('Aceptar'),
+                    child: Text("Ok").tr(),
                   ),
               ],
             ),
@@ -109,13 +110,12 @@ void _handleFileUpload() async {
             state: _step0Completed ? StepState.complete : StepState.indexed,
           ),
           Step(
-            title: Text('Curso'),
+            title: Text("Topic").tr(),
             content: Column(
               children: <Widget>[
-                Text('Nombre del Curso'),
+                Text("Topic name").tr(),
                   TextField(
                     controller: _nameController,
-                    decoration: InputDecoration(labelText: 'Nombre'),
                     onChanged: (value) {
                       setState(() => _step1Completed = value.isNotEmpty);
                       },
@@ -123,7 +123,7 @@ void _handleFileUpload() async {
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: _guardarTema,
-                    child: Text('Guardar'),
+                    child: Text("Save".tr()),
                   ),
               ],
             ),
@@ -134,10 +134,10 @@ void _handleFileUpload() async {
             title: Text('Mate'),
             content: Column(
               children: <Widget>[
-                Text('Agregar Archivos (PDF / JPG)'),
+                Text("Add files (PDF / JPG)").tr(),
                   _isUploading ? CircularProgressIndicator() : ElevatedButton(
                     onPressed: _handleFileUpload,
-                    child: Text('Subir archivo'),
+                    child: Text("Upload file").tr(),
                   ),
 
               ],
@@ -149,8 +149,7 @@ void _handleFileUpload() async {
             title: Text(''),
             content: Column(
               children: <Widget>[
-                Text('Que deseas hacer ahora?'),
-              
+                Text("What do you want to do?".tr()),
                 SizedBox(height: 20),
                 Center(
                   child: Column(
@@ -166,7 +165,7 @@ void _handleFileUpload() async {
                             _step3Completed = false;
                           });
                         },
-                        child: Text('Agregar otro cursos'),
+                        child: Text("Add other topic".tr()),
                       ),
                       ElevatedButton(
                         onPressed: () {
@@ -175,7 +174,7 @@ void _handleFileUpload() async {
                             MaterialPageRoute(builder: (context) => Menu()),
                           );
                         },
-                        child: Text('Iniciar con la aventura'),
+                        child: Text("Start app").tr(),
                       ),
                     ],
                   ),

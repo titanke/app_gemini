@@ -1,3 +1,5 @@
+import 'package:app_gemini/services/Gemini_service.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
@@ -26,8 +28,9 @@ class Chatpage extends StatefulWidget {
 class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin{
   List<Message> messages = [];
   TextEditingController prompt = TextEditingController();
+  final GeminiService gem = GeminiService();
   bool isLoading = false;
-  final String initialPrompt = "Eres un chatbot que ayuda al usuario a repasar.";
+
   late AnimationController _animationController;
 
   final ScrollController _scrollController = ScrollController();
@@ -58,19 +61,16 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
     });
   }
 
-  Future<void> getRes(String prompt) async {
+  Future<void> getRes(String query) async {
     setState(() {
       isLoading = true;
     });
 
     try {
-      var apiKey = dotenv.env['API_KEY'];
-      final model = GenerativeModel(model: 'gemini-1.5-pro-latest', apiKey: apiKey!);
-      final content = [Content.text("$initialPrompt $prompt")];
-      final response = await model.generateContent(content);
+      String response =await gem.ragResponse(query);
 
       setState(() {
-        messages.add(Message(response.text!, false));
+        messages.add(Message(response, false));
         isLoading = false;
       });
       _scrollToBottom();
@@ -86,7 +86,7 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
    return Scaffold(
       appBar: AppBar(
-        title: const Text("CHAT COMPANION"),
+        title: const Text("Chat Companion").tr(),
       ),
       body: Column(
         children: [
@@ -99,11 +99,11 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
                 if (index == messages.length) {
                   return FadeTransition(
                     opacity: _animationController,
-                    child: const Align(
+                    child:  Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text("Escribiendo respuesta..."),
+                        child: Text("Writting...").tr(),
                       ),
                     ),
                   );
@@ -141,7 +141,7 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
                   child: TextField(
                     controller: prompt,
                     decoration: InputDecoration(
-                      hintText: 'Escribe un mensaje...',
+                      hintText: "Writte your answer...".tr(),
                       border: OutlineInputBorder(),
                     ),
                   ),

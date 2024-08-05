@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:app_gemini/widgets/theme_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 class PerfilPage extends StatefulWidget {
 
   @override
@@ -80,17 +82,30 @@ class _PerfilPageState extends State<PerfilPage> {
                 ],
               ),
               SizedBox(height: 20),
-              Text('Datos de cuenta', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text("Account Data", style: TextStyle(fontWeight: FontWeight.bold)).tr(),
               ExpansionTile(
-                title: Text('Información personal'),
+                title: Text("Personal information").tr(),
                 children: [
-                  ListTile(title: Text('Edad: ${_userData['age']}')),
-                  ListTile(title: Text('País: ${_userData['country']}')),
-                  ListTile(title: Text('Intereses: ${_userData['interests']}')),
+                    ListTile(
+                      title: Text(
+                        '${("Age: ").tr()} ${_userData['age']}',
+                      ),
+                    ),     
+                    ListTile(
+                      title: Text(
+                        '${("Country: ").tr()} ${_userData['country']}',
+                      ),
+                    ), 
+                    ListTile(
+                      title: Text(
+                        '${("Interests: ").tr()} ${_userData['interests']}',
+                      ),
+                    ),              
+              
                 ],
               ),
-                  Text('Ajustes', style: TextStyle(fontWeight: FontWeight.bold)),
-              ExpansionTile(
+                  Text("Settings", style: TextStyle(fontWeight: FontWeight.bold)).tr(),
+             /* ExpansionTile(
                 title: Text('Ajustes de Conocimiento'),
                 children: [
                     ExpansionTile(
@@ -102,39 +117,74 @@ class _PerfilPageState extends State<PerfilPage> {
                       ],
                     ),
                   ],
-              ),
+              ),*/
                 ExpansionTile(
-                  title: Text('Ajustes de Aplicacion'),
+                  title: Text('App Settings').tr(),
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Text("Cambiar Tema"),
-                        ),
-                     Consumer<ThemeProvider>(
-                      builder: (context, themeProvider, child) {
-                        return Switch(
-                          value: themeProvider.isDarkTheme,
-                          onChanged: (value) {
-                            themeProvider.toggleTheme();
-                          },
-                        );
+            Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text("Change Theme").tr(),
+                ),
+                Consumer<ThemeProvider>(
+                  builder: (context, themeProvider, child) {
+                    return Switch(
+                      value: themeProvider.isDarkTheme,
+                      onChanged: (value) {
+                        themeProvider.toggleTheme();
                       },
-                    ),
-
+                    );
+                  },
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text("Change Languaje").tr(),
+                ),
+                Consumer<ThemeProvider>(
+                  builder: (context, provider, child) {
+                    return DropdownButton<Locale>(
+                      value: provider.locale,
+                      onChanged: (Locale? newLocale) {
+                        if (newLocale != null) {
+                          provider.setLocale(newLocale);
+                          context.setLocale(newLocale);
+                        }
+                      },
+                      items: [
+                        DropdownMenuItem(
+                          value: Locale('en', 'US'),
+                          child: Text('English'),
+                        ),
+                        DropdownMenuItem(
+                          value: Locale('es', 'ES'),
+                          child: Text('Español'),
+                        ),
                       ],
-                    ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
                   ],
                 ),
 
                 GestureDetector(
                   onTap: () {
+                    themeProvider.signOut();
                     _signOut(context);
                     Navigator.pushNamed(context, '/login');
                   },
-                  child: Text('Cerrar Sesión', style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: Text("Sign Out", style: TextStyle(fontWeight: FontWeight.bold)).tr(),
                 ),            
               ],
           ),

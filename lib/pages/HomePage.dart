@@ -1,5 +1,6 @@
 import 'package:app_gemini/widgets/customcard.dart';
 import 'package:app_gemini/widgets/theme_provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:app_gemini/services/Firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:app_gemini/pages/DetailTopicPage.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -32,7 +34,7 @@ class _HomepageState extends State<Homepage> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
+    return mounted?Scaffold(
       // HEADER
 
       appBar: PreferredSize(
@@ -43,15 +45,15 @@ class _HomepageState extends State<Homepage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Padding(
+                 Padding(
                   padding: EdgeInsets.all(16.0),
                   child: Text(
-                    'Hola!',
+                    'Hi..!',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
                     ),
-                  ),
+                  ).tr(),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -88,9 +90,9 @@ class _HomepageState extends State<Homepage> {
                         if (!snapshot.hasData || snapshot.data!.isEmpty) {
                           return Center(
                             child: Text(
-                              'No tienes ningún tema, agrega uno',
+                              "Don't? have a topic, add one",
                               textAlign: TextAlign.center,
-                            ),
+                            ).tr(),
                           );
                         }
                         final topics = snapshot.data!
@@ -102,10 +104,10 @@ class _HomepageState extends State<Homepage> {
                             Card(
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
-                                child: Text('Bienvenido empieza a practiar :)'),
+                                child: Text('Welcome start practicing :)').tr(),
                               ),
                             ),
-                            Text("Temas recientes", textAlign: TextAlign.left),
+                            Text("Last Topics", textAlign: TextAlign.left).tr(),
                             CarouselSlider.builder(
                               options: CarouselOptions(
                                 height: 120.0,
@@ -127,7 +129,8 @@ class _HomepageState extends State<Homepage> {
                                     });
                               },
                             ),
-                            Text("Temas favoritos", textAlign: TextAlign.left),
+                            Text("Favorite topics", textAlign: TextAlign.left).tr(),
+                            /*
                             favoriteTopics.isNotEmpty
                                 ? GridView.builder(
                                     shrinkWrap: true,
@@ -153,9 +156,9 @@ class _HomepageState extends State<Homepage> {
                                         return SizedBox(
                                           child: Container(
                                             padding: EdgeInsets.all(
-                                                16.0), // Ajusta el valor de padding según tus necesidades
+                                                16.0), 
                                             child: Text(
-                                                'No tienes ningún tema favorito, Empieza agregando uno.'),
+                                                'Add your favorite topic here').tr(),
                                           ),
                                         );
                                       }
@@ -166,19 +169,19 @@ class _HomepageState extends State<Homepage> {
                                     height: screenHeight / 2,
                                     child: Center(
                                       child: Text(
-                                          'No tienes ningún tema favorito\n Empieza agregando uno.'),
+                                          'Add your favorite topic here').tr(),
                                     ),
-                                  ),
+                                  ),*/
                           ],
                         );
                       },
                     ),
                   ),
                 )
-              : Text('cargando'),
+              : Text('Loading..').tr(),
         ],
       ),
-    );
+    ):Text('Cargando');
   }
 
   void _navigateToDetailScreen(Object dato) {

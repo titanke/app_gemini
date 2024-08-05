@@ -1,5 +1,5 @@
 import 'dart:ffi';
-
+import 'dart:io';
 import 'package:app_gemini/interfaces/TopicInterface.dart';
 import 'package:app_gemini/pages/HomePage.dart';
 import 'package:app_gemini/pages/PerfilPage.dart';
@@ -20,70 +20,88 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:app_gemini/widgets/theme_provider.dart';
 import 'package:app_gemini/widgets/FirstTPage.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 void main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
 
   await Firebase. initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await dotenv.load();
+  final String defaultLocale = Platform.localeName;
+  final localeList = defaultLocale.split('_');
+  final deviceLocale = Locale(localeList[0], localeList.length > 1 ? localeList[1] : '');
+
   runApp(    
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
-      child: MyApp(),
-      ),
+    EasyLocalization(
+          supportedLocales: [Locale('en', 'US'), Locale('es', 'ES')],
+          path: 'assets/trans',
+          fallbackLocale: Locale('en', 'US'),
+          child: ChangeNotifierProvider(
+          create: (context) => ThemeProvider(),
+          child: MyApp(),
+          ),
+        ),
+
     );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
 
-        print('User is currently signed out!');
-      } else {
-        print('User is signed in!');
-
-      }
-    });
-
-    return MaterialApp(
-      title: 'App gemini',
-      theme: Provider.of<ThemeProvider>(context).themeData,
-      home: AuthenticationWrapper(),
-      routes: <String, WidgetBuilder>{
-        '/home': (context) => Menu(),
-        '/detail': (context) => DetailScreen(),
-        '/storage': (context) => FileStorageScreen(),
-        '/quiz': (context) => QuizIntroduction(),
-        '/quiz/introduction': (context) => QuizIntroduction(),
-        '/quiz/start': (context) => QuizPage(),
-        '/quiz/result': (context) => ResultsPage(),
-        '/login': (context) => LoginPage(),
-        '/ftpage': (context) => FirstTopicsPage(),
-      },
-    );
+  Future<User?> _getUser() async {
+    return FirebaseAuth.instance.currentUser;
   }
-}
+  
+  /*
+  Future<ThemeProvider?> _getUser() async {
+  final user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    final userId = user.uid;
+    final themeProvider = ThemeProvider(userId);
+    return themeProvider;  
+  }
+  return null;
+}*/
 
-class AuthenticationWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
+        return FutureBuilder<User?>(
+    //return FutureBuilder<ThemeProvider?>(
+      future: _getUser(),
       builder: (context, snapshot) {
-        if (snapshot.data != null) {
-          return Menu();
-        } else
-          return LoginPage();
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else {
+          return MaterialApp(
+            title: 'App gemini',
+            theme: Provider.of<ThemeProvider>(context).themeData,
+            locale: context.locale,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            home: snapshot.hasData ? Menu() : LoginPage(),
+            routes: <String, WidgetBuilder>{
+              '/home': (context) => Menu(),
+              '/detail': (context) => DetailScreen(),
+              '/storage': (context) => FileStorageScreen(),
+              '/quiz': (context) => QuizIntroduction(),
+              '/quiz/introduction': (context) => QuizIntroduction(),
+              '/quiz/start': (context) => QuizPage(),
+              '/quiz/result': (context) => ResultsPage(),
+              '/login': (context) => LoginPage(),
+              '/ftpage': (context) => FirstTopicsPage(),
+            },
+          );
+        }
       },
     );
   }
 }
+
 
 
 class Menu extends StatefulWidget {
@@ -107,23 +125,23 @@ class _MyHomePageState extends State<Menu> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Inicio',
+            label: "Home".tr(),       
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.book), 
-            label: 'Temas',
+            label: "Topics".tr(),
           ),
 
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),
-            label: 'Chat',
+            label: "Chat".tr(),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Perfil',
+            label: "Profile".tr(),
           ),
           
         ],
@@ -137,3 +155,20 @@ class _MyHomePageState extends State<Menu> {
     );
   }
 }
+
+/*
+class AuthenticationWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.data != null) {
+          return Menu();
+        } else
+          return LoginPage();
+      },
+    );
+  }
+}
+*/

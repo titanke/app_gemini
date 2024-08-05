@@ -3,13 +3,14 @@ import 'package:app_gemini/theme/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider with ChangeNotifier {
+  //themes
     bool _isDarkTheme = false;
 
   ThemeProvider() {
     _loadThemeFromSharedPreferences();
     loadFavorites();
+     _loadLocale();
   }
-
   ThemeData get themeData => _isDarkTheme ? darkMode : lightMode;
 
   bool get isDarkTheme => _isDarkTheme;
@@ -37,6 +38,7 @@ class ThemeProvider with ChangeNotifier {
     notifyListeners();
   }
 
+//favorites 
   List<String> _favoriteTopics = [];
 
   List<String> get favoriteTopics => _favoriteTopics;
@@ -71,4 +73,30 @@ class ThemeProvider with ChangeNotifier {
     notifyListeners();
     saveFavorites(); 
   }
+  
+  //languaje
+  Locale _locale = Locale('es', 'ES');
+
+
+  Locale get locale => _locale;
+
+  Future<void> _loadLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    final localeCode = prefs.getString('locale') ?? 'en_US';
+    final localeList = localeCode.split('_');
+    _locale = Locale(localeList[0], localeList[1]);
+    notifyListeners();
+  }
+
+  Future<void> setLocale(Locale locale) async {
+    _locale = locale;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('locale', '${locale.languageCode}_${locale.countryCode}');
+    notifyListeners();
+  }
+
+    Future<void> signOut() async {
+
+    _favoriteTopics.clear();
+    }
 }
