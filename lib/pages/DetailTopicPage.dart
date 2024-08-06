@@ -23,18 +23,24 @@ class _DetailScreenState extends State<DetailScreen> {
       super.initState();
       _fetchData();
     }
-
     Future<void> _fetchData() async {
       final String documentMarkdown = await db.getDocumentMarkdown(widget.topic.uid);
       setState(() {
       _isLoading = documentMarkdown == "You don't have files in this theme, add some".tr();
       });
     }
+
       @override
   Widget build(BuildContext context) {
  return Scaffold(
       appBar: AppBar(
         title: Text(widget.topic.name),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamed(context, '/home', arguments: 1);
+            }
+      ),
         actions: [
           IconButton(
             icon: Icon(Icons.storage),
@@ -48,59 +54,10 @@ class _DetailScreenState extends State<DetailScreen> {
               Navigator.pushNamed(context, '/quiz', arguments: widget.topic);
             },
           ),
+          
         ],
       ),
       body: TopicOverviewScreen(topic: widget.topic),
     );
 }
 }
-/*
- class DetailScreen extends StatefulWidget {
-  const DetailScreen({Key? key}) : super(key: key);
-
-  @override
-  _DetailScreenState createState() => _DetailScreenState();
-}
-
-class _DetailScreenState extends State<DetailScreen> {
-  int currentIndex = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    final Topic data = ModalRoute.of(context)?.settings.arguments as Topic;
-    final List<Widget> _children = [
-      TopicOverviewScreen(dato: data),
-      FileStorageScreen(),
-      QuizPage(dato: data.name)
-    ];
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Temas: ${data.name}'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.storage),
-            onPressed: () {
-              setState(() {
-                currentIndex = 1;
-              });
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.play_arrow),
-            onPressed: () {
-              setState(() {
-                currentIndex = 2;
-              });
-            },
-          ),
-        ],
-      ),
-      body: IndexedStack(
-        index: currentIndex,
-        children: _children,
-      ),
-    );
-  }
-}
-*/
