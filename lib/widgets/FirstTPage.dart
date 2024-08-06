@@ -29,12 +29,11 @@ class _FirstTopicsPageState extends State<FirstTopicsPage> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text("Topic succesfully saved").tr()),
             );
-              setState(() {
-              _currentStep++;
-            });
+              
           } catch (e) {
             print("Error en crear el tema $e");
           }      setState(() {
+        _currentStep++;
         _step1Completed = true;
       });
     }

@@ -3,6 +3,8 @@ import 'package:app_gemini/interfaces/QuestionInterface.dart';
 import 'package:app_gemini/interfaces/TopicInterface.dart';
 import 'package:app_gemini/services/Gemini_service.dart';
 import 'package:flutter/material.dart';
+import 'package:app_gemini/interfaces/TopicInterface.dart';
+import 'package:app_gemini/pages/DetailTopicPage.dart';
 
 class QuizIntroduction extends StatefulWidget {
   @override
@@ -73,6 +75,8 @@ class _QuizIntroductionState extends State<QuizIntroduction> {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/detail', arguments: topic);
+                       // Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: topic)));
+
                   },
                   child: Text('Cancelar'),
                 ),

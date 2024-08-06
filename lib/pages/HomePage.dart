@@ -130,7 +130,7 @@ class _HomepageState extends State<Homepage> {
                               },
                             ),
                             Text("Favorite topics", textAlign: TextAlign.left).tr(),
-                            /*
+                            
                             favoriteTopics.isNotEmpty
                                 ? GridView.builder(
                                     shrinkWrap: true,
@@ -171,7 +171,7 @@ class _HomepageState extends State<Homepage> {
                                       child: Text(
                                           'Add your favorite topic here').tr(),
                                     ),
-                                  ),*/
+                                  ),
                           ],
                         );
                       },
@@ -185,7 +185,8 @@ class _HomepageState extends State<Homepage> {
   }
 
   void _navigateToDetailScreen(Object dato) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: dato as Topic)));
+    Navigator.pushNamed(context, '/detail', arguments: dato as Topic);
+    //Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: dato as Topic)));
   }
 }
 
