@@ -7,100 +7,52 @@ import 'package:flutter/material.dart';
 import 'package:app_gemini/interfaces/TopicInterface.dart';
 
 class DetailScreen extends StatefulWidget {
-  final Topic topic;
 
-  const DetailScreen({required this.topic});
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
 
 class _DetailScreenState extends State<DetailScreen> {
-    bool _isLoading = true; 
-    FirebaseDatabase db = FirebaseDatabase();
+    late Topic topic;
+    final FirebaseDatabase db = FirebaseDatabase();
+
 
     @override
-    void initState() {
-      super.initState();
-      _fetchData();
+    Widget build(BuildContext context) {
+        topic = ModalRoute.of(context)?.settings.arguments as Topic;
+
+
+        return Scaffold(
+            appBar: AppBar(
+              title: Text(topic.name),
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.storage),
+                  onPressed: () {
+                  Navigator.pushNamed(context, '/storage', arguments: topic.uid);
+                  },
+                ),
+                FutureBuilder<bool>(
+                  future: db.existContent(topic.uid),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData && snapshot.data == true) {
+                      return IconButton(
+                        icon: Icon(Icons.play_arrow),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/quiz', arguments: topic);
+                        },
+                      );
+                    } else {
+                      return IconButton(
+                        icon: Icon(Icons.play_arrow),
+                        onPressed: null,
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+            body: TopicOverviewScreen(topic: topic, db: db,),
+          );
     }
-
-    Future<void> _fetchData() async {
-      final String documentMarkdown = await db.getDocumentMarkdown(widget.topic.uid);
-      setState(() {
-      _isLoading = documentMarkdown == "You don't have files in this theme, add some".tr();
-      });
-    }
-      @override
-  Widget build(BuildContext context) {
- return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.topic.name),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.storage),
-            onPressed: () {
-            Navigator.pushNamed(context, '/storage', arguments: widget.topic.uid);
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.play_arrow),
-           onPressed: _isLoading ? null : () {
-              Navigator.pushNamed(context, '/quiz', arguments: widget.topic);
-            },
-          ),
-        ],
-      ),
-      body: TopicOverviewScreen(topic: widget.topic),
-    );
 }
-}
-/*
- class DetailScreen extends StatefulWidget {
-  const DetailScreen({Key? key}) : super(key: key);
-
-  @override
-  _DetailScreenState createState() => _DetailScreenState();
-}
-
-class _DetailScreenState extends State<DetailScreen> {
-  int currentIndex = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    final Topic data = ModalRoute.of(context)?.settings.arguments as Topic;
-    final List<Widget> _children = [
-      TopicOverviewScreen(dato: data),
-      FileStorageScreen(),
-      QuizPage(dato: data.name)
-    ];
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Temas: ${data.name}'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.storage),
-            onPressed: () {
-              setState(() {
-                currentIndex = 1;
-              });
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.play_arrow),
-            onPressed: () {
-              setState(() {
-                currentIndex = 2;
-              });
-            },
-          ),
-        ],
-      ),
-      body: IndexedStack(
-        index: currentIndex,
-        children: _children,
-      ),
-    );
-  }
-}
-*/

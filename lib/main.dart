@@ -86,6 +86,7 @@ class MyApp extends StatelessWidget {
             home: snapshot.hasData ? Menu() : LoginPage(),
             routes: <String, WidgetBuilder>{
               '/home': (context) => Menu(),
+              '/detail': (context) => DetailScreen(),
               '/storage': (context) => FileStorageScreen(),
               '/quiz': (context) => QuizIntroduction(),
               '/quiz/introduction': (context) => QuizIntroduction(),

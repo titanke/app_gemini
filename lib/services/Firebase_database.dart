@@ -14,11 +14,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-
-String lastSavedTopicId = ''; 
+String lastSavedTopicId = '';
 
 class FirebaseDatabase {
-
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -37,14 +35,22 @@ class FirebaseDatabase {
     }
   }
 
+  Future<bool> existContent(topicId) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('user_id');
+    String fileTxtPath = 'users/$userId/topics/$topicId/';
 
-  void SaveTranscript (String markdownContent, String filePath) async{
+    final storageRef = _storage.ref().child(fileTxtPath);
+    final FullMetadata metadata = await storageRef.getMetadata();
+    return metadata.size! > 0;
+  }
+
+  void SaveTranscript(String markdownContent, String filePath) async {
     String fileName = "transcript.txt";
     String newContent = markdownContent;
     final storageRef = _storage.ref().child(filePath).child(fileName);
 
     try {
-
       final existingData = await storageRef.getData();
       if (existingData != null) {
         // Append new content to the existing content
@@ -70,7 +76,7 @@ class FirebaseDatabase {
 
   void saveTopic(String name) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final userId= prefs.getString('user_id');
+    final userId = prefs.getString('user_id');
 
     if (name.isNotEmpty) {
       DocumentReference userRef = _firestore.collection('users').doc(userId);
@@ -83,7 +89,8 @@ class FirebaseDatabase {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('user_id');
     try {
-      CollectionReference topicsCollection = _firestore.collection('users').doc(userId).collection('topics');
+      CollectionReference topicsCollection =
+          _firestore.collection('users').doc(userId).collection('topics');
       yield* topicsCollection.snapshots().map((snapshot) {
         return snapshot.docs.map((doc) {
           return Topic(name: doc['name'], uid: doc.id);
@@ -96,6 +103,7 @@ class FirebaseDatabase {
   }
 
   Future<void> pickAndUploadFiles2(String topicId, Function(double) onProgress) async {
+
     final GeminiService gem = GeminiService();
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -126,9 +134,16 @@ class FirebaseDatabase {
 
             String downloadURL = await _storage.ref(filePath).getDownloadURL();
 
-            markdownContent = '$markdownContent\n${await gem.transcriptDocument(selectedFile, downloadURL)}';
+            markdownContent =
+                '$markdownContent\n${await gem.transcriptDocument(selectedFile, downloadURL)}';
 
-            await _firestore.collection('users').doc(userId).collection('topics').doc(topicId).collection('documents').add({
+            await _firestore
+                .collection('users')
+                .doc(userId)
+                .collection('topics')
+                .doc(topicId)
+                .collection('documents')
+                .add({
               'fileName': fileName,
               'url': downloadURL,
               'uploadedAt': Timestamp.now(),
@@ -136,7 +151,6 @@ class FirebaseDatabase {
 
             processedFiles++;
             onProgress(processedFiles / totalFiles);
-
           } catch (e) {
             showToast(message: "${"Error in save document".tr()} $e");
             print(e);
@@ -149,7 +163,6 @@ class FirebaseDatabase {
       showToast(message: "No files selected".tr());
     }
   }
-
 
   Future<void> pickAndUploadFiles(String topicId) async {
     final GeminiService gem = GeminiService();
@@ -173,20 +186,25 @@ class FirebaseDatabase {
           String fileName = file.name;
           String filePath = 'users/$userId/topics/$topicId/$fileName';
 
-
           try {
             await _storage.ref(filePath).putFile(selectedFile);
 
             String downloadURL = await _storage.ref(filePath).getDownloadURL();
 
-            markdownContent = '$markdownContent\n${await gem.transcriptDocument(selectedFile, downloadURL)}';
+            markdownContent =
+                '$markdownContent\n${await gem.transcriptDocument(selectedFile, downloadURL)}';
 
-            await _firestore.collection('users').doc(userId).collection('topics').doc(topicId).collection('documents').add({
+            await _firestore
+                .collection('users')
+                .doc(userId)
+                .collection('topics')
+                .doc(topicId)
+                .collection('documents')
+                .add({
               'fileName': fileName,
               'url': downloadURL,
               'uploadedAt': Timestamp.now(),
             });
-
           } catch (e) {
             showToast(message: "${"Error in save document: ".tr()} $e");
             print(e);
@@ -195,7 +213,6 @@ class FirebaseDatabase {
       }
 
       SaveTranscript(markdownContent, fileTxtPath);
-
     } else {
       showToast(message: "No files selected".tr());
     }
@@ -206,8 +223,16 @@ class FirebaseDatabase {
     String? uid = prefs.getString('user_id');
 
     try {
-      CollectionReference documentsCollection = _firestore.collection('users').doc(uid).collection('topics').doc(topicId).collection('documents');
-      yield* documentsCollection.orderBy('uploadedAt', descending: true).snapshots().map((snapshot) {
+      CollectionReference documentsCollection = _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('topics')
+          .doc(topicId)
+          .collection('documents');
+      yield* documentsCollection
+          .orderBy('uploadedAt', descending: true)
+          .snapshots()
+          .map((snapshot) {
         return snapshot.docs.map((doc) => Document.fromFirestore(doc)).toList();
       });
     } catch (e) {
@@ -236,13 +261,21 @@ class FirebaseDatabase {
     }
   }
 
-  Future<void> deleteDocument(String topicId, String documentId, String fileName) async {
+  Future<void> deleteDocument(
+      String topicId, String documentId, String fileName) async {
     //todo: agregar codigos en los transcritos y eliminar o editar
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('user_id');
     try {
-      DocumentReference documentRef = FirebaseFirestore.instance.collection('users').doc(userId).collection('topics').doc(topicId).collection('documents').doc(documentId);
-      Reference fileRef = _storage.ref().child('users/$userId/topics/$topicId/$fileName');
+      DocumentReference documentRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('topics')
+          .doc(topicId)
+          .collection('documents')
+          .doc(documentId);
+      Reference fileRef =
+          _storage.ref().child('users/$userId/topics/$topicId/$fileName');
       await documentRef.delete();
       await fileRef.delete();
       print("Document succesfully removed".tr());
@@ -269,7 +302,8 @@ class FirebaseDatabase {
     try {
       Reference ref = FirebaseStorage.instance.ref().child(filePath);
 
-      String transcriptContent = await ref.getDownloadURL().then((fileUrl) async {
+      String transcriptContent =
+          await ref.getDownloadURL().then((fileUrl) async {
         final response = await http.get(Uri.parse(fileUrl));
         if (response.statusCode == 200) {
           return response.body;
@@ -298,5 +332,4 @@ class FirebaseDatabase {
 
     return combinedContent;
   }
-
 }
