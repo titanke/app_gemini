@@ -109,21 +109,21 @@ void _toggleFavorite(String topicId) {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('¿Estás seguro?'),
-                          content: Text('Esta acción eliminará el tema de forma permanente.'),
+                          title: Text("Are you sure?").tr(),
+                          content: Text("This action will remove this topic permanently").tr(),
                           actions: [
                             TextButton(
                               onPressed: () {
                                 Navigator.of(context).pop(); 
                               },
-                              child: Text('Cancelar'),
+                              child: Text("Cancel").tr(),
                             ),
                             TextButton(
                               onPressed: () {
                                 db.DeleteTopic(topic.uid);
                                 Navigator.of(context).pop(); 
                               },
-                              child: Text('Eliminar'),
+                              child: Text("Remove").tr(),
                             ),
                           ],
                         );
@@ -205,7 +205,7 @@ void _toggleFavorite(String topicId) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Editar Topic'),
+          title: Text("Edit Topic").tr(),
           
  content: Form(
           key: _formKey,
@@ -220,9 +220,7 @@ void _toggleFavorite(String topicId) {
               },
             decoration: InputDecoration(hintText: ''),
              onChanged: (value) {
-            setState(() {
               _newTopicName = value;
-            });
             },
           ),
           ),
@@ -231,13 +229,13 @@ void _toggleFavorite(String topicId) {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('Cancelar'),
+            child: Text("Cancel").tr(),
           ),
           TextButton(
             onPressed: () {
               db.EditTopic(topicId, _newTopicName,_formKey,context);
             },
-            child: Text('Guardar'),
+            child: Text("Save").tr(),
           ),
         ],
         );

@@ -2,6 +2,7 @@ import 'package:app_gemini/interfaces/QuestionInterface.dart';
 import 'package:app_gemini/interfaces/TopicInterface.dart';
 import 'package:app_gemini/pages/Quiz/QuizPage.dart';
 import 'package:app_gemini/services/Gemini_service.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -79,12 +80,12 @@ class _QuizPageState extends State<QuizPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Text(
-                  _isCorrect?'Respuesta Correcta':'Respuesta Incorrecta',
+                  _isCorrect?"Correct answer".tr():"Incorrect answer".tr(),
                   style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.left,
               ),
               Text(
-                  'La respuesta es: ${_questions[_currentStep].correctAnswer}',
+                  '${"Answer is:".tr()} " " ${_questions[_currentStep].correctAnswer}',
                   textAlign: TextAlign.left,
               ),
               SizedBox(height: 8, width: double.infinity),
@@ -93,7 +94,7 @@ class _QuizPageState extends State<QuizPage> {
                   Navigator.pop(context);
                   _nextQuestion();
                 },
-                child: Text('Siguiente'),
+                child: Text("Next").tr(),
               ),
             ],
           ),
@@ -225,10 +226,10 @@ class _QuizPageState extends State<QuizPage> {
       case "open":
         return TextField(
           onChanged: (value) => _answerSubmittedCallback(value),
-          decoration: InputDecoration(hintText: 'Ingrese su respuesta'),
+          decoration: InputDecoration(hintText: "Write your answer".tr()),
         );
       default:
-        return Text('Tipo de pregunta no soportado');
+        return Text("Type of question not suported").tr();
     }
   }
 
@@ -239,7 +240,7 @@ class _QuizPageState extends State<QuizPage> {
         onPressed: () {
           _evaluateQuestion();
         },
-        child: Text('Comprobar', style: TextStyle(fontSize: 16 ),),
+        child: Text("Check", style: TextStyle(fontSize: 16 ),).tr(),
       ),
     );
   }

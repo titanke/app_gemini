@@ -80,14 +80,22 @@ class FirebaseDatabase {
     }
   }
 
-  void DeleteTopic(String topicId) async {
+void DeleteTopic(String topicId) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final userId = prefs.getString('user_id');
+
   try {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('user_id');
-    await _firestore.collection('users').doc(userId).collection('topics').doc(topicId).delete();
-    showToast(message: "${"Topic succesfully removed: ".tr()}");
+      final stream = loadDocuments(topicId);
+      await for (final documents in stream) {
+        for (final document in documents) {
+          final documentId = document.id;
+          await deleteDocument(topicId, documentId, document.fileName); 
+        }
+      await _firestore.collection('users').doc(userId).collection('topics').doc(topicId).delete();
+      showToast(message: "${"Topic successfully removed: ".tr()}");
+    }
   } catch (error) {
-       showToast(message: "${"Error deleting topic: ".tr()}");
+    showToast(message: "${"Error deleting topic: ".tr()} ${error.toString().tr()}");
   }
 }
 
@@ -266,7 +274,6 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
   }
 
   Future<void> deleteDocument(String topicId, String documentId, String fileName) async {
-    //todo: agregar codigos en los transcritos y eliminar o editar
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('user_id');
     try {

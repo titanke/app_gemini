@@ -2,6 +2,7 @@ import 'package:app_gemini/global/common/toast.dart';
 import 'package:app_gemini/interfaces/QuestionInterface.dart';
 import 'package:app_gemini/interfaces/TopicInterface.dart';
 import 'package:app_gemini/services/Gemini_service.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:app_gemini/interfaces/TopicInterface.dart';
 import 'package:app_gemini/pages/DetailTopicPage.dart';
@@ -37,7 +38,7 @@ class _QuizIntroductionState extends State<QuizIntroduction> {
             },
           );
         }else{
-          showToast(message: 'Error al generar preguntas intentelo denuevo');
+          showToast(message: "An error occured making questions, try again".tr());
         }
 
       } catch (e) {
@@ -59,27 +60,25 @@ class _QuizIntroductionState extends State<QuizIntroduction> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '¡Bienvenido! ¿Estás preparado para tu quiz?',
+              "Welcome! Are you ready to take a Quiz?",
               style: TextStyle(fontSize: 18),
               textAlign: TextAlign.center,
-            ),
+            ).tr(),
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
                   onPressed: _startQuiz,
-                  child: Text('Continuar'),
+                  child: Text("Continue").tr(),
                 ),
                 SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: () {
                    Navigator.pushNamed(context, '/detail', arguments: topic);
-                    
                        // Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: topic)));
-
                   },
-                  child: Text('Cancelar'),
+                  child: Text("Cancel").tr(),
                 ),
               ],
             ),
