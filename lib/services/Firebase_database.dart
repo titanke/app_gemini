@@ -162,7 +162,7 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
               'url': downloadURL,
               'uploadedAt': Timestamp.now(),
             });
-
+            showToast(message: "File saved".tr());
             processedFiles++;
             onProgress(processedFiles / totalFiles);
 

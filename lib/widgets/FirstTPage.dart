@@ -57,9 +57,7 @@ void _handleFileUpload() async {
       _step2Completed = true;
       _currentStep++;
       _isUploading = false;
-      ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(content: Text('file uploaded successfully').tr()),
-      );
+    
     });
   } catch (e) {
     setState(() {

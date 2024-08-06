@@ -120,16 +120,13 @@ class _MyHomePageState extends State<Menu> {
 
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),
-            label: "Chat".tr(),
+            label: "Chat",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: "Profile".tr(),
           ),
-             BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "a".tr(),
-          ),
+          
         ],
         unselectedItemColor: Colors.grey,
         onTap: (index) {

@@ -41,6 +41,7 @@ class _HomepageState extends State<Homepage> {
         preferredSize: const Size.fromHeight(150),
         child: AppBar(
           backgroundColor: Colors.orange[400],
+          automaticallyImplyLeading: false,
           flexibleSpace: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
