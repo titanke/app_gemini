@@ -76,7 +76,8 @@ class _QuizPageState extends State<QuizPage> {
           height: 200,
           width: double.infinity,
           padding: EdgeInsets.all(16.0),
-          child: Column(
+          child: Expanded(
+            child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Text(
@@ -85,7 +86,7 @@ class _QuizPageState extends State<QuizPage> {
                   textAlign: TextAlign.left,
               ),
               Text(
-                  '${"Answer is:".tr()} " " ${_questions[_currentStep].correctAnswer}',
+                  '${"Answer is:".tr()}${" "}${_questions[_currentStep].correctAnswer}',
                   textAlign: TextAlign.left,
               ),
               SizedBox(height: 8, width: double.infinity),
@@ -98,6 +99,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
             ],
           ),
+            )
         );
       },
     );
