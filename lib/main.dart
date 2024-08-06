@@ -51,27 +51,13 @@ void main() async{
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-
   Future<User?> _getUser() async {
     return FirebaseAuth.instance.currentUser;
   }
   
-  /*
-  Future<ThemeProvider?> _getUser() async {
-  final user = FirebaseAuth.instance.currentUser;
-  if (user != null) {
-    final userId = user.uid;
-    final themeProvider = ThemeProvider(userId);
-    return themeProvider;  
-  }
-  return null;
-}*/
-
   @override
   Widget build(BuildContext context) {
         return FutureBuilder<User?>(
-    //return FutureBuilder<ThemeProvider?>(
       future: _getUser(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -102,8 +88,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
-
 class Menu extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -112,11 +96,10 @@ class Menu extends StatefulWidget {
 class _MyHomePageState extends State<Menu> {
 
   int _currentIndex = 0;
-  final List<Widget> _children = [Homepage(),Topicspage(), Chatpage(), PerfilPage()];
+  final List<Widget> _children = [Homepage(),Topicspage(), Chatpage(), PerfilPage(),FirstTopicsPage()];
 
   @override
   Widget build(BuildContext context) {
-    //_currentIndex = ModalRoute.of(context)?.settings.arguments as int??0;
     return Scaffold(
      
       body: IndexedStack(
@@ -137,7 +120,7 @@ class _MyHomePageState extends State<Menu> {
 
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),
-            label: "Chat".tr(),
+            label: "Chat",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -156,19 +139,3 @@ class _MyHomePageState extends State<Menu> {
   }
 }
 
-/*
-class AuthenticationWrapper extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.data != null) {
-          return Menu();
-        } else
-          return LoginPage();
-      },
-    );
-  }
-}
-*/

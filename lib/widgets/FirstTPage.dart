@@ -29,12 +29,11 @@ class _FirstTopicsPageState extends State<FirstTopicsPage> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text("Topic succesfully saved").tr()),
             );
-              setState(() {
-              _currentStep++;
-            });
+              
           } catch (e) {
             print("Error en crear el tema $e");
           }      setState(() {
+        _currentStep++;
         _step1Completed = true;
       });
     }
@@ -58,9 +57,7 @@ void _handleFileUpload() async {
       _step2Completed = true;
       _currentStep++;
       _isUploading = false;
-      ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(content: Text('file uploaded successfully').tr()),
-      );
+    
     });
   } catch (e) {
     setState(() {

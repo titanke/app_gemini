@@ -31,114 +31,107 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     final favoriteTopics = Provider.of<ThemeProvider>(context).favoriteTopics;
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return mounted
-        ? Scaffold(
-            // HEADER
+    return mounted?Scaffold(
+      // HEADER
 
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(150),
-              child: AppBar(
-                backgroundColor: Colors.orange[400],
-                flexibleSpace: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Text(
-                          'Hi..!',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                          ),
-                        ).tr(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: SvgPicture.asset(
-                          'assets/squirrel-svgrepo-com.svg',
-                          width: 80,
-                          height: 80,
-                        ),
-                      ),
-                    ],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(150),
+        child: AppBar(
+          backgroundColor: Colors.orange[400],
+          automaticallyImplyLeading: false,
+          flexibleSpace: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                 Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
+                    'Hi..!',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  ).tr(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SvgPicture.asset(
+                    'assets/squirrel-svgrepo-com.svg',
+                    width: 80,
+                    height: 80,
                   ),
                 ),
-              ),
+              ],
             ),
+          ),
+        ),
+      ),
 
-            body: Column(
-              children: [
-                mounted
-                    ? Expanded(
-                        child: SingleChildScrollView(
-                          child: StreamBuilder<List<Topic>>(
-                            stream: db.getTopicsUser(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Center(
-                                    child: CircularProgressIndicator());
-                              }
+      body: Column(
+        children: [
+          mounted
+              ? Expanded(
+                  child: SingleChildScrollView(
+                    child: StreamBuilder<List<Topic>>(
+                      stream: db.getTopicsUser(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        }
 
-                              if (snapshot.hasError) {
-                                return Center(
-                                    child: Text('Error: ${snapshot.error}'));
-                              }
+                        if (snapshot.hasError) {
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        }
 
-                              if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                                return Center(
-                                  child: Text(
-                                    "Don't? have a topic, add one",
-                                    textAlign: TextAlign.center,
-                                  ).tr(),
-                                );
-                              }
-                              final topics = snapshot.data!
-                                ..sort((a, b) => b.lastInteracted
-                                    .compareTo(a.lastInteracted));
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Text('Welcome start practicing :)')
-                                          .tr(),
-                                    ),
-                                  ),
-                                  Text("Last Topics", textAlign: TextAlign.left)
-                                      .tr(),
-                                  CarouselSlider.builder(
-                                    options: CarouselOptions(
-                                      height: 120.0,
-                                      viewportFraction: 0.3,
-                                      enableInfiniteScroll: true,
-                                      autoPlay: true,
-                                    ),
-                                    itemCount: topics.length,
-                                    itemBuilder: (context, index, realIndex) {
-                                      final topic = topics[index];
-                                      return CustomCard(
-                                          title: topic.name,
-                                          bgcolor: Colors.blueGrey,
-                                          onTap: () {
-                                            setState(() {
-                                              topic.lastInteracted =
-                                                  DateTime.now();
-                                            });
-                                            _navigateToDetailScreen(topic);
-                                          });
-                                    },
-                                  ),
-                                  Text("Favorite topics",
-                                          textAlign: TextAlign.left)
-                                      .tr(),
-                                  /*
+                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return Center(
+                            child: Text(
+                              "Don't? have a topic, add one",
+                              textAlign: TextAlign.center,
+                            ).tr(),
+                          );
+                        }
+                        final topics = snapshot.data!
+                          ..sort((a, b) =>
+                              b.lastInteracted.compareTo(a.lastInteracted));
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text('Welcome start practicing :)').tr(),
+                              ),
+                            ),
+                            Text("Last Topics", textAlign: TextAlign.left).tr(),
+                            CarouselSlider.builder(
+                              options: CarouselOptions(
+                                height: 120.0,
+                                viewportFraction: 0.3,
+                                enableInfiniteScroll: true,
+                                autoPlay: true,
+                              ),
+                              itemCount: topics.length,
+                              itemBuilder: (context, index, realIndex) {
+                                final topic = topics[index];
+                                return CustomCard(
+                                    title: topic.name,
+                                    bgcolor: Colors.blueGrey,
+                                    onTap: () {
+                                      setState(() {
+                                        topic.lastInteracted = DateTime.now();
+                                      });
+                                      _navigateToDetailScreen(topic);
+                                    });
+                              },
+                            ),
+                            Text("Favorite topics", textAlign: TextAlign.left).tr(),
+
                             favoriteTopics.isNotEmpty
                                 ? GridView.builder(
                                     shrinkWrap: true,
@@ -164,7 +157,7 @@ class _HomepageState extends State<Homepage> {
                                         return SizedBox(
                                           child: Container(
                                             padding: EdgeInsets.all(
-                                                16.0),
+                                                16.0), 
                                             child: Text(
                                                 'Add your favorite topic here').tr(),
                                           ),
@@ -179,21 +172,21 @@ class _HomepageState extends State<Homepage> {
                                       child: Text(
                                           'Add your favorite topic here').tr(),
                                     ),
-                                  ),*/
-                                ],
-                              );
-                            },
-                          ),
-                        ),
-                      )
-                    : Text('Loading..').tr(),
-              ],
-            ),
-          )
-        : Text('Cargando');
+                                  ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                )
+              : Text('Loading..').tr(),
+        ],
+      ),
+    ):Text('Cargando');
   }
 
-  void _navigateToDetailScreen(Object topic) {
-    Navigator.pushNamed(context, '/detail', arguments: topic);
+  void _navigateToDetailScreen(Object dato) {
+    Navigator.pushNamed(context, '/detail', arguments: dato as Topic);
+    //Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: dato as Topic)));
   }
 }

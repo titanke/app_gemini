@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -85,6 +86,42 @@ class FirebaseDatabase {
     }
   }
 
+void DeleteTopic(String topicId) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final userId = prefs.getString('user_id');
+
+  try {
+      final stream = loadDocuments(topicId);
+      await for (final documents in stream) {
+        for (final document in documents) {
+          final documentId = document.id;
+          await deleteDocument(topicId, documentId, document.fileName); 
+        }
+      await _firestore.collection('users').doc(userId).collection('topics').doc(topicId).delete();
+      showToast(message: "${"Topic successfully removed: ".tr()}");
+    }
+  } catch (error) {
+    showToast(message: "${"Error deleting topic: ".tr()} ${error.toString().tr()}");
+  }
+}
+
+void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,BuildContext context) async {
+      if (_formKey.currentState!.validate()) {
+        try {
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          final userId = prefs.getString('user_id');
+
+          await _firestore.collection('users').doc(userId).collection('topics').doc(topicId).update({
+            'name': newName,
+          });
+          showToast(message: "${"Topic updated successfully".tr()}");
+          Navigator.of(context).pop();
+        } catch (error) {
+          showToast(message: "${"Error updating topic: ".tr()}");
+        }
+      }
+}
+
   Stream<List<Topic>> getTopicsUser() async* {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('user_id');
@@ -148,7 +185,7 @@ class FirebaseDatabase {
               'url': downloadURL,
               'uploadedAt': Timestamp.now(),
             });
-
+            showToast(message: "File saved".tr());
             processedFiles++;
             onProgress(processedFiles / totalFiles);
           } catch (e) {
@@ -261,9 +298,9 @@ class FirebaseDatabase {
     }
   }
 
-  Future<void> deleteDocument(
-      String topicId, String documentId, String fileName) async {
-    //todo: agregar codigos en los transcritos y eliminar o editar
+
+  Future<void> deleteDocument(String topicId, String documentId, String fileName) async {
+
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('user_id');
     try {

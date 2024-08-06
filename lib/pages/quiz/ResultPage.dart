@@ -1,5 +1,6 @@
 import 'package:app_gemini/interfaces/TopicInterface.dart';
 import 'package:app_gemini/pages/Quiz/QuizPage.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,8 +18,8 @@ class ResultsPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('¡Felicidades! Has terminado el quiz.'),
-            Text('Obtuviste ${correctAnswers} respuestas correctas de 5'),
+            const Text("Congrantulations! You have completed the Quiz").tr(),
+            Text("${"You have".tr()} ${correctAnswers} ${"answers of 5".tr()}"),
             TextButton(
               onPressed: () {
                 Navigator.pushNamed(
@@ -27,13 +28,13 @@ class ResultsPage extends StatelessWidget {
                   arguments: topic
                 );
               },
-              child: Text('Hacer otra prueba'),
+              child: Text("Take another quiz").tr(),
             ),
             TextButton(
               onPressed:() {
                 Navigator.pushNamed(context, '/detail', arguments: topic);
               },
-              child: Text('Salir'),
+              child: Text("Exit").tr(),
             ),
           ],
         ),

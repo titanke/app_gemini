@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:app_gemini/theme/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:math';
+
 
 class ThemeProvider with ChangeNotifier {
-  //themes
-    bool _isDarkTheme = false;
-
+  bool _isDarkTheme = false;
   ThemeProvider() {
     _loadThemeFromSharedPreferences();
     loadFavorites();
      _loadLocale();
   }
-  ThemeData get themeData => _isDarkTheme ? darkMode : lightMode;
 
+  //themes
+  ThemeData get themeData => _isDarkTheme ? darkMode : lightMode;
   bool get isDarkTheme => _isDarkTheme;
 
   set isDarkTheme(bool value) {
@@ -77,7 +78,6 @@ class ThemeProvider with ChangeNotifier {
   //languaje
   Locale _locale = Locale('es', 'ES');
 
-
   Locale get locale => _locale;
 
   Future<void> _loadLocale() async {
@@ -96,7 +96,9 @@ class ThemeProvider with ChangeNotifier {
   }
 
     Future<void> signOut() async {
-
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
     _favoriteTopics.clear();
     }
 }
+
