@@ -5,6 +5,7 @@ import 'package:app_gemini/interfaces/QuestionInterface.dart';
 import 'package:app_gemini/services/ErrorService.dart';
 import 'package:app_gemini/services/Firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
@@ -175,7 +176,7 @@ class GeminiService {
 
           '''
           Eres un asistente que ayuda al usuario a repasar temas en base a este contexto: {context}
-          Question: {question}
+          Question: {question} responde en este idioma ${"languaje".tr()}
           '''
       );
 

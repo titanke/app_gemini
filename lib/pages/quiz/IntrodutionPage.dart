@@ -74,7 +74,7 @@ class _QuizIntroductionState extends State<QuizIntroduction> {
                 SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/detail', arguments: topic);
+                   Navigator.pushNamed(context, '/detail', arguments: topic);
                     
                        // Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: topic)));
 
