@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:app_gemini/widgets/theme_provider.dart';
 import 'package:app_gemini/pages/DetailTopicPage.dart';
+
 final List<String> favoriteTopics = []; 
 class Topicspage extends StatefulWidget {
   const Topicspage({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class Topicspage extends StatefulWidget {
 }
 
 class _TopicspageState extends State<Topicspage> {
+  String _newTopicName = '';
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final FirebaseDatabase db = FirebaseDatabase();
@@ -42,7 +44,6 @@ void _toggleFavorite(String topicId) {
     favoritesProvider.addFavoriteTopic(topicId);
   }
 }
-
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +96,41 @@ void _toggleFavorite(String topicId) {
                   ),
                   onPressed: () => _toggleFavorite(topic.uid), 
                 ),
+                      IconButton(
+                  icon: Icon(
+                        Icons.edit
+                  ),
+                  onPressed: () => _showEditModal(topic.uid, topic.name) 
+                ),
+                 IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('¿Estás seguro?'),
+                          content: Text('Esta acción eliminará el tema de forma permanente.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); 
+                              },
+                              child: Text('Cancelar'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                db.DeleteTopic(topic.uid);
+                                Navigator.of(context).pop(); 
+                              },
+                              child: Text('Eliminar'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
                 ],
               ),
             ),
@@ -104,10 +140,9 @@ void _toggleFavorite(String topicId) {
     },
   ),
 ),
-
           ElevatedButton(
             onPressed: () => _showTemaModal(context),
-            child: Text("Add Topic".tr()),
+            child:Text("Add Topic").tr(),
           ),
         ]
       ),
@@ -165,6 +200,51 @@ void _toggleFavorite(String topicId) {
     },
   );
 }
+ void _showEditModal(String topicId, String currentName) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Editar Topic'),
+          
+ content: Form(
+          key: _formKey,
+           child:          
+           TextFormField(
+            controller: TextEditingController(text: currentName),
+             validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Please enter a topic name".tr();
+                }
+                return null;
+              },
+            decoration: InputDecoration(hintText: ''),
+             onChanged: (value) {
+            setState(() {
+              _newTopicName = value;
+            });
+            },
+          ),
+          ),
+                  actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              db.EditTopic(topicId, _newTopicName,_formKey,context);
+            },
+            child: Text('Guardar'),
+          ),
+        ],
+        );
+      },
+    );
+  }
+
 
 }
 

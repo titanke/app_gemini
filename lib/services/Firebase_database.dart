@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -78,6 +79,34 @@ class FirebaseDatabase {
       lastSavedTopicId = topicRef.id;
     }
   }
+
+  void DeleteTopic(String topicId) async {
+  try {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('user_id');
+    await _firestore.collection('users').doc(userId).collection('topics').doc(topicId).delete();
+    showToast(message: "${"Topic succesfully removed: ".tr()}");
+  } catch (error) {
+       showToast(message: "${"Error deleting topic: ".tr()}");
+  }
+}
+
+void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,BuildContext context) async {
+      if (_formKey.currentState!.validate()) {
+        try {
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          final userId = prefs.getString('user_id');
+
+          await _firestore.collection('users').doc(userId).collection('topics').doc(topicId).update({
+            'name': newName,
+          });
+          showToast(message: "${"Topic updated successfully".tr()}");
+          Navigator.of(context).pop();
+        } catch (error) {
+          showToast(message: "${"Error updating topic: ".tr()}");
+        }
+      }
+}
 
   Stream<List<Topic>> getTopicsUser() async* {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
