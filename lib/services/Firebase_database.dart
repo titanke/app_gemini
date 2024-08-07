@@ -171,8 +171,7 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
 
             String downloadURL = await _storage.ref(filePath).getDownloadURL();
 
-            markdownContent =
-                '$markdownContent\n${await gem.transcriptDocument(selectedFile, downloadURL)}';
+            markdownContent = '$markdownContent\n${await gem.transcriptDocument(selectedFile, downloadURL)}';
 
             await _firestore
                 .collection('users')
@@ -225,23 +224,27 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
 
           try {
             await _storage.ref(filePath).putFile(selectedFile);
+            String downloadURL= await _storage.ref(filePath).getDownloadURL();
 
-            String downloadURL = await _storage.ref(filePath).getDownloadURL();
-
-            markdownContent =
-                '$markdownContent\n${await gem.transcriptDocument(selectedFile, downloadURL)}';
-
-            await _firestore
+            DocumentReference docRef = _firestore
                 .collection('users')
                 .doc(userId)
                 .collection('topics')
                 .doc(topicId)
                 .collection('documents')
-                .add({
+                .doc();
+
+            await docRef.set({
               'fileName': fileName,
               'url': downloadURL,
               'uploadedAt': Timestamp.now(),
             });
+
+            String transcriptContent = await gem.transcriptDocument(selectedFile, downloadURL);
+            String documentId = docRef.id;
+
+            markdownContent = '$markdownContent\n======$documentId\n$transcriptContent\n======$documentId';
+
           } catch (e) {
             showToast(message: "${"Error in save document: ".tr()} $e");
             print(e);
