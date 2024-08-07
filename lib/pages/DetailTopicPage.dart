@@ -25,6 +25,12 @@ class _DetailScreenState extends State<DetailScreen> {
         return Scaffold(
             appBar: AppBar(
               title: Text(topic.name),
+              leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/home', arguments: 1);
+                  }
+              ),
               actions: [
                 IconButton(
                   icon: Icon(Icons.storage),

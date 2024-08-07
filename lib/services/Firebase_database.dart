@@ -39,7 +39,7 @@ class FirebaseDatabase {
   Future<bool> existContent(topicId) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('user_id');
-    String fileTxtPath = 'users/$userId/topics/$topicId/';
+    String fileTxtPath = 'users/$userId/topics/$topicId/transcript.txt';
 
     final storageRef = _storage.ref().child(fileTxtPath);
     final FullMetadata metadata = await storageRef.getMetadata();
