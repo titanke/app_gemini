@@ -50,12 +50,7 @@ class _FileStorageScreenState extends State<FileStorageScreen> {
         isUploading = true;
       });
 
-      await db.pickAndUploadFiles2(topicId, (progress) {
-        setState(() {
-          print(progress);
-          uploadProgress = progress;
-        });
-      });
+      await db.pickAndUploadFiles2(topicId);
 
       setState(() {
         isUploading = false;

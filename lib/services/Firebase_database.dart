@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:app_gemini/global/common/toast.dart';
 import 'package:app_gemini/interfaces/DocumentInterface.dart';
@@ -139,7 +140,7 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
     }
   }
 
-  Future<void> pickAndUploadFiles2(String topicId, Function(double) onProgress) async {
+  Future<void> pickAndUploadFiles2(String topicId) async {
 
     final GeminiService gem = GeminiService();
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -155,8 +156,6 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
     String markdownContent = '';
 
     if (result != null && userId != null) {
-      int totalFiles = result.files.length;
-      int processedFiles = 0;
 
       for (var file in result.files) {
         if (file.path != null) {
@@ -171,22 +170,28 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
 
             String downloadURL = await _storage.ref(filePath).getDownloadURL();
 
-            markdownContent = '$markdownContent\n${await gem.transcriptDocument(selectedFile, downloadURL)}';
 
-            await _firestore
+            DocumentReference docRef = _firestore
                 .collection('users')
                 .doc(userId)
                 .collection('topics')
                 .doc(topicId)
                 .collection('documents')
-                .add({
+                .doc();
+
+            await docRef.set({
               'fileName': fileName,
               'url': downloadURL,
               'uploadedAt': Timestamp.now(),
             });
+
+            String transcriptContent = await gem.transcriptDocument(selectedFile, downloadURL);
+            String documentId = docRef.id;
+
+            markdownContent = '$markdownContent\n======$documentId\n$transcriptContent\n======$documentId';
+
             showToast(message: "File saved".tr());
-            processedFiles++;
-            onProgress(processedFiles / totalFiles);
+
           } catch (e) {
             showToast(message: "${"Error in save document".tr()} $e");
             print(e);
@@ -200,7 +205,7 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
     }
   }
 
-  Future<void> pickAndUploadFiles(String topicId) async {
+  /*Future<void> pickAndUploadFiles(String topicId) async {
     final GeminiService gem = GeminiService();
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -242,6 +247,7 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
 
             String transcriptContent = await gem.transcriptDocument(selectedFile, downloadURL);
             String documentId = docRef.id;
+            print(documentId);
 
             markdownContent = '$markdownContent\n======$documentId\n$transcriptContent\n======$documentId';
 
@@ -256,7 +262,7 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
     } else {
       showToast(message: "No files selected".tr());
     }
-  }
+  }*/
 
   Stream<List<Document>> loadDocuments(String topicId) async* {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -290,9 +296,16 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
       final storageRef = FirebaseStorage.instance.ref().child(documentPath);
       final url = await storageRef.getDownloadURL();
       final response = await http.get(Uri.parse(url));
+
       if (response.statusCode == 200) {
+
         final decodedBody = utf8.decode(response.bodyBytes);
-        return decodedBody;
+
+        final filteredContent = decodedBody.split('\n')
+            .where((line) => !line.startsWith('======'))
+            .join('\n');
+
+        return filteredContent;
       } else {
         throw Exception('Failed to load document from Firebase Storage');
       }
@@ -303,10 +316,10 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
 
 
   Future<void> deleteDocument(String topicId, String documentId, String fileName) async {
-
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('user_id');
     try {
+
       DocumentReference documentRef = FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
@@ -314,15 +327,34 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
           .doc(topicId)
           .collection('documents')
           .doc(documentId);
-      Reference fileRef =
-          _storage.ref().child('users/$userId/topics/$topicId/$fileName');
+
+      Reference fileRef = _storage.ref().child('users/$userId/topics/$topicId/$fileName');
+      Reference transcriptRef = _storage.ref().child('users/$userId/topics/$topicId/transcript.txt');
+
+      Uint8List? data = await transcriptRef.getData();
+      String content = utf8.decode(data!);
+
       await documentRef.delete();
       await fileRef.delete();
-      print("Document succesfully removed".tr());
+
+      String startMarker = '======$documentId\n';
+      String endMarker = '\n======$documentId';
+
+      int startIndex = content.indexOf(startMarker);
+      int endIndex = content.indexOf(endMarker, startIndex);
+
+      if (startIndex != -1 && endIndex != -1) {
+        content = content.replaceRange(startIndex, endIndex + endMarker.length, '');
+      }
+
+      await transcriptRef.putString(content);
+
+      print("Document successfully removed");
     } catch (e) {
-      print("${"Error removing: ".tr()} $e".tr());
+      print("Error removing: $e");
     }
   }
+
 
   Future<List<String>> getTopicIds(String userId) async {
     List<String> topicIds = [];

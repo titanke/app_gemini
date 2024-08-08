@@ -52,7 +52,7 @@ void _handleFileUpload() async {
   });
 
   try {
-    await _db.pickAndUploadFiles(lastSavedTopicId);
+    await _db.pickAndUploadFiles2(lastSavedTopicId);
     setState(() {
       _step2Completed = true;
       _currentStep++;
