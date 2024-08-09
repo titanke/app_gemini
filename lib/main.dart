@@ -6,6 +6,7 @@ import 'package:app_gemini/pages/PerfilPage.dart';
 import 'package:app_gemini/pages/quiz/IntrodutionPage.dart';
 import 'package:app_gemini/pages/quiz/QuizStack.dart';
 import 'package:app_gemini/pages/quiz/ResultPage.dart';
+import 'package:app_gemini/services/Firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:app_gemini/pages/ChatPage.dart';
 import 'package:app_gemini/pages/TopicsPage.dart';
@@ -94,27 +95,165 @@ class Menu extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<Menu> {
-
+  final _formKey = GlobalKey<FormState>();
+  final FirebaseDatabase db = FirebaseDatabase();
+  final TextEditingController _nameController = TextEditingController();
   int _currentIndex = 0;
   final List<Widget> _children = [Homepage(),Topicspage(), Chatpage(), PerfilPage(),FirstTopicsPage()];
+
+  void _onTap (int index){
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  void _guardarTema() async {
+    if (_formKey.currentState!.validate()) {
+      String name = _nameController.text;
+      try {
+        db.saveTopic(name);
+        _nameController.clear();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Topic succesfully saved").tr()),
+        );
+        Navigator.of(context).pop();
+      } catch (e) {
+        print("Error creating topic".tr());
+      }
+    }
+  }
+
+  void _showTemaModal(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            title: Text("Topic Name").tr(),
+            content: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: _nameController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter a topic name".tr();
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _guardarTema,
+                    child: Text("Save").tr(),
+                  ),
+                ],
+              ),
+            )
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
+      resizeToAvoidBottomInset: false,
       body: IndexedStack(
         index: _currentIndex,
         children: _children,
       ),
-      bottomNavigationBar: BottomNavigationBar(
+        floatingActionButton: Transform.translate(
+          offset: const Offset(0,8),
+          child: ClipOval(
+            child: Material(
+              color: Colors.orange[400],
+              child: InkWell(
+                onTap: () {
+                  _showTemaModal(context);
+                },
+                child: const SizedBox(
+                  width: 56,
+                  height: 56,
+                  child: Icon(
+                    Icons.add,
+                    size: 28,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            buildNavBarItem(Icons.home, "Home".tr(),0),
+            buildNavBarItem(Icons.book, "Topics".tr(),1),
+            const SizedBox(width: 60),
+            buildNavBarItem(Icons.chat, "Chat".tr(),2),
+            buildNavBarItem(Icons.person, "Profile".tr(),3),
+
+          ],
+        ),
+      )
+    );
+  }
+
+  Widget buildNavBarItem(IconData icon, String label, int index) {
+    return InkWell(
+      onTap: () => _onTap(index),
+      customBorder: CircleBorder(),
+      child: Container(
+        padding: const EdgeInsets.all(4.0),
+        width: 70,
+        height: 60,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 24,
+              color: _currentIndex == index ? Colors.orange[400] : Colors.grey,
+            ),
+            Text(
+              label,
+              style: TextStyle(
+                color: _currentIndex == index ? Colors.orange[400] : Colors.grey,
+                fontSize: 12, // Tamaño fijo del texto
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+}
+
+
+
+/*
+* ottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home".tr(),       
+            icon: Padding(
+              padding: const EdgeInsets.all(8.0), // Ajusta el margen aquí
+              child:Icon(Icons.home),
+            ),
+            label: "Home".tr(),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.book), 
+            icon: Icon(Icons.book),
             label: "Topics".tr(),
           ),
 
@@ -126,7 +265,7 @@ class _MyHomePageState extends State<Menu> {
             icon: Icon(Icons.person),
             label: "Profile".tr(),
           ),
-          
+
         ],
         unselectedItemColor: Colors.grey,
         onTap: (index) {
@@ -135,7 +274,12 @@ class _MyHomePageState extends State<Menu> {
           });
         },
       ),
-    );
-  }
-}
+*
+* FloatingActionButton(
+        child: Icon(Icons.add),
+        shape: CircleBorder(),
+        onPressed: (){
 
+        },
+      )
+* */

@@ -20,6 +20,7 @@ class _TopicspageState extends State<Topicspage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final FirebaseDatabase db = FirebaseDatabase();
+
   Future<void> _loadFavoriteTopics() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? savedFavorites = prefs.getStringList('favoriteTopics');
@@ -140,10 +141,10 @@ class _TopicspageState extends State<Topicspage> {
                 },
               ),
             ),
-            ElevatedButton(
+            /*ElevatedButton(
               onPressed: () => _showTemaModal(context),
               child:Text("Add Topic").tr(),
-            ),
+            ),*/
           ]
       ),
     );
@@ -200,6 +201,7 @@ class _TopicspageState extends State<Topicspage> {
       },
     );
   }
+
   void _showEditModal(String topicId, String currentName) {
     showDialog(
       context: context,

@@ -132,7 +132,7 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
                               padding: const EdgeInsets.all(8.0),
                               margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                               decoration: BoxDecoration(
-                                color: message.isUserMessage ? const Color.fromARGB(255, 25, 43, 58) : const Color.fromARGB(255, 223, 88, 88),
+                                color: message.isUserMessage ? const Color(0xFFF2AA00) : const Color(0xFFBF8600),
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                               child: MarkdownBody(

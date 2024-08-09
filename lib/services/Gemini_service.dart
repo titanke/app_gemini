@@ -142,7 +142,7 @@ class GeminiService {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('user_id');
     final locale = prefs.getString('locale');
-
+    print(locale);
     var apiKey = dotenv.env['API_KEY'];
 
     try {
@@ -178,7 +178,7 @@ class GeminiService {
           '''
           Eres un asistente que ayuda al usuario a repasar temas en base a este contexto: {context}
           Question: {question} 
-          responde al usuario en este idioma: ${locale}
+          responde al usuario en este idioma: ${locale=='en_US'? "English": "Español"}
           '''
       );
 
