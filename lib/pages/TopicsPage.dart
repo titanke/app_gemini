@@ -65,6 +65,7 @@ class _TopicspageState extends State<Topicspage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         // ignore: prefer_const_constructors
         title: Center(
           // ignore: prefer_const_constructors

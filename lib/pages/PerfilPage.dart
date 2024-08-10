@@ -63,6 +63,7 @@ class _PerfilPageState extends State<PerfilPage> {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         // ignore: prefer_const_constructors
         title: Center(
           // ignore: prefer_const_constructors

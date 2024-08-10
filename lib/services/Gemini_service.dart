@@ -172,13 +172,12 @@ class GeminiService {
       );
 
       final chatModel = ChatGoogleGenerativeAI(apiKey: apiKey);
-
       final docPrompt = ChatPromptTemplate.fromTemplate(
 
           '''
           Eres un asistente que ayuda al usuario a repasar temas en base a este contexto: {context}
           Question: {question} 
-          responde al usuario en este idioma: ${locale=='en_US'? "English": "Español"}
+          responde al usuario en este idioma: ${locale=='es_ES'? "Español": "English"}
           '''
       );
 
