@@ -15,6 +15,7 @@ import 'package:app_gemini/pages/StorageDetailPage.dart';
 import 'package:app_gemini/pages/quiz/QuizPage.dart';
 import 'package:app_gemini/login/LoginPage.dart';
 import 'package:app_gemini/widgets/AddTopic.dart';
+import 'package:app_gemini/services/Local_notification.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'firebase_options.dart';
@@ -32,6 +33,7 @@ void main() async{
   await Firebase. initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await Fnoti().initNotific();
   await dotenv.load();
   final String defaultLocale = Platform.localeName;
   final localeList = defaultLocale.split('_');
