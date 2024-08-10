@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 import 'package:langchain/langchain.dart';
+
 class Chatpage extends StatefulWidget {
   const Chatpage({super.key});
 
@@ -11,14 +12,15 @@ class Chatpage extends StatefulWidget {
   State<Chatpage> createState() => _ChatpageState();
 }
 
-  class Message {
-    final String text;
-    final bool isUserMessage;
+class Message {
+  final String text;
+  final bool isUserMessage;
 
-    Message(this.text, this.isUserMessage);
-  }
+  Message(this.text, this.isUserMessage);
+}
 
-class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin{
+class _ChatpageState extends State<Chatpage>
+    with SingleTickerProviderStateMixin {
   List<Message> messages = [];
   TextEditingController prompt = TextEditingController();
   final GeminiService gem = GeminiService();
@@ -36,8 +38,7 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
       _animationController = AnimationController(
         duration: const Duration(seconds: 1),
         vsync: this,
-      )
-        ..repeat(reverse: true);
+      )..repeat(reverse: true);
     }
   }
 
@@ -58,7 +59,7 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
     _animationController.dispose();
     super.dispose();
   }
-  
+
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
@@ -77,7 +78,7 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
     });
 
     try {
-      String response =await gem.ragResponse(rag!, query);
+      String response = await gem.ragResponse(rag!, query);
       setState(() {
         messages.add(Message(response, false));
         isLoading = false;
@@ -93,92 +94,109 @@ class _ChatpageState extends State<Chatpage> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-
-   return Scaffold(
-   
-      body: rag ==null?
-          Center(
-            child: CircularProgressIndicator(),
-          )
-          :Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              controller: _scrollController, 
-              reverse: false,
-              itemCount: messages.length + (isLoading ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index == messages.length) {
-                  return FadeTransition(
-                    opacity: _animationController,
-                    child:  Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Writting...".tr()),
-                      ),
-                    ),
-                  );
-                }
-                final message = messages[index];
-                return Align(
-                  alignment: message.isUserMessage ? Alignment.centerRight : Alignment.centerLeft,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-             
-                      Flexible(
-                            child: Container(
-                              padding: const EdgeInsets.all(8.0),
-                              margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                              decoration: BoxDecoration(
-                                color: message.isUserMessage ? const Color(0xFFF2AA00) : const Color(0xFFBF8600),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              child: MarkdownBody(
-                                data: message.text,
-                              ),
-                            ),
-                          ),
-                   
-                    ],
-                  ),
-                );
-              },
+    return Scaffold(
+      appBar: AppBar(
+        // ignore: prefer_const_constructors
+        title: Center(
+          // ignore: prefer_const_constructors
+          child: Text(
+            'General Chat',
+            // ignore: prefer_const_constructors
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
+        ),
+        backgroundColor: const Color(
+            0xFFFFA500), // Set the background color for the AppBar if needed
+      ),
+      body: rag == null
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
               children: [
                 Expanded(
-                  child: TextField(
-                    controller: prompt,
-                    decoration: InputDecoration(
-                      hintText: "Writte your answer...".tr(),
-                      border: OutlineInputBorder(),
-                    ),
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    reverse: false,
+                    itemCount: messages.length + (isLoading ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index == messages.length) {
+                        return FadeTransition(
+                          opacity: _animationController,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text("Writting...".tr()),
+                            ),
+                          ),
+                        );
+                      }
+                      final message = messages[index];
+                      return Align(
+                        alignment: message.isUserMessage
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(
+                              child: Container(
+                                padding: const EdgeInsets.all(8.0),
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 16.0, vertical: 8.0),
+                                decoration: BoxDecoration(
+                                  color: message.isUserMessage
+                                      ? const Color(0xFFF2AA00)
+                                      : const Color(0xFFBF8600),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: MarkdownBody(
+                                  data: message.text,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    final text = prompt.text;
-                    if (text.isNotEmpty) {
-                      setState(() {
-                        messages.add(Message(text, true));
-                      });
-                      prompt.clear();
-                      getRes(text);
-                      _scrollToBottom();
-                    }
-                  },
-                  icon: const Icon(Icons.arrow_circle_right_rounded),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: prompt,
+                          decoration: InputDecoration(
+                            hintText: "Writte your answer...".tr(),
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          final text = prompt.text;
+                          if (text.isNotEmpty) {
+                            setState(() {
+                              messages.add(Message(text, true));
+                            });
+                            prompt.clear();
+                            getRes(text);
+                            _scrollToBottom();
+                          }
+                        },
+                        icon: const Icon(Icons.arrow_circle_right_rounded),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }

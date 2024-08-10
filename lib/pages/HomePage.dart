@@ -114,7 +114,6 @@ class _HomepageState extends State<Homepage> {
                                 ..sort((a, b) => b.lastInteracted
                                     .compareTo(a.lastInteracted));
 
-<<<<<<< HEAD
                               //
                               return Column(
                                 mainAxisSize: MainAxisSize.min,
@@ -180,9 +179,7 @@ class _HomepageState extends State<Homepage> {
                                                         .ellipsis, // Abrevia el texto con puntos suspensivos si es necesario
                                                   ),
                                                   backgroundColor:
-                                                      Colors.blueGrey,
-                                                  labelStyle: TextStyle(
-                                                      color: Colors.white),
+                                                      Color(0xFFFFCC80),
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -233,7 +230,7 @@ class _HomepageState extends State<Homepage> {
                                         if (topic != null) {
                                           return CustomCard(
                                             title: topic.name,
-                                            bgcolor: Color(0xFFABA8B2),
+                                            bgcolor: Color(0xFFFFB84D),
                                             onTap: () =>
                                                 _navigateToDetailScreen(topic),
                                           );
@@ -263,53 +260,6 @@ class _HomepageState extends State<Homepage> {
             ),
           )
         : Text('Cargando');
-=======
-                      (topics.isNotEmpty && favoriteTopics.isNotEmpty)
-    ? GridView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-        ),
-        itemCount: favoriteTopics.length,
-        itemBuilder: (context, index) {
-          final topicId = favoriteTopics[index];
-          final topic = topics.firstWhere((t) => t.uid == topicId, orElse: () => Topic(uid: '', name: 'Unknown'));
-          if (topic != null) {
-            return CustomCard(
-              title: topic.name,
-              bgcolor: Colors.grey,
-              onTap: () => _navigateToDetailScreen(topic),
-            );
-          } else {
-            return SizedBox(
-              child: Container(
-                padding: EdgeInsets.all(16.0),
-                child: Text('Add your favorite topic here').tr(),
-              ),
-            );
-          }
-        },
-      )
-    : Container(
-        width: screenWidth,
-        height: screenHeight / 2,
-        child: Center(
-          child: Text('Add your favorite topic here').tr(),
-        ),
-      ),
-
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                )
-              : Text('Loading..').tr(),
-        ],
-      ),
-    ):Text('Cargando');
->>>>>>> bb86a2460feebb06fb4689def76c481aaa915d31
   }
 
   void _navigateToDetailScreen(Object dato) {

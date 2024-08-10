@@ -62,7 +62,22 @@ class _PerfilPageState extends State<PerfilPage> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
-      //appBar: AppBar(title: Text("Perfil"),),
+      appBar: AppBar(
+        // ignore: prefer_const_constructors
+        title: Center(
+          // ignore: prefer_const_constructors
+          child: Text(
+            'Profile',
+            // ignore: prefer_const_constructors
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        backgroundColor: const Color(
+            0xFFFFA500), // Set the background color for the AppBar if needed
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -76,10 +91,12 @@ class _PerfilPageState extends State<PerfilPage> {
                     backgroundImage: NetworkImage(
                         'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'),
                   ),
-                  SizedBox(width: 16),
-                  Text('${_userData['email']}'),
+                  // SizedBox(width: 16),
+                  // Text('${_userData['email']}'),
                 ],
               ),
+              SizedBox(width: 16),
+              Text('${_userData['email']}'),
               SizedBox(height: 20),
               Text("Account Data",
                       style: TextStyle(fontWeight: FontWeight.bold))

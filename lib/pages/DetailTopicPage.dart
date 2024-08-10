@@ -7,59 +7,67 @@ import 'package:flutter/material.dart';
 import 'package:app_gemini/interfaces/TopicInterface.dart';
 
 class DetailScreen extends StatefulWidget {
-
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
 
 class _DetailScreenState extends State<DetailScreen> {
-    late Topic topic;
-    final FirebaseDatabase db = FirebaseDatabase();
+  late Topic topic;
+  final FirebaseDatabase db = FirebaseDatabase();
 
+  @override
+  Widget build(BuildContext context) {
+    topic = ModalRoute.of(context)?.settings.arguments as Topic;
 
-    @override
-    Widget build(BuildContext context) {
-        topic = ModalRoute.of(context)?.settings.arguments as Topic;
-
-
-        return Scaffold(
-            appBar: AppBar(
-              title: Text(topic.name),
-              leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          topic.name,
+          style: TextStyle(color: Colors.white), // Set the text color to white
+        ),
+        backgroundColor:
+            Color(0xFFFFA500), // Set the background color of the AppBar
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back,
+              color: Colors.white), // Set the icon color to white
+          onPressed: () {
+            Navigator.pushNamed(context, '/home', arguments: 1);
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.storage,
+                color: Colors.white), // Set the icon color to white
+            onPressed: () {
+              Navigator.pushNamed(context, '/storage', arguments: topic.uid);
+            },
+          ),
+          FutureBuilder<bool>(
+            future: db.existContent(topic.uid),
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data == true) {
+                return IconButton(
+                  icon: Icon(Icons.play_arrow,
+                      color: Colors.white), // Set the icon color to white
                   onPressed: () {
-                    Navigator.pushNamed(context, '/home', arguments: 1);
-                  }
-              ),
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.storage),
-                  onPressed: () {
-                  Navigator.pushNamed(context, '/storage', arguments: topic.uid);
+                    Navigator.pushNamed(context, '/quiz', arguments: topic);
                   },
-                ),
-                FutureBuilder<bool>(
-                  future: db.existContent(topic.uid),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData && snapshot.data == true) {
-                      return IconButton(
-                        icon: Icon(Icons.play_arrow),
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/quiz', arguments: topic);
-                        },
-                      );
-                    } else {
-                      return IconButton(
-                        icon: Icon(Icons.play_arrow),
-                        onPressed: null,
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
-            body: TopicOverviewScreen(topic: topic, db: db,),
-          );
-    }
+                );
+              } else {
+                return IconButton(
+                  icon: Icon(Icons.play_arrow,
+                      color: Colors.white), // Set the icon color to white
+                  onPressed: null,
+                );
+              }
+            },
+          ),
+        ],
+      ),
+      body: TopicOverviewScreen(
+        topic: topic,
+        db: db,
+      ),
+    );
+  }
 }
-
