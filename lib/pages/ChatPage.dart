@@ -103,7 +103,7 @@ class _ChatpageState extends State<Chatpage>
             'General Chat',
             // ignore: prefer_const_constructors
             style: TextStyle(
-              color: Colors.white,
+              // color: Colors.white,
               fontSize: 20,
             ),
           ),
@@ -174,7 +174,14 @@ class _ChatpageState extends State<Chatpage>
                           controller: prompt,
                           decoration: InputDecoration(
                             hintText: "Writte your answer...".tr(),
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.black, // Color del borde
+                                width: 24.0, // Grosor del borde
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                  12.0), // Radio de las esquinas (opcional)
+                            ),
                           ),
                         ),
                       ),

@@ -167,15 +167,15 @@ class _MyHomePageState extends State<Menu> {
               size: 24,
               color: _currentIndex == index
                   ? Colors.orange[400]
-                  : Color(0xFF19191B),
+                  : Color(0xFFFFE0B2),
             ),
             Text(
               label,
               style: TextStyle(
                 color: _currentIndex == index
                     ? Colors.orange[400]
-                    : Color(0xFF19191B),
-                fontSize: 12, // Tamaño fijo del texto
+                    : Color(0xFFFFE0B2),
+                fontSize: 11, // Tamaño fijo del texto
               ),
             ),
           ],

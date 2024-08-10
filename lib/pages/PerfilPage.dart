@@ -70,7 +70,7 @@ class _PerfilPageState extends State<PerfilPage> {
             'Profile',
             // ignore: prefer_const_constructors
             style: TextStyle(
-              color: Colors.white,
+              // color: Colors.white,
               fontSize: 20,
             ),
           ),
