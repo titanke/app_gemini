@@ -91,5 +91,6 @@
     "Error creating topic": "Error creating topic",
     "Home": "Home",
     "Topics": "Topics",
-    "Profile": "Profile"
+    "Profile": "Profile",
+    "The file exceeds the maximum allowed size of 2 MB": "The file exceeds the maximum allowed size of 8 MB"
 }
