@@ -104,7 +104,7 @@ void DeleteTopic(String topicId,BuildContext context) async {
         favoritesProvider.removeFavoriteTopic(topicId);
 
       await _firestore.collection('users').doc(userId).collection('topics').doc(topicId).delete();
-      showToast(message: "${"Topic successfully removed: ".tr()}");
+      showToast(message: "${"Topic successfully removed".tr()}");
     }
   } catch (error) {
     showToast(message: "${"Error deleting topic: ".tr()} ${error.toString().tr()}");

@@ -108,13 +108,13 @@ class _ChatpageState extends State<Chatpage>
         title: Center(
           // ignore: prefer_const_constructors
           child: Text(
-            'General Chat',
+            "Study Companion",
             // ignore: prefer_const_constructors
             style: TextStyle(
-              color: Colors.white,
+              // color: Colors.white,
               fontSize: 20,
             ),
-          ),
+          ).tr(),
         ),
         backgroundColor: const Color(
             0xFFFFA500), // Set the background color for the AppBar if needed
@@ -182,7 +182,14 @@ class _ChatpageState extends State<Chatpage>
                           controller: prompt,
                           decoration: InputDecoration(
                             hintText: "Writte your answer...".tr(),
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.black, // Color del borde
+                                width: 24.0, // Grosor del borde
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                  12.0), // Radio de las esquinas (opcional)
+                            ),
                           ),
                         ),
                       ),

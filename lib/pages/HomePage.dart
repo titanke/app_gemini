@@ -33,11 +33,9 @@ class _HomepageState extends State<Homepage> {
     final favoriteTopics = Provider.of<ThemeProvider>(context).favoriteTopics;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-
     return mounted
         ? Scaffold(
             // HEADER
-
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(150),
               child: AppBar(
@@ -55,7 +53,7 @@ class _HomepageState extends State<Homepage> {
                           'Hi..!',
                           // ignore: prefer_const_constructors
                           style: TextStyle(
-                            color: Colors.white,
+                            // color: Colors.black,
                             fontSize: 24,
                           ),
                         ).tr(),
@@ -143,8 +141,8 @@ class _HomepageState extends State<Homepage> {
                                           borderRadius:
                                               BorderRadius.circular(8.0),
                                           side: const BorderSide(
-                                              color: Colors
-                                                  .transparent), // Eliminar el borde
+                                              color: Color(
+                                                  0xFFFFB84D)), // Eliminar el borde
                                         );
 
                                         // Imprimir el color del borde actual en la consola
@@ -179,14 +177,16 @@ class _HomepageState extends State<Homepage> {
                                                         .ellipsis, // Abrevia el texto con puntos suspensivos si es necesario
                                                   ),
                                                   backgroundColor:
-                                                      Color(0xFFFFCC80),
+                                                      Colors.transparent,
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             8.0),
                                                     side: BorderSide(
-                                                        color: Colors
-                                                            .transparent), // Borde transparente
+                                                        color:
+                                                            Color(0xFFFFB84D),
+                                                        width:
+                                                            2.5), // Borde transparente
                                                   ),
                                                 ),
                                               ),
@@ -230,7 +230,8 @@ class _HomepageState extends State<Homepage> {
                                         if (topic != null) {
                                           return CustomCard(
                                             title: topic.name,
-                                            bgcolor: Color(0xFFFFB84D),
+                                            borderColor: Colors.transparent,
+                                            bgcolor: Color(0xFFFFCC80),
                                             onTap: () =>
                                                 _navigateToDetailScreen(topic),
                                           );
@@ -238,7 +239,7 @@ class _HomepageState extends State<Homepage> {
                                           // En caso de que no haya un topic, se muestra un SizedBox con el mensaje
                                           return SizedBox(
                                             child: Container(
-                                              padding:
+                                              margin:
                                                   const EdgeInsets.all(16.0),
                                               child: Text(
                                                       'Add your favorite topic here')

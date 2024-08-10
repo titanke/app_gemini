@@ -64,18 +64,16 @@ class _PerfilPageState extends State<PerfilPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        // ignore: prefer_const_constructors
         title: Center(
-          // ignore: prefer_const_constructors
           child: Text(
-            'Profile',
-            // ignore: prefer_const_constructors
+            "Profile".tr(),
             style: TextStyle(
-              color: Colors.white,
+              // color: Colors.white,
               fontSize: 20,
             ),
           ),
         ),
+        
         backgroundColor: const Color(
             0xFFFFA500), // Set the background color for the AppBar if needed
       ),

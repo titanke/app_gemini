@@ -1,10 +1,7 @@
-import 'dart:ffi';
 import 'dart:io';
-import 'package:app_gemini/interfaces/TopicInterface.dart';
 import 'package:app_gemini/pages/HomePage.dart';
 import 'package:app_gemini/pages/PerfilPage.dart';
 import 'package:app_gemini/pages/quiz/IntrodutionPage.dart';
-import 'package:app_gemini/pages/quiz/QuizStack.dart';
 import 'package:app_gemini/pages/quiz/ResultPage.dart';
 import 'package:app_gemini/services/Firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -18,36 +15,37 @@ import 'package:app_gemini/widgets/AddTopic.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'firebase_options.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart'; 
 import 'package:provider/provider.dart';
 import 'package:app_gemini/widgets/theme_provider.dart';
 import 'package:app_gemini/widgets/FirstTPage.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-void main() async {
+void main() async{
+
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
-  await Firebase.initializeApp(
+  await Firebase. initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await dotenv.load();
   final String defaultLocale = Platform.localeName;
   final localeList = defaultLocale.split('_');
-  final deviceLocale =
-      Locale(localeList[0], localeList.length > 1 ? localeList[1] : '');
+  final deviceLocale = Locale(localeList[0]);
 
-  runApp(
+  runApp(    
     EasyLocalization(
-      supportedLocales: [Locale('en', 'US'), Locale('es', 'ES')],
-      path: 'assets/trans',
-      fallbackLocale: Locale('en', 'US'),
-      child: ChangeNotifierProvider(
-        create: (context) => ThemeProvider(),
-        child: MyApp(),
-      ),
-    ),
-  );
+          supportedLocales: [Locale('en', 'US'), Locale('es', 'ES')],
+          path: 'assets/trans',
+          fallbackLocale: Locale('en', 'US'),
+          child: ChangeNotifierProvider(
+          create: (context) => ThemeProvider(),
+          child: MyApp(),
+          ),
+        ),
+
+    );
 }
 
 class MyApp extends StatelessWidget {
@@ -55,10 +53,10 @@ class MyApp extends StatelessWidget {
   Future<User?> _getUser() async {
     return FirebaseAuth.instance.currentUser;
   }
-
+  
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<User?>(
+        return FutureBuilder<User?>(
       future: _getUser(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -100,54 +98,64 @@ class _MyHomePageState extends State<Menu> {
   final FirebaseDatabase db = FirebaseDatabase();
   final TextEditingController _nameController = TextEditingController();
   int _currentIndex = 0;
-  final List<Widget> _children = [
-    Homepage(),
-    Topicspage(),
-    Chatpage(),
-    PerfilPage(),
-    FirstTopicsPage()
-  ];
+  final List<Widget> _children = [Homepage(),Topicspage(), Chatpage(), PerfilPage(),FirstTopicsPage()];
 
-  void _onTap(int index) {
+  void _onTap (int index){
     setState(() {
       _currentIndex = index;
     });
   }
 
+
+
+
   @override
   Widget build(BuildContext context) {
-    // final theme = Theme.of(context);
-
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: IndexedStack(
-          index: _currentIndex,
-          children: _children,
-        ),
-        bottomNavigationBar: BottomAppBar(
-          color: Colors.transparent,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              buildNavBarItem(Icons.home, "Home".tr(), 0),
-              buildNavBarItem(Icons.book, "Topics".tr(), 1),
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.orange[400], // Background color of the circle
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.add, color: Colors.white, size: 28),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/Addtopic');
-                  },
+      resizeToAvoidBottomInset: false,
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _children,
+      ),
+        floatingActionButton: Transform.translate(
+          offset: const Offset(0,24),
+          child: ClipOval(
+            child: Material(
+              color: Colors.orange[400],
+              child: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, '/Addtopic');
+                },
+                child: const SizedBox(
+                  width: 56,
+                  height: 56,
+                  child: Icon(
+                    Icons.add,
+                    size: 28,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-              buildNavBarItem(Icons.chat, "Chat".tr(), 2),
-              buildNavBarItem(Icons.person, "Profile".tr(), 3),
-            ],
+            ),
           ),
-        ));
+        ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            buildNavBarItem(Icons.home, "Home".tr(),0),
+            buildNavBarItem(Icons.book, "Topics".tr(),1),
+            const SizedBox(width: 60),
+            buildNavBarItem(Icons.chat, "Chat".tr(),2),
+            buildNavBarItem(Icons.person, "Profile".tr(),3),
+
+          ],
+        ),
+      )
+    );
   }
 
   Widget buildNavBarItem(IconData icon, String label, int index) {
@@ -167,15 +175,15 @@ class _MyHomePageState extends State<Menu> {
               size: 24,
               color: _currentIndex == index
                   ? Colors.orange[400]
-                  : Colors.grey,
+                  : Color(0xFFFFE0B2),
             ),
             Text(
               label,
               style: TextStyle(
                 color: _currentIndex == index
                     ? Colors.orange[400]
-                    : Colors.grey,
-                fontSize: 12, // Tamaño fijo del texto
+                    : Color(0xFFFFE0B2),
+                fontSize: 11, // Tamaño fijo del texto
               ),
             ),
           ],
@@ -183,6 +191,8 @@ class _MyHomePageState extends State<Menu> {
       ),
     );
   }
+
+
 }
 
 
