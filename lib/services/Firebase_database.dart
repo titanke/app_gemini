@@ -6,6 +6,7 @@ import 'package:app_gemini/global/common/toast.dart';
 import 'package:app_gemini/interfaces/DocumentInterface.dart';
 import 'package:app_gemini/interfaces/TopicInterface.dart';
 import 'package:app_gemini/services/Gemini_service.dart';
+import 'package:app_gemini/widgets/theme_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
@@ -13,6 +14,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -87,9 +89,10 @@ class FirebaseDatabase {
     }
   }
 
-void DeleteTopic(String topicId) async {
+void DeleteTopic(String topicId,BuildContext context) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final userId = prefs.getString('user_id');
+    final favoritesProvider = Provider.of<ThemeProvider>(context, listen: false);
 
   try {
       final stream = loadDocuments(topicId);
@@ -98,6 +101,8 @@ void DeleteTopic(String topicId) async {
           final documentId = document.id;
           await deleteDocument(topicId, documentId, document.fileName); 
         }
+        favoritesProvider.removeFavoriteTopic(topicId);
+
       await _firestore.collection('users').doc(userId).collection('topics').doc(topicId).delete();
       showToast(message: "${"Topic successfully removed: ".tr()}");
     }
