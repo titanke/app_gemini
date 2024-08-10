@@ -30,11 +30,18 @@ class _ChatpageState extends State<Chatpage>
   late AnimationController _animationController;
 
   final ScrollController _scrollController = ScrollController();
+
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    context.locale;
+    _initializeRag();
+  }
+
   @override
   void initState() {
     if (mounted) {
       super.initState();
-      _initializeRag();
+      //_initializeRag();
       _animationController = AnimationController(
         duration: const Duration(seconds: 1),
         vsync: this,
@@ -96,6 +103,7 @@ class _ChatpageState extends State<Chatpage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         // ignore: prefer_const_constructors
         title: Center(
           // ignore: prefer_const_constructors
@@ -206,4 +214,5 @@ class _ChatpageState extends State<Chatpage>
             ),
     );
   }
+
 }
