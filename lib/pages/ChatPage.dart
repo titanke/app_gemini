@@ -100,13 +100,13 @@ class _ChatpageState extends State<Chatpage>
         title: Center(
           // ignore: prefer_const_constructors
           child: Text(
-            'General Chat',
+            "Study Companion",
             // ignore: prefer_const_constructors
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,
             ),
-          ),
+          ).tr(),
         ),
         backgroundColor: const Color(
             0xFFFFA500), // Set the background color for the AppBar if needed

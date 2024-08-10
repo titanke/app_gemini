@@ -75,7 +75,7 @@ class _TopicspageState extends State<Topicspage> {
               color: Colors.white,
               fontSize: 20,
             ),
-          ),
+          ).tr(),
         ),
         backgroundColor: Color(
             0xFFFFA500), // Set the background color for the AppBar if needed

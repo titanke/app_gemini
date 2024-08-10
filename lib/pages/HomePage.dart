@@ -33,11 +33,9 @@ class _HomepageState extends State<Homepage> {
     final favoriteTopics = Provider.of<ThemeProvider>(context).favoriteTopics;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-
     return mounted
         ? Scaffold(
             // HEADER
-
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(150),
               child: AppBar(

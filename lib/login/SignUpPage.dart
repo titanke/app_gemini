@@ -5,7 +5,7 @@ import 'package:app_gemini/widgets/FormContainerWidget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:app_gemini/widgets/Tfield.dart';
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
@@ -62,6 +62,8 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(
                 height: 10,
               ),*/
+         
+              
               FormContainerWidget(
                 controller: _emailController,
                 hintText: "Email".tr(),
@@ -108,7 +110,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   width: double.infinity,
                   height: 45,
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: Colors.orange,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
@@ -140,7 +142,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: Text(
                         "Login".tr(),
                         style: TextStyle(
-                            color: Colors.blue, fontWeight: FontWeight.bold),
+                            color: Colors.orange, fontWeight: FontWeight.bold),
                       ))
                 ],
               )
