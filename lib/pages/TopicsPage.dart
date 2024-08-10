@@ -121,7 +121,7 @@ class _TopicspageState extends State<Topicspage> {
                                           ),
                                           TextButton(
                                             onPressed: () {
-                                              db.DeleteTopic(topic.uid);
+                                              db.DeleteTopic(topic.uid,context);
                                               Navigator.of(context).pop();
                                             },
                                             child: Text("Remove").tr(),
