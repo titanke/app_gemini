@@ -8,6 +8,7 @@ import 'package:app_gemini/widgets/theme_provider.dart';
 import 'package:app_gemini/pages/DetailTopicPage.dart';
 
 final List<String> favoriteTopics = [];
+
 class Topicspage extends StatefulWidget {
   const Topicspage({Key? key}) : super(key: key);
 
@@ -37,7 +38,7 @@ class _TopicspageState extends State<Topicspage> {
   void initState() {
     super.initState();
     _loadFavoriteTopics();
-        _searchController.addListener(() {
+    _searchController.addListener(() {
       setState(() {
         _searchText = _searchController.text;
       });
@@ -45,7 +46,8 @@ class _TopicspageState extends State<Topicspage> {
   }
 
   void _toggleFavorite(String topicId) {
-    final favoritesProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final favoritesProvider =
+        Provider.of<ThemeProvider>(context, listen: false);
     if (favoritesProvider.favoriteTopics.contains(topicId)) {
       favoritesProvider.removeFavoriteTopic(topicId);
     } else {
@@ -61,123 +63,134 @@ class _TopicspageState extends State<Topicspage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-
-      body: Column(
-
-          children: [
-                  Padding(
+      appBar: AppBar(
+        // ignore: prefer_const_constructors
+        title: Center(
+          // ignore: prefer_const_constructors
+          child: Text(
+            'Topics',
+            // ignore: prefer_const_constructors
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        backgroundColor: Color(
+            0xFFFFA500), // Set the background color for the AppBar if needed
+      ),
+      body: Column(children: [
+        Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextField(
             controller: _searchController,
             decoration: InputDecoration(
-              labelText: "Search".tr()+"...",
+              labelText: "Search".tr() + "...",
               border: OutlineInputBorder(),
             ),
           ),
         ),
-            Expanded(
-              child: StreamBuilder<List<Topic>>(
-                stream: db.getTopicsUser(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  }
+        Expanded(
+          child: StreamBuilder<List<Topic>>(
+            stream: db.getTopicsUser(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
 
-                  if (snapshot.hasError)
-                  {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  }
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
 
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: Text("Don't? have a topic, add one").tr());
-                  }
+              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Center(child: Text("Don't? have a topic, add one").tr());
+              }
 
-                  final List<Topic> topics = snapshot.data!;
-               final filteredTopics = topics.where((topic) =>
-              topic.name.toLowerCase().contains(_searchText.toLowerCase())).toList();
+              final List<Topic> topics = snapshot.data!;
+              final filteredTopics = topics
+                  .where((topic) => topic.name
+                      .toLowerCase()
+                      .contains(_searchText.toLowerCase()))
+                  .toList();
 
-
-
-                  return ListView.builder(
-                    itemCount: filteredTopics.length,
-                    itemBuilder: (context, index) {
-                      final topic = filteredTopics[index];
-                      final favoritesProvider = Provider.of<ThemeProvider>(context);
-                      final isFavorite = favoritesProvider.favoriteTopics.contains(topic.uid);
-                      return InkWell(
-                        onTap: () => _navigateToDetailScreen(topic),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children:
-                            [
-                              Expanded(child: Text(topic.name,
+              return ListView.builder(
+                itemCount: filteredTopics.length,
+                itemBuilder: (context, index) {
+                  final topic = filteredTopics[index];
+                  final favoritesProvider = Provider.of<ThemeProvider>(context);
+                  final isFavorite =
+                      favoritesProvider.favoriteTopics.contains(topic.uid);
+                  return InkWell(
+                    onTap: () => _navigateToDetailScreen(topic),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                              child: Text(topic.name,
                                   style: const TextStyle(fontSize: 20))),
-                              IconButton(
-                                icon: Icon(
-                                  isFavorite ? Icons.favorite : Icons.favorite_border,
-                                  color: isFavorite ? Colors.red : Colors.grey,
-
-                                ),
-                                onPressed: () => _toggleFavorite(topic.uid),
-                              ),
-                              IconButton(
-                                  icon: Icon(
-                                      Icons.edit
-                                  ),
-                                  onPressed: () => _showEditModal(topic.uid, topic.name)
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.delete),
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text("Are you sure?").tr(),
-                                        content: Text("This action will remove this topic permanently").tr(),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text("Cancel").tr(),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              db.DeleteTopic(topic.uid,context);
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text("Remove").tr(),
-                                          ),
-                                        ],
-                                      );
-                                    },
+                          IconButton(
+                            icon: Icon(
+                              isFavorite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: isFavorite ? Colors.red : Colors.grey,
+                            ),
+                            onPressed: () => _toggleFavorite(topic.uid),
+                          ),
+                          IconButton(
+                              icon: Icon(Icons.edit),
+                              onPressed: () =>
+                                  _showEditModal(topic.uid, topic.name)),
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text("Are you sure?").tr(),
+                                    content: Text(
+                                            "This action will remove this topic permanently")
+                                        .tr(),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text("Cancel").tr(),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          db.DeleteTopic(topic.uid, context);
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text("Remove").tr(),
+                                      ),
+                                    ],
                                   );
                                 },
-                              ),
-                            ],
+                              );
+                            },
                           ),
-                        ),
-                      );
-                    },
+                        ],
+                      ),
+                    ),
                   );
                 },
-              ),
-            ),
-         
-          ]
-      ),
+              );
+            },
+          ),
+        ),
+      ]),
     );
-
   }
+
   void _navigateToDetailScreen(Object topic) {
     Navigator.pushNamed(context, '/detail', arguments: topic);
   }
-
 
   void _showEditModal(String topicId, String currentName) {
     showDialog(
@@ -185,11 +198,9 @@ class _TopicspageState extends State<Topicspage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Edit Topic").tr(),
-
           content: Form(
             key: _formKey,
-            child:
-            TextFormField(
+            child: TextFormField(
               controller: TextEditingController(text: currentName),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -212,7 +223,7 @@ class _TopicspageState extends State<Topicspage> {
             ),
             TextButton(
               onPressed: () {
-                db.EditTopic(topicId, _newTopicName,_formKey,context);
+                db.EditTopic(topicId, _newTopicName, _formKey, context);
               },
               child: Text("Save").tr(),
             ),
@@ -221,10 +232,4 @@ class _TopicspageState extends State<Topicspage> {
       },
     );
   }
-
-
 }
-
-
-
-

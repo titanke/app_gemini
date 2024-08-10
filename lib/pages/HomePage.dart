@@ -34,149 +34,232 @@ class _HomepageState extends State<Homepage> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return mounted?Scaffold(
-      // HEADER
+    return mounted
+        ? Scaffold(
+            // HEADER
 
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(150),
-        child: AppBar(
-          backgroundColor: Colors.orange[400],
-          automaticallyImplyLeading: false,
-          flexibleSpace: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                 Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text(
-                    'Hi..!',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
-                  ).tr(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SvgPicture.asset(
-                    'assets/squirrel-svgrepo-com.svg',
-                    width: 80,
-                    height: 80,
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(150),
+              child: AppBar(
+                backgroundColor: Color(0xFFFFA500),
+                automaticallyImplyLeading: false,
+                flexibleSpace: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        // ignore: prefer_const_constructors
+                        padding: EdgeInsets.all(16.0),
+                        // ignore: prefer_const_constructors
+                        child: Text(
+                          'Hi..!',
+                          // ignore: prefer_const_constructors
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                          ),
+                        ).tr(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SvgPicture.asset(
+                          'assets/squirrel-svgrepo-com.svg',
+                          width: 80,
+                          height: 80,
+
+                          // Color responsiveness, en caso de que sea necesario
+
+                          // colorFilter: ColorFilter.mode(
+                          //   Theme.of(context).iconTheme.color!,
+                          //   BlendMode.srcIn,
+                          // ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+              ),
+            ),
+
+            body: Column(
+              children: [
+                mounted
+                    ? Expanded(
+                        child: SingleChildScrollView(
+                          child: StreamBuilder<List<Topic>>(
+                            stream: db.getTopicsUser(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                // ignore: prefer_const_constructors
+                                return Center(
+                                    // ignore: prefer_const_constructors
+                                    child: CircularProgressIndicator());
+                              }
+
+                              if (snapshot.hasError) {
+                                return Center(
+                                    child: Text('Error: ${snapshot.error}'));
+                              }
+
+                              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                return Center(
+                                  child: Text(
+                                    "Don't? have a topic, add one",
+                                    textAlign: TextAlign.center,
+                                  ).tr(),
+                                );
+                              }
+                              final topics = snapshot.data!
+                                ..sort((a, b) => b.lastInteracted
+                                    .compareTo(a.lastInteracted));
+
+                              //
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 8.0), // Margen superior de 8 dp
+                                    child: const Text(
+                                      "Last Topics",
+                                      textAlign: TextAlign.left,
+                                    ).tr(),
+                                  ),
+
+                                  // #//////////////////////////////////////////////////////////////////////////////////////////
+                                  // CHIPS INICIO
+                                  // ignore: prefer_const_constructors
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis
+                                        .horizontal, // Permite desplazamiento horizontal
+                                    child: Row(
+                                      children:
+                                          List.generate(topics.length, (index) {
+                                        final topic = topics[index];
+
+                                        // Crear la forma del chip con un borde vacío
+                                        final shape = RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          side: const BorderSide(
+                                              color: Colors
+                                                  .transparent), // Eliminar el borde
+                                        );
+
+                                        // Imprimir el color del borde actual en la consola
+                                        // print(
+                                        //     "Color del borde actual: ${shape.side.color}");
+
+                                        return Padding(
+                                            padding: EdgeInsets.only(
+                                              left: index == 0
+                                                  ? 16.0
+                                                  : 0, // Margen izquierdo de 16 dp solo para el primer chip
+                                              right:
+                                                  8.0, // Separación de 8 dp entre los chips
+                                            ),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  topic.lastInteracted =
+                                                      DateTime.now();
+                                                });
+                                                _navigateToDetailScreen(topic);
+                                              },
+                                              child: Container(
+                                                constraints: BoxConstraints(
+                                                  maxWidth:
+                                                      120, // Ajusta el ancho máximo del chip según sea necesario
+                                                ),
+                                                child: Chip(
+                                                  label: Text(
+                                                    topic.name,
+                                                    overflow: TextOverflow
+                                                        .ellipsis, // Abrevia el texto con puntos suspensivos si es necesario
+                                                  ),
+                                                  backgroundColor:
+                                                      Color(0xFFFFCC80),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8.0),
+                                                    side: BorderSide(
+                                                        color: Colors
+                                                            .transparent), // Borde transparente
+                                                  ),
+                                                ),
+                                              ),
+                                            ));
+                                      }),
+                                    ),
+                                  ),
+
+                                  // CHIPS FIN
+
+                                  // Sección de favoritos
+                                  // =>
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 8.0), // Margen superior de 8 dp
+                                    child: const Text(
+                                      "Favorite topics",
+                                      textAlign: TextAlign.left,
+                                    ).tr(),
+                                  ),
+
+                                  // ##
+                                  // Grid builder
+                                  Container(
+                                    margin: const EdgeInsets.all(
+                                        16.0), // Margen de 16 dp alrededor del GridView
+                                    child: GridView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                      ),
+                                      itemCount: favoriteTopics.length,
+                                      itemBuilder: (context, index) {
+                                        final topicId = favoriteTopics[index];
+                                        final topic = topics.firstWhere(
+                                            (t) => t.uid == topicId);
+
+                                        if (topic != null) {
+                                          return CustomCard(
+                                            title: topic.name,
+                                            bgcolor: Color(0xFFFFB84D),
+                                            onTap: () =>
+                                                _navigateToDetailScreen(topic),
+                                          );
+                                        } else {
+                                          // En caso de que no haya un topic, se muestra un SizedBox con el mensaje
+                                          return SizedBox(
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.all(16.0),
+                                              child: Text(
+                                                      'Add your favorite topic here')
+                                                  .tr(),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  )
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      )
+                    : Text('Loading..').tr(),
               ],
             ),
-          ),
-        ),
-      ),
-
-      body: Column(
-        children: [
-          mounted
-              ? Expanded(
-                  child: SingleChildScrollView(
-                    child: StreamBuilder<List<Topic>>(
-                      stream: db.getTopicsUser(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
-                        }
-
-                        if (snapshot.hasError) {
-                          return Center(
-                              child: Text('Error: ${snapshot.error}'));
-                        }
-
-                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return Center(
-                            child: Text(
-                              "Don't? have a topic, add one",
-                              textAlign: TextAlign.center,
-                            ).tr(),
-                          );
-                        }
-                        final topics = snapshot.data!
-                          ..sort((a, b) =>
-                              b.lastInteracted.compareTo(a.lastInteracted));
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Card(
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Text('Welcome start practicing :)').tr(),
-                              ),
-                            ),
-                            Text("Last Topics", textAlign: TextAlign.left).tr(),
-                            CarouselSlider.builder(
-                              options: CarouselOptions(
-                                height: 120.0,
-                                viewportFraction: 0.3,
-                                enableInfiniteScroll: true,
-                                autoPlay: true,
-                              ),
-                              itemCount: topics.length,
-                              itemBuilder: (context, index, realIndex) {
-                                final topic = topics[index];
-                                return CustomCard(
-                                    title: topic.name,
-                                    bgcolor: Colors.blueGrey,
-                                    onTap: () {
-                                      setState(() {
-                                        topic.lastInteracted = DateTime.now();
-                                      });
-                                      _navigateToDetailScreen(topic);
-                                    });
-                              },
-                            ),
-                            Text("Favorite topics", textAlign: TextAlign.left).tr(),
-
-                      (topics.isNotEmpty && favoriteTopics.isNotEmpty)
-    ? GridView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-        ),
-        itemCount: favoriteTopics.length,
-        itemBuilder: (context, index) {
-          final topicId = favoriteTopics[index];
-          final topic = topics.firstWhere((t) => t.uid == topicId, orElse: () => Topic(uid: '', name: 'Unknown'));
-          if (topic != null) {
-            return CustomCard(
-              title: topic.name,
-              bgcolor: Colors.grey,
-              onTap: () => _navigateToDetailScreen(topic),
-            );
-          } else {
-            return SizedBox(
-              child: Container(
-                padding: EdgeInsets.all(16.0),
-                child: Text('Add your favorite topic here').tr(),
-              ),
-            );
-          }
-        },
-      )
-    : Container(
-        width: screenWidth,
-        height: screenHeight / 2,
-        child: Center(
-          child: Text('Add your favorite topic here').tr(),
-        ),
-      ),
-
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                )
-              : Text('Loading..').tr(),
-        ],
-      ),
-    ):Text('Cargando');
+          )
+        : Text('Cargando');
   }
 
   void _navigateToDetailScreen(Object dato) {
