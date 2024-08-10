@@ -63,11 +63,12 @@ class _PerfilPageState extends State<PerfilPage> {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Center(
           child: Text(
             "Profile".tr(),
             style: TextStyle(
-              color: Colors.white,
+              // color: Colors.white,
               fontSize: 20,
             ),
           ),

@@ -65,6 +65,7 @@ class _TopicspageState extends State<Topicspage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         // ignore: prefer_const_constructors
         title: Center(
           // ignore: prefer_const_constructors
@@ -72,7 +73,7 @@ class _TopicspageState extends State<Topicspage> {
             'Topics',
             // ignore: prefer_const_constructors
             style: TextStyle(
-              color: Colors.white,
+              // color: Colors.white,
               fontSize: 20,
             ),
           ).tr(),
@@ -87,7 +88,13 @@ class _TopicspageState extends State<Topicspage> {
             controller: _searchController,
             decoration: InputDecoration(
               labelText: "Search".tr() + "...",
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.black, // Color del borde
+                  width: 24.0, // Grosor del borde
+                ),
+                borderRadius: BorderRadius.circular(12.0),
+              ),
             ),
           ),
         ),
