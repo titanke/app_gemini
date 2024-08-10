@@ -14,6 +14,7 @@ import 'package:app_gemini/pages/DetailTopicPage.dart';
 import 'package:app_gemini/pages/StorageDetailPage.dart';
 import 'package:app_gemini/pages/quiz/QuizPage.dart';
 import 'package:app_gemini/login/LoginPage.dart';
+import 'package:app_gemini/widgets/AddTopic.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'firebase_options.dart';
@@ -81,6 +82,7 @@ class MyApp extends StatelessWidget {
               '/quiz/result': (context) => ResultsPage(),
               '/login': (context) => LoginPage(),
               '/ftpage': (context) => FirstTopicsPage(),
+              '/Addtopic': (context) => AddTopic(),
             },
           );
         }
@@ -107,54 +109,8 @@ class _MyHomePageState extends State<Menu> {
     });
   }
 
-  void _guardarTema() async {
-    if (_formKey.currentState!.validate()) {
-      String name = _nameController.text;
-      try {
-        db.saveTopic(name);
-        _nameController.clear();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Topic succesfully saved").tr()),
-        );
-        Navigator.of(context).pop();
-      } catch (e) {
-        print("Error creating topic".tr());
-      }
-    }
-  }
 
-  void _showTemaModal(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-            title: Text("Topic Name").tr(),
-            content: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormField(
-                    controller: _nameController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter a topic name".tr();
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _guardarTema,
-                    child: Text("Save").tr(),
-                  ),
-                ],
-              ),
-            )
-        );
-      },
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +127,7 @@ class _MyHomePageState extends State<Menu> {
               color: Colors.orange[400],
               child: InkWell(
                 onTap: () {
-                  _showTemaModal(context);
+                  Navigator.pushNamed(context, '/Addtopic');
                 },
                 child: const SizedBox(
                   width: 56,

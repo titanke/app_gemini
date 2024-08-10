@@ -20,6 +20,8 @@ class _TopicspageState extends State<Topicspage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final FirebaseDatabase db = FirebaseDatabase();
+  TextEditingController _searchController = TextEditingController();
+  String _searchText = "";
 
   Future<void> _loadFavoriteTopics() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -35,6 +37,11 @@ class _TopicspageState extends State<Topicspage> {
   void initState() {
     super.initState();
     _loadFavoriteTopics();
+        _searchController.addListener(() {
+      setState(() {
+        _searchText = _searchController.text;
+      });
+    });
   }
 
   void _toggleFavorite(String topicId) {
@@ -47,6 +54,12 @@ class _TopicspageState extends State<Topicspage> {
   }
 
   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     return Scaffold(
@@ -54,6 +67,16 @@ class _TopicspageState extends State<Topicspage> {
       body: Column(
 
           children: [
+                  Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              labelText: "Search".tr()+"...",
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ),
             Expanded(
               child: StreamBuilder<List<Topic>>(
                 stream: db.getTopicsUser(),
@@ -72,11 +95,15 @@ class _TopicspageState extends State<Topicspage> {
                   }
 
                   final List<Topic> topics = snapshot.data!;
+               final filteredTopics = topics.where((topic) =>
+              topic.name.toLowerCase().contains(_searchText.toLowerCase())).toList();
+
+
 
                   return ListView.builder(
-                    itemCount: topics.length,
+                    itemCount: filteredTopics.length,
                     itemBuilder: (context, index) {
-                      final topic = topics[index];
+                      final topic = filteredTopics[index];
                       final favoritesProvider = Provider.of<ThemeProvider>(context);
                       final isFavorite = favoritesProvider.favoriteTopics.contains(topic.uid);
                       return InkWell(
@@ -141,10 +168,7 @@ class _TopicspageState extends State<Topicspage> {
                 },
               ),
             ),
-            /*ElevatedButton(
-              onPressed: () => _showTemaModal(context),
-              child:Text("Add Topic").tr(),
-            ),*/
+         
           ]
       ),
     );
@@ -154,53 +178,6 @@ class _TopicspageState extends State<Topicspage> {
     Navigator.pushNamed(context, '/detail', arguments: topic);
   }
 
-  void _guardarTema() async {
-    if (_formKey.currentState!.validate()) {
-      String name = _nameController.text;
-      try {
-        db.saveTopic(name);
-        _nameController.clear();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Topic succesfully saved").tr()),
-        );
-        Navigator.of(context).pop();
-      } catch (e) {
-        print("Error creating topic".tr());
-      }
-    }
-  }
-  void _showTemaModal(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-            title: Text("Topic Name").tr(),
-            content: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormField(
-                    controller: _nameController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter a topic name".tr();
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _guardarTema,
-                    child: Text("Save").tr(),
-                  ),
-                ],
-              ),
-            )
-        );
-      },
-    );
-  }
 
   void _showEditModal(String topicId, String currentName) {
     showDialog(
