@@ -118,7 +118,7 @@ class _MyHomePageState extends State<Menu> {
         children: _children,
       ),
         floatingActionButton: Transform.translate(
-          offset: const Offset(0,8),
+          offset: const Offset(0,24),
           child: ClipOval(
             child: Material(
               color: Colors.orange[400],

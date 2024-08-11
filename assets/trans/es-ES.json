@@ -92,5 +92,6 @@
     "Error creating topic":"Error en crear el tema",
     "Home":"Inicio",
     "Topics":"Temas",
-    "Profile":"Perfil"
+    "Profile":"Perfil",
+    "The file exceeds the maximum allowed size of 2 MB": "El archivo excede el tamaño máximo permitido de 8 MB"
 }

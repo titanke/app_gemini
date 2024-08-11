@@ -146,7 +146,6 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
   }
 
   Future<void> pickAndUploadFiles2(String topicId) async {
-
     final GeminiService gem = GeminiService();
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -160,21 +159,25 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
     String fileTxtPath = 'users/$userId/topics/$topicId/';
     String markdownContent = '';
 
-    if (result != null && userId != null) {
+    const int maxFileSize = 8 * 1024 * 1024;
 
+    if (result != null && userId != null) {
       for (var file in result.files) {
         if (file.path != null) {
           File selectedFile = File(file.path!);
+
+          if (selectedFile.lengthSync() > maxFileSize) {
+            showToast(message: "El archivo excede el tamaño máximo permitido de 2 MB".tr());
+            continue;
+          }
 
           String fileName = file.name;
           String filePath = 'users/$userId/topics/$topicId/$fileName';
 
           try {
-            // Subir archivo
             await _storage.ref(filePath).putFile(selectedFile);
 
             String downloadURL = await _storage.ref(filePath).getDownloadURL();
-
 
             DocumentReference docRef = _firestore
                 .collection('users')
@@ -196,7 +199,6 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
             markdownContent = '$markdownContent\n======$documentId\n$transcriptContent\n======$documentId';
 
             showToast(message: "File saved".tr());
-
           } catch (e) {
             showToast(message: "${"Error in save document".tr()} $e");
             print(e);
@@ -209,6 +211,7 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
       showToast(message: "No files selected".tr());
     }
   }
+
 
   /*Future<void> pickAndUploadFiles(String topicId) async {
     final GeminiService gem = GeminiService();

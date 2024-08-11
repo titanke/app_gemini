@@ -6,7 +6,8 @@ ThemeData lightMode = ThemeData(
       surface: Colors.orangeAccent,
     primary: Color.fromARGB(255, 247, 134, 5),
       secondary: Colors.black
-  )
+  ),
+
 );
 
 ThemeData darkMode = ThemeData(
