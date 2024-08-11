@@ -103,7 +103,7 @@ class _HomepageState extends State<Homepage> {
                               if (!snapshot.hasData || snapshot.data!.isEmpty) {
                                 return Center(
                                   child: Text(
-                                    "Don't? have a topic, add one",
+                                    "Don't have a topic?, add one",
                                     textAlign: TextAlign.center,
                                   ).tr(),
                                 );

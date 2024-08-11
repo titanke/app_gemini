@@ -101,7 +101,7 @@ void _handleFileUpload() async {
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "Before you begin, first add a course and its material.".tr(),
+                  "Before you begin, first add a topic and its material.".tr(),
                   style: TextStyle(fontSize: 18),
                   textAlign: TextAlign.center,
                   

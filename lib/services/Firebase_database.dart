@@ -318,7 +318,7 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
         throw Exception('Failed to load document from Firebase Storage');
       }
     } catch (e) {
-      return "You don't have files in this theme, add some".tr();
+      return "You don't have files in this topic, add some".tr();
     }
   }
 
