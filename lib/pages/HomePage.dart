@@ -211,45 +211,30 @@ class _HomepageState extends State<Homepage> {
                                   // Grid builder
                                   Container(
                                     margin: const EdgeInsets.all(
-                                        16.0), 
-                                    child: Column(children: [
+                                        16.0), // Margen de 16 dp alrededor del GridView
+                                    child: GridView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                      ),
+                                      itemCount: favoriteTopics.length,
+                                      itemBuilder: (context, index) {
+                                        final topicId = favoriteTopics[index];
+                                        final topic = topics.firstWhere(
+                                            (t) => t.uid == topicId);
 
-                                      (topics.isNotEmpty && favoriteTopics.isNotEmpty)
-                                        ? GridView.builder(
-                                            shrinkWrap: true,
-                                            physics: NeverScrollableScrollPhysics(),
-                                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2,
-                                            ),
-                                            itemCount: favoriteTopics.length,
-                                            itemBuilder: (context, index) {
-                                              final topicId = favoriteTopics[index];
-                                              final topic = topics.firstWhere((t) => t.uid == topicId, orElse: () => Topic(uid: '', name: 'Unknown'));
-                                              if (topic != null) {
-                                                return CustomCard(
-                                                  title: topic.name,
-                                                  bgcolor: Colors.grey,
-                                                  onTap: () => _navigateToDetailScreen(topic),
-                                                );
-                                              } else {
-                                                return SizedBox(
-                                                  child: Container(
-                                                    padding: EdgeInsets.all(16.0),
-                                                    child: Text('Add your favorite topic here').tr(),
-                                                  ),
-                                                );
-                                              }
-                                            },
-                                          )
-                                        : Container(
-                                            width: screenWidth,
-                                            height: screenHeight / 2,
-                                            child: Center(
-                                              child: Text('Add your favorite topic here').tr(),
-                                            ),
-                                          ),
-
-                                    ],)
+                                        return CustomCard(
+                                          title: topic.name,
+                                          borderColor: Colors.transparent,
+                                          bgcolor: Color(0xFFFFCC80),
+                                          onTap: () =>
+                                              _navigateToDetailScreen(topic),
+                                        );
+                                      },
+                                    ),
                                   )
                                 ],
                               );
