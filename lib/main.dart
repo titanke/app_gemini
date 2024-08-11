@@ -98,7 +98,7 @@ class _MyHomePageState extends State<Menu> {
   final FirebaseDatabase db = FirebaseDatabase();
   final TextEditingController _nameController = TextEditingController();
   int _currentIndex = 0;
-  final List<Widget> _children = [Homepage(),Topicspage(),Chatpage(),PerfilPage()];
+  final List<Widget> _children = [Homepage(),Topicspage(),Chatpage(),IntroPage()];
 
   void _onTap(int index) {
     setState(() {
@@ -115,7 +115,7 @@ class _MyHomePageState extends State<Menu> {
         children: _children,
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
+        color: const Color.fromARGB(0, 255, 255, 255),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
