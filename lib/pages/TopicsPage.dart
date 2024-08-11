@@ -111,7 +111,7 @@ class _TopicspageState extends State<Topicspage> {
               }
 
               if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text("Don't? have a topic, add one").tr());
+                return Center(child: Text("Don't have a topic?, add one").tr());
               }
 
               final List<Topic> topics = snapshot.data!;

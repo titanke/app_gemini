@@ -127,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
        Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-         Text("You don't have an account?").tr(),
+         Text("Don't have an account?").tr(),
          SizedBox(
           width: 5,
          ),
