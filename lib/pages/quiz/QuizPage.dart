@@ -47,49 +47,55 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   void _evaluateQuestion() async {
-    if (_questions[_currentStep].type == 'open') {
-      setState(() {
-        isLoading = true;
-      });
+    print(_answerText);
+      if (_questions[_currentStep].type == 'open') {
 
-      bool response = await gem.evaluateAnswer(
-          _questions[_currentStep].question,
-          _answerText!,
-          _questions[_currentStep].correctAnswer!);
-      _isCorrect = response;
-      _showResult = false;
+        if(_answerText =='' || _answerText == null) {
+          return;
+        }
 
-      setState(() {
-        isLoading = false;
-      });
-    } else {
-      _isCorrect = _selectedOption ==
-          _questions[_currentStep].correctAnswer; // Local evaluation
-    }
+        setState(() {
+          isLoading = true;
+        });
 
-    showModalBottomSheet(
-      context: context,
-      isDismissible: false,
-      enableDrag: false,
-      builder: (BuildContext context) {
-        return Container(
+        bool response = await gem.evaluateAnswer(
+            _questions[_currentStep].question,
+            _answerText!,
+            _questions[_currentStep].correctAnswer!);
+        _isCorrect = response;
+        _showResult = false;
+
+        setState(() {
+          isLoading = false;
+        });
+      } else {
+        _isCorrect = _selectedOption ==
+            _questions[_currentStep].correctAnswer; // Local evaluation
+      }
+
+      showModalBottomSheet(
+        context: context,
+        isDismissible: false,
+        enableDrag: false,
+        builder: (BuildContext context) {
+          return Container(
             height: 200,
             width: double.infinity,
             padding: EdgeInsets.all(16.0),
-            child: Expanded(
+            child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    _isCorrect
-                        ? "Correct answer".tr()
-                        : "Incorrect answer".tr(),
-                    style:
-                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                    _isCorrect ? "Correct answer".tr() : "Incorrect answer"
+                        .tr(),
+                    style: TextStyle(
+                        fontSize: 18.0, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.left,
                   ),
                   Text(
-                    '${"Answer is:".tr()}${" "}${_questions[_currentStep].correctAnswer}',
+                    '${"Answer is:".tr()} ${_questions[_currentStep]
+                        .correctAnswer}',
                     textAlign: TextAlign.left,
                   ),
                   SizedBox(height: 8, width: double.infinity),
@@ -102,9 +108,12 @@ class _QuizPageState extends State<QuizPage> {
                   ),
                 ],
               ),
-            ));
-      },
-    );
+            ),
+          );
+        },
+      );
+
+
   }
 
   void _nextQuestion() async {
