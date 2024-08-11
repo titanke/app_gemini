@@ -175,7 +175,7 @@ class _SignUpPageState extends State<SignUpPage> {
       });
       if (user != null) {
         showToast(message: "User is successfully created".tr());
-        Navigator.pushNamed(context, "/ftpage");
+        Navigator.pushNamed(context, "/IntroPage");
       } else {
         showToast(message: "Some error happend in register".tr());
       }

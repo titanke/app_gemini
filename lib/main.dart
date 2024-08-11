@@ -104,9 +104,7 @@ class Menu extends StatefulWidget {
 class _MyHomePageState extends State<Menu> {
   final FirebaseDatabase db = FirebaseDatabase();
   int _currentIndex = 0;
-  //final List<Widget> _children = [Homepage(),Topicspage(),Chatpage(),PerfilPage()];
-
-  final List<Widget> _children = [Homepage(),Topicspage(),Chatpage(),IntroPage()];
+  final List<Widget> _children = [Homepage(),Topicspage(),Chatpage(),PerfilPage()];
 
   void _onTap(int index) {
     setState(() {
