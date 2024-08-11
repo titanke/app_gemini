@@ -35,7 +35,7 @@ class _HomepageState extends State<Homepage> {
     double screenHeight = MediaQuery.of(context).size.height;
     return mounted
         ? Scaffold(
-            // HEADER
+
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(150),
               child: AppBar(
@@ -45,18 +45,29 @@ class _HomepageState extends State<Homepage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        // ignore: prefer_const_constructors
-                        padding: EdgeInsets.all(16.0),
-                        // ignore: prefer_const_constructors
-                        child: Text(
-                          'Hi..!',
-                          // ignore: prefer_const_constructors
-                          style: TextStyle(
-                            // color: Colors.black,
-                            fontSize: 24,
+                      Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(0, 60, 0, 5),
+                            child: Text(
+                              "What's up :)",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: 24,
+                              ),
+                            ).tr(),
                           ),
-                        ).tr(),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(24, 0, 0, 5),
+                            child: Text(
+                              'What topic you wanna review today..?',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: 12,
+                              ),
+                            ).tr(),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -114,11 +125,11 @@ class _HomepageState extends State<Homepage> {
 
                               //
                               return Column(
-                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start, // Add this line
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 8.0), // Margen superior de 8 dp
+                                    padding: EdgeInsets.all(15),
                                     child: const Text(
                                       "Last Topics",
                                       textAlign: TextAlign.left,
@@ -200,8 +211,8 @@ class _HomepageState extends State<Homepage> {
                                   // Sección de favoritos
                                   // =>
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 8.0), // Margen superior de 8 dp
+                                    padding: const EdgeInsets.all(
+                                        15), // Margen superior de 8 dp
                                     child: const Text(
                                       "Favorite topics",
                                       textAlign: TextAlign.left,
@@ -211,8 +222,7 @@ class _HomepageState extends State<Homepage> {
                                   // ##
                                   // Grid builder
                                   Container(
-                                    margin: const EdgeInsets.all(
-                                        16.0), // Margen de 16 dp alrededor del GridView
+                                    margin: const EdgeInsets.all(2),
                                     child: GridView.builder(
                                       shrinkWrap: true,
                                       physics:
@@ -220,6 +230,10 @@ class _HomepageState extends State<Homepage> {
                                       gridDelegate:
                                           const SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 2,
+                                        mainAxisExtent: 100,
+                                        mainAxisSpacing: 5,
+                                        crossAxisSpacing:
+                                            .0, // Espacio horizontal entre los elementos
                                       ),
                                       itemCount: favoriteTopics.length,
                                       itemBuilder: (context, index) {
@@ -227,26 +241,13 @@ class _HomepageState extends State<Homepage> {
                                         final topic = topics.firstWhere(
                                             (t) => t.uid == topicId);
 
-                                        if (topic != null) {
-                                          return CustomCard(
-                                            title: topic.name,
-                                            borderColor: Colors.transparent,
-                                            bgcolor: Color(0xFFFFCC80),
-                                            onTap: () =>
-                                                _navigateToDetailScreen(topic),
-                                          );
-                                        } else {
-                                          // En caso de que no haya un topic, se muestra un SizedBox con el mensaje
-                                          return SizedBox(
-                                            child: Container(
-                                              margin:
-                                                  const EdgeInsets.all(16.0),
-                                              child: Text(
-                                                      'Add your favorite topic here')
-                                                  .tr(),
-                                            ),
-                                          );
-                                        }
+                                        return CustomCard(
+                                          title: topic.name,
+                                          borderColor: Colors.transparent,
+                                          bgcolor: Color(0xFFFFCC80),
+                                          onTap: () =>
+                                              _navigateToDetailScreen(topic),
+                                        );
                                       },
                                     ),
                                   )
@@ -268,3 +269,6 @@ class _HomepageState extends State<Homepage> {
     //Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: dato as Topic)));
   }
 }
+/*
+
+*/

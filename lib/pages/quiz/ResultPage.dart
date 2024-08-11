@@ -12,31 +12,33 @@ class ResultsPage extends StatelessWidget {
     int correctAnswers = args['correctAnswers'];
     Topic topic = args['topic'] as Topic;
 
-    return Scaffold(
-      //appBar: AppBar(title: Text('Resultados')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text("Congrantulations! You have completed the Quiz").tr(),
-            Text("${"You have".tr()} ${correctAnswers} ${"answers of 5".tr()}"),
-            TextButton(
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  '/quiz/introduction',
-                  arguments: topic
-                );
-              },
-              child: Text("Take another quiz").tr(),
-            ),
-            TextButton(
-              onPressed:() {
-                Navigator.pushNamed(context, '/detail', arguments: topic);
-              },
-              child: Text("Exit").tr(),
-            ),
-          ],
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("Congrantulations! You have completed the Quiz").tr(),
+              Text("${"You have".tr()} ${correctAnswers} ${"answers of 5".tr()}"),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/quiz/introduction',
+                    arguments: topic
+                  );
+                },
+                child: Text("Take another quiz").tr(),
+              ),
+              TextButton(
+                onPressed:() {
+                  Navigator.pushNamed(context, '/detail', arguments: topic);
+                },
+                child: Text("Exit").tr(),
+              ),
+            ],
+          ),
         ),
       ),
     );
