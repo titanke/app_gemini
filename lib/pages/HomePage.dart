@@ -227,26 +227,13 @@ class _HomepageState extends State<Homepage> {
                                         final topic = topics.firstWhere(
                                             (t) => t.uid == topicId);
 
-                                        if (topic != null) {
-                                          return CustomCard(
-                                            title: topic.name,
-                                            borderColor: Colors.transparent,
-                                            bgcolor: Color(0xFFFFCC80),
-                                            onTap: () =>
-                                                _navigateToDetailScreen(topic),
-                                          );
-                                        } else {
-                                          // En caso de que no haya un topic, se muestra un SizedBox con el mensaje
-                                          return SizedBox(
-                                            child: Container(
-                                              margin:
-                                                  const EdgeInsets.all(16.0),
-                                              child: Text(
-                                                      'Add your favorite topic here')
-                                                  .tr(),
-                                            ),
-                                          );
-                                        }
+                                        return CustomCard(
+                                          title: topic.name,
+                                          borderColor: Colors.transparent,
+                                          bgcolor: Color(0xFFFFCC80),
+                                          onTap: () =>
+                                              _navigateToDetailScreen(topic),
+                                        );
                                       },
                                     ),
                                   )
