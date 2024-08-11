@@ -65,7 +65,7 @@ class OnBoardingPageState extends State<IntroPage> {
             PageViewModel(
           title: "Multiple Topics",
           body:
-              "You can have multiple topics, each of them will have a personalized quiz, and you can add your favorites to the main screen.",
+              "You can have multiple topics, each of them will have a personalized quiz, just tap on the topic and it will show you a page where you can take the quiz or see your notes",
           image: _buildImage('top.png'),
           decoration: pageDecoration,
         ),
