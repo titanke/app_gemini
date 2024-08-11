@@ -45,19 +45,28 @@ class _HomepageState extends State<Homepage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        // ignore: prefer_const_constructors
-                        padding: EdgeInsets.all(16.0),
-                        // ignore: prefer_const_constructors
-                        child: Text(
-                          'Hi..!',
-                          // ignore: prefer_const_constructors
-                          style: TextStyle(
-                            // color: Colors.black,
-                            fontSize: 24,
+                        Column(
+                          children: [
+                                Padding(
+                        padding: EdgeInsets.fromLTRB(0, 60, 0, 5),
+                              child: Text(
+                                "What's up :)",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                ),
+                              ).tr(),
+                            ),
+                                  Padding(
+                            padding: EdgeInsets.fromLTRB(24, 0, 0, 5),
+                            child: Text(
+                              'What topic you wanna review today..?',
+                              style: TextStyle(
+                                fontSize: 12,
+                              ),
+                            ).tr(),
                           ),
-                        ).tr(),
-                      ),
+                          ],
+                        ),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: SvgPicture.asset(
@@ -117,7 +126,7 @@ class _HomepageState extends State<Homepage> {
                     crossAxisAlignment: CrossAxisAlignment.start,  // Add this line
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.all(20), 
+                                    padding: EdgeInsets.all(15), 
                                     child: const Text(
                                       "Last Topics",
                                       textAlign: TextAlign.left,
@@ -200,7 +209,7 @@ class _HomepageState extends State<Homepage> {
                                   // =>
                                   Padding(
                                     padding: const EdgeInsets.all(
-                                        20), // Margen superior de 8 dp
+                                        15), // Margen superior de 8 dp
                                     child: const Text(
                                       "Favorite topics",
                                       textAlign: TextAlign.left,
@@ -210,16 +219,18 @@ class _HomepageState extends State<Homepage> {
                                   // ##
                                   // Grid builder
                                   Container(
-                                    margin: const EdgeInsets.all(
-                                        16.0), // Margen de 16 dp alrededor del GridView
+                                    margin: const EdgeInsets.all(2),                                 
                                     child: GridView.builder(
                                       shrinkWrap: true,
                                       physics:
                                           const NeverScrollableScrollPhysics(),
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 2,
+                                        mainAxisExtent: 100,
+                                        mainAxisSpacing: 5,
+                                        crossAxisSpacing: .0, // Espacio horizontal entre los elementos
                                       ),
+                                                                        
                                       itemCount: favoriteTopics.length,
                                       itemBuilder: (context, index) {
                                         final topicId = favoriteTopics[index];
@@ -254,3 +265,6 @@ class _HomepageState extends State<Homepage> {
     //Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: dato as Topic)));
   }
 }
+/*
+
+*/ 
