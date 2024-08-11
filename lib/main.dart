@@ -38,7 +38,7 @@ void main() async{
     EasyLocalization(
           supportedLocales: [Locale('en', 'US'), Locale('es', 'ES')],
           path: 'assets/trans',
-          fallbackLocale: deviceLocale,
+          fallbackLocale: Locale('en', 'US'),
           child: ChangeNotifierProvider(
           create: (context) => ThemeProvider(),
           child: MyApp(),
