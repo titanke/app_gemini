@@ -15,18 +15,17 @@ import 'package:app_gemini/widgets/AddTopic.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'firebase_options.dart';
-import 'package:firebase_auth/firebase_auth.dart'; 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:app_gemini/widgets/theme_provider.dart';
 import 'package:app_gemini/widgets/FirstTPage.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-void main() async{
-
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
-  await Firebase. initializeApp(
+  await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await dotenv.load();
@@ -34,18 +33,17 @@ void main() async{
   final localeList = defaultLocale.split('_');
   final deviceLocale = Locale(localeList[0]);
 
-  runApp(    
+  runApp(
     EasyLocalization(
-          supportedLocales: [Locale('en', 'US'), Locale('es', 'ES')],
-          path: 'assets/trans',
-          fallbackLocale: Locale('en', 'US'),
-          child: ChangeNotifierProvider(
-          create: (context) => ThemeProvider(),
-          child: MyApp(),
-          ),
-        ),
-
-    );
+      supportedLocales: [Locale('en', 'US'), Locale('es', 'ES')],
+      path: 'assets/trans',
+      fallbackLocale: Locale('en', 'US'),
+      child: ChangeNotifierProvider(
+        create: (context) => ThemeProvider(),
+        child: MyApp(),
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -53,34 +51,44 @@ class MyApp extends StatelessWidget {
   Future<User?> _getUser() async {
     return FirebaseAuth.instance.currentUser;
   }
-  
+
   @override
   Widget build(BuildContext context) {
-        return FutureBuilder<User?>(
+    return FutureBuilder<User?>(
       future: _getUser(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                  Colors.black), // Color blanco, si lo deseas
+            ),
+          );
         } else {
-          return MaterialApp(
-            title: 'App gemini',
-            theme: Provider.of<ThemeProvider>(context).themeData,
-            locale: context.locale,
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            home: snapshot.hasData ? Menu() : LoginPage(),
-            routes: <String, WidgetBuilder>{
-              '/home': (context) => Menu(),
-              '/detail': (context) => DetailScreen(),
-              '/storage': (context) => FileStorageScreen(),
-              '/quiz': (context) => QuizIntroduction(),
-              '/quiz/introduction': (context) => QuizIntroduction(),
-              '/quiz/start': (context) => QuizPage(),
-              '/quiz/result': (context) => ResultsPage(),
-              '/login': (context) => LoginPage(),
-              '/ftpage': (context) => FirstTopicsPage(),
-              '/Addtopic': (context) => AddTopic(),
-            },
+          String initialRoute = snapshot.hasData ? '/home' : '/login';
+          print(initialRoute);
+          return PopScope(
+            canPop: false,
+            child: MaterialApp(
+              title: 'App Gemini',
+              theme: Provider.of<ThemeProvider>(context).themeData,
+              locale: context.locale,
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              initialRoute: initialRoute,
+              routes: <String, WidgetBuilder>{
+                '/home': (context) => Menu(),
+                '/detail': (context) => DetailScreen(),
+                '/storage': (context) => FileStorageScreen(),
+                '/quiz': (context) => QuizIntroduction(),
+                '/quiz/introduction': (context) => QuizIntroduction(),
+                '/quiz/start': (context) => QuizPage(),
+                '/quiz/result': (context) => ResultsPage(),
+                '/login': (context) => LoginPage(),
+                '/ftpage': (context) => FirstTopicsPage(),
+                '/Addtopic': (context) => AddTopic(),
+              },
+            ),
           );
         }
       },
@@ -94,68 +102,69 @@ class Menu extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<Menu> {
-  final _formKey = GlobalKey<FormState>();
   final FirebaseDatabase db = FirebaseDatabase();
-  final TextEditingController _nameController = TextEditingController();
   int _currentIndex = 0;
-  final List<Widget> _children = [Homepage(),Topicspage(), Chatpage(), PerfilPage(),FirstTopicsPage()];
+  final List<Widget> _children = [
+    Homepage(),
+    Topicspage(),
+    Chatpage(),
+    PerfilPage(),
+    FirstTopicsPage()
+  ];
 
-  void _onTap (int index){
+  void _onTap(int index) {
     setState(() {
       _currentIndex = index;
     });
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _children,
-      ),
-        floatingActionButton: Transform.translate(
-          offset: const Offset(0,24),
-          child: ClipOval(
-            child: Material(
-              color: Colors.orange[400],
-              child: InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, '/Addtopic');
-                },
-                child: const SizedBox(
-                  width: 56,
-                  height: 56,
-                  child: Icon(
-                    Icons.add,
-                    size: 28,
-                    color: Colors.white,
+    return PopScope(
+        canPop: false,
+        child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: IndexedStack(
+              index: _currentIndex,
+              children: _children,
+            ),
+            floatingActionButton: Transform.translate(
+              offset: const Offset(0, 24),
+              child: ClipOval(
+                child: Material(
+                  color: Colors.orange[400],
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/Addtopic');
+                    },
+                    child: const SizedBox(
+                      width: 56,
+                      height: 56,
+                      child: Icon(
+                        Icons.add,
+                        size: 28,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.transparent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            buildNavBarItem(Icons.home, "Home".tr(),0),
-            buildNavBarItem(Icons.book, "Topics".tr(),1),
-            const SizedBox(width: 60),
-            buildNavBarItem(Icons.chat, "Chat".tr(),2),
-            buildNavBarItem(Icons.person, "Profile".tr(),3),
-
-          ],
-        ),
-      )
-    );
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            bottomNavigationBar: BottomAppBar(
+              color: Colors.transparent,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  buildNavBarItem(Icons.home, "Home".tr(), 0),
+                  buildNavBarItem(Icons.book, "Topics".tr(), 1),
+                  const SizedBox(width: 60),
+                  buildNavBarItem(Icons.chat, "Chat".tr(), 2),
+                  buildNavBarItem(Icons.person, "Profile".tr(), 3),
+                ],
+              ),
+            )));
   }
 
   Widget buildNavBarItem(IconData icon, String label, int index) {
@@ -191,52 +200,4 @@ class _MyHomePageState extends State<Menu> {
       ),
     );
   }
-
-
 }
-
-
-
-/*
-* ottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _currentIndex,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: const EdgeInsets.all(8.0), // Ajusta el margen aquí
-              child:Icon(Icons.home),
-            ),
-            label: "Home".tr(),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: "Topics".tr(),
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: "Chat",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profile".tr(),
-          ),
-
-        ],
-        unselectedItemColor: Colors.grey,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-      ),
-*
-* FloatingActionButton(
-        child: Icon(Icons.add),
-        shape: CircleBorder(),
-        onPressed: (){
-
-        },
-      )
-* */

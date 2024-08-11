@@ -65,22 +65,17 @@ class _TopicspageState extends State<Topicspage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        // ignore: prefer_const_constructors
-        title: Center(
-          // ignore: prefer_const_constructors
-          child: Text(
-            'Topics',
-            // ignore: prefer_const_constructors
-            style: TextStyle(
-              // color: Colors.white,
-              fontSize: 20,
-            ),
-          ).tr(),
-        ),
-        backgroundColor: Color(
-            0xFFFFA500), // Set the background color for the AppBar if needed
-      ),
+          automaticallyImplyLeading: false,
+          title: Center(
+            child: Text(
+              'Topics',
+              style: TextStyle(
+                // color: Colors.white,
+                fontSize: 20,
+              ),
+            ).tr(),
+          ),
+          backgroundColor: Color(0xFFFFA500)),
       body: Column(children: [
         Padding(
           padding: const EdgeInsets.all(8.0),

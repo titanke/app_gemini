@@ -7,6 +7,9 @@ ThemeData lightMode = ThemeData(
       primary: Colors.black,
       secondary: Colors.black
   ),
+  progressIndicatorTheme: ProgressIndicatorThemeData(
+    color: Colors.orangeAccent, // Color del CircularProgressIndicator en Light Mode
+  ),
 
 );
 
@@ -16,5 +19,9 @@ ThemeData darkMode = ThemeData(
       surface: Colors.orangeAccent,
     primary: Colors.white,
       secondary: Colors.black
-    )
+    ),
+  progressIndicatorTheme: ProgressIndicatorThemeData(
+    color: Colors.orangeAccent, // Color del CircularProgressIndicator en Light Mode
+  ),
+
 );

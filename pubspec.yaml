@@ -60,6 +60,8 @@ dependencies:
   langchain_core: ^0.3.4
   langchain_community: ^0.3.0
   firebase_messaging: ^14.9.4
+  font_awesome_flutter: ^10.7.0
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:

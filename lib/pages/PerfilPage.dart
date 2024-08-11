@@ -199,7 +199,7 @@ class _PerfilPageState extends State<PerfilPage> {
               GestureDetector(
                 onTap: () {
                   themeProvider.signOut();
-                  Navigator.pushNamed(context, '/login');
+                  Navigator.pushReplacementNamed(context, '/login');
                   _signOut(context);
                 },
                 child: Text("Sign Out",
