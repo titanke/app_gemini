@@ -68,155 +68,181 @@ class _AddTopicState extends State<AddTopic> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        // ignore: prefer_const_constructors
-        title: Center(
-          // ignore: prefer_const_constructors
-          child: Text(
-            'Add Topic',
-            // ignore: prefer_const_constructors
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
+    return PopScope(
+      canPop: true,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Center(
+            child: Text(
+              'Add Topic',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
             ),
           ),
+          backgroundColor: Color(
+              0xFFFFA500), 
         ),
-        backgroundColor: Color(
-            0xFFFFA500), // Set the background color for the AppBar if needed
-      ),
-      body: Form(
-        key: _formKey,
-        child: Stepper(
-          type: StepperType.horizontal,
-          currentStep: _currentStep,
-          onStepTapped: null,
-          onStepContinue: () {
-            if (_currentStep < 3) {
-              setState(() => _currentStep += 1);
-            } else {
-              setState(() => _step3Completed = true);
-            }
-          },
-          onStepCancel: () {
-            if (_currentStep > 0) {
-              setState(() => _currentStep -= 1);
-            }
-          },
-          steps: [
-            Step(
-              title: Text("Topic", style: TextStyle(color: Colors.orange)),
-              content: Container(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  children: <Widget>[
-                    Text("Topic name").tr(),
-                    TextFormField(
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
+        body: Form(
+          key: _formKey,
+          child: Stepper(
+            type: StepperType.horizontal,
+            currentStep: _currentStep,
+            onStepTapped: null,
+            onStepContinue: () {
+              if (_currentStep < 3) {
+                setState(() => _currentStep += 1);
+              } else {
+                setState(() => _step3Completed = true);
+              }
+            },
+            onStepCancel: () {
+              if (_currentStep > 0) {
+                setState(() => _currentStep -= 1);
+              }
+            },
+            steps: [
+              Step(
+                title: Text("", style: TextStyle(color: Colors.orange)),
+                content: Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,  
+                    children: <Widget>[
+                      Container(
+                         margin: EdgeInsets.all(20),
+                        child:    
+                        Text("Add the topic name",
+                              style: TextStyle(
+                              fontSize: 18, 
+                              fontWeight: FontWeight.bold,
+                            ),
+                          textAlign: TextAlign.left,
+                          
+                          ).tr(),
+                      ),
+                      TextFormField(
+                        controller: _nameController,
+                        decoration: InputDecoration(
+                          labelText: "Name",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please enter a topic name".tr();
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          setState(() => _step1Completed = value.isNotEmpty);
+                        },
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: _guardarTema,
+                        child: Text("Save".tr()),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.orange,
                         ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please enter a topic name".tr();
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        setState(() => _step1Completed = value.isNotEmpty);
-                      },
-                    ),
+                    ],
+                  ),
+                ),
+                isActive: _currentStep >= 1,
+                state: _step1Completed ? StepState.complete : StepState.indexed,
+              ),
+              Step(
+                title: Text("".tr(), style: TextStyle(color: Colors.orange)),
+                content: Column(
+                  children: <Widget>[
+                    Text("Add your notes (PDF / JPG)",
+                            style: TextStyle(
+                                  fontSize: 18, 
+                              fontWeight: FontWeight.bold,
+                                ))
+                        .tr(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                             Text("Allowed files (PDF / PHOTOS). \nwe recommend that the size of each file be lesser than 10mb.",
+                            style: TextStyle(
+                                  fontSize: 12, 
+                                ))
+                        .tr(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                    _isUploading
+                        ? CircularProgressIndicator()
+                        : ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.orange,
+                            ),
+                            onPressed: _handleFileUpload,
+                            child: Text("Upload file").tr(),
+                          ),
+                  ],
+                ),
+                isActive: _currentStep >= 2,
+                state: _step2Completed ? StepState.complete : StepState.indexed,
+              ),
+              Step(
+                title: Text(''),
+                content: Column(
+                  children: <Widget>[
+                    Text("What do you want to do?".tr()),
                     SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: _guardarTema,
-                      child: Text("Save".tr()),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.orange,
+                    Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                _currentStep = 1;
+                                _step0Completed = false;
+                                _step1Completed = false;
+                                _step2Completed = false;
+                                _step3Completed = false;
+                              });
+                            },
+                            child: Text("Add other topic".tr()),
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.orange,
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Menu()),
+                              );
+                            },
+                            child: Text("Exit").tr(),
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.orange,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
+                isActive: _currentStep >= 3,
+                state: _step3Completed ? StepState.complete : StepState.indexed,
               ),
-              isActive: _currentStep >= 1,
-              state: _step1Completed ? StepState.complete : StepState.indexed,
-            ),
-            Step(
-              title: Text("File".tr(), style: TextStyle(color: Colors.orange)),
-              content: Column(
-                children: <Widget>[
-                  Text("Add files (PDF / JPG)",
-                          style: TextStyle(
-                              color: const Color.fromARGB(125, 255, 153, 0)))
-                      .tr(),
-                  _isUploading
-                      ? CircularProgressIndicator()
-                      : ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.orange,
-                          ),
-                          onPressed: _handleFileUpload,
-                          child: Text("Upload file").tr(),
-                        ),
-                ],
-              ),
-              isActive: _currentStep >= 2,
-              state: _step2Completed ? StepState.complete : StepState.indexed,
-            ),
-            Step(
-              title: Text(''),
-              content: Column(
-                children: <Widget>[
-                  Text("What do you want to do?".tr()),
-                  SizedBox(height: 20),
-                  Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              _currentStep = 1;
-                              _step0Completed = false;
-                              _step1Completed = false;
-                              _step2Completed = false;
-                              _step3Completed = false;
-                            });
-                          },
-                          child: Text("Add other topic".tr()),
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.orange,
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => Menu()),
-                            );
-                          },
-                          child: Text("Exit").tr(),
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.orange,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              isActive: _currentStep >= 3,
-              state: _step3Completed ? StepState.complete : StepState.indexed,
-            ),
-          ],
-          controlsBuilder: (BuildContext context, ControlsDetails controls) {
-            return SizedBox.shrink();
-          },
+            ],
+            controlsBuilder: (BuildContext context, ControlsDetails controls) {
+              return SizedBox.shrink();
+            },
+          ),
         ),
       ),
     );

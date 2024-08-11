@@ -18,9 +18,8 @@ import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart'; 
 import 'package:provider/provider.dart';
 import 'package:app_gemini/widgets/theme_provider.dart';
-import 'package:app_gemini/widgets/FirstTPage.dart';
 import 'package:easy_localization/easy_localization.dart';
-
+import 'package:app_gemini/pages/IntroPage.dart';
 void main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -78,8 +77,10 @@ class MyApp extends StatelessWidget {
               '/quiz/start': (context) => QuizPage(),
               '/quiz/result': (context) => ResultsPage(),
               '/login': (context) => LoginPage(),
-              '/ftpage': (context) => FirstTopicsPage(),
               '/Addtopic': (context) => AddTopic(),
+              '/IntroPage': (context) => IntroPage(),
+
+
             },
           );
         }
@@ -98,7 +99,7 @@ class _MyHomePageState extends State<Menu> {
   final FirebaseDatabase db = FirebaseDatabase();
   final TextEditingController _nameController = TextEditingController();
   int _currentIndex = 0;
-  final List<Widget> _children = [Homepage(),Topicspage(), Chatpage(), PerfilPage(),FirstTopicsPage()];
+  final List<Widget> _children = [Homepage(),Topicspage(), PerfilPage(),Chatpage()];
 
   void _onTap (int index){
     setState(() {

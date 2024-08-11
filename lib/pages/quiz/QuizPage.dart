@@ -168,69 +168,72 @@ class _QuizPageState extends State<QuizPage> {
     _questions = args['questions'];
     topic = args['topic'] as Topic;
 
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Stack(children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Stepper(
-                    controlsBuilder:
-                        (BuildContext context, ControlsDetails controls) {
-                      return SizedBox.shrink();
-                    },
-                    type: StepperType.horizontal,
-                    currentStep: _currentStep,
-                    onStepTapped: (step) {
-                      if (step == _currentStep + 1 &&
-                          _isCorrect &&
-                          _optionSelected) {
-                        setState(() {
-                          _currentStep = step;
-                        });
-                      }
-                    },
-                    steps: _questions.map((question) {
-                      return Step(
-                        title: Text(''),
-                        state: question.isCompleted
-                            ? StepState.complete
-                            : StepState.disabled,
-                        content: Column(
-                          children: [
-                            Text(
-                              question.question,
-                              style: TextStyle(
-                                  fontSize: 18.0, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 32.0),
-                            _buildQuestion(question),
-                          ],
-                        ),
-                      );
-                    }).toList(),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: Stack(children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Stepper(
+                      controlsBuilder:
+                          (BuildContext context, ControlsDetails controls) {
+                        return SizedBox.shrink();
+                      },
+                      type: StepperType.horizontal,
+                      currentStep: _currentStep,
+                      onStepTapped: (step) {
+                        if (step == _currentStep + 1 &&
+                            _isCorrect &&
+                            _optionSelected) {
+                          setState(() {
+                            _currentStep = step;
+                          });
+                        }
+                      },
+                      steps: _questions.map((question) {
+                        return Step(
+                          title: Text(''),
+                          state: question.isCompleted
+                              ? StepState.complete
+                              : StepState.disabled,
+                          content: Column(
+                            children: [
+                              Text(
+                                question.question,
+                                style: TextStyle(
+                                    fontSize: 18.0, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 32.0),
+                              _buildQuestion(question),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: _buildButton(),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: _buildButton(),
+                  ),
+                ],
+              ),
             ),
-          ),
-          if (isLoading)
-            const Opacity(
-              opacity: 0.8,
-              child: ModalBarrier(dismissible: false, color: Colors.black),
-            ),
-          if (isLoading)
-            const Center(
-              child: CircularProgressIndicator(),
-            ),
-        ]));
+            if (isLoading)
+              const Opacity(
+                opacity: 0.8,
+                child: ModalBarrier(dismissible: false, color: Colors.black),
+              ),
+            if (isLoading)
+              const Center(
+                child: CircularProgressIndicator(),
+              ),
+          ])),
+    );
   }
 
   Widget _buildQuestion(Question question) {
