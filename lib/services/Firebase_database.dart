@@ -166,10 +166,10 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
         if (file.path != null) {
           File selectedFile = File(file.path!);
 
-          if (selectedFile.lengthSync() > maxFileSize) {
+          /*if (selectedFile.lengthSync() > maxFileSize) {
             showToast(message: "El archivo excede el tamaño máximo permitido de 2 MB".tr());
             continue;
-          }
+          }*/
 
           String fileName = file.name;
           String filePath = 'users/$userId/topics/$topicId/$fileName';

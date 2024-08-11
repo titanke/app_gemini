@@ -73,45 +73,61 @@ class _QuizPageState extends State<QuizPage> {
             _questions[_currentStep].correctAnswer; // Local evaluation
       }
 
-      showModalBottomSheet(
-        context: context,
-        isDismissible: false,
-        enableDrag: false,
-        builder: (BuildContext context) {
-          return Container(
-            height: 200,
-            width: double.infinity,
-            padding: EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    _isCorrect ? "Correct answer".tr() : "Incorrect answer"
-                        .tr(),
-                    style: TextStyle(
-                        fontSize: 18.0, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.left,
-                  ),
-                  Text(
-                    '${"Answer is:".tr()} ${_questions[_currentStep]
-                        .correctAnswer}',
-                    textAlign: TextAlign.left,
-                  ),
-                  SizedBox(height: 8, width: double.infinity),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      _nextQuestion();
-                    },
-                    child: Text("Next").tr(),
-                  ),
-                ],
+    showModalBottomSheet(
+      context: context,
+      isDismissible: false,
+      enableDrag: false,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Container(
+          width: MediaQuery.of(context).size.width,
+          child: Wrap(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      _isCorrect ? "Correct answer".tr() : "Incorrect answer".tr(),
+                      style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(height: 8.0),
+                    Text(
+                      '${"Answer is:".tr()}: ${_questions[_currentStep].correctAnswer}',
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(height: 16.0),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _nextQuestion();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black, // Cambia el color del botón
+                          padding: EdgeInsets.symmetric(vertical: 8.0), // Ajusta el padding vertical
+                        ),
+                        child: Text(
+                          "Next".tr(),
+                          style: TextStyle(
+                            color: Colors.white, // Cambia el color del texto
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
-      );
+            ],
+          ),
+        );
+      },
+    );
+
 
 
   }

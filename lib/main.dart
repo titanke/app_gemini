@@ -142,7 +142,7 @@ class _MyHomePageState extends State<Menu> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
       bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
+        color: Colors.transparent,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
