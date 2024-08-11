@@ -119,7 +119,7 @@ class _MyHomePageState extends State<Menu> {
         children: _children,
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
+        color: Colors.transparent,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -132,7 +132,7 @@ class _MyHomePageState extends State<Menu> {
                 shape: BoxShape.circle,
                 color: Colors.orange[400], // Background color of the circle
                 border: Border.all(
-                  color: Colors.white, // Border color
+                  color: Colors.transparent, // Border color
                   width: 2, // Border width
                 ),
               ),

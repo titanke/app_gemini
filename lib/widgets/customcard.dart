@@ -36,7 +36,7 @@ class CustomCard extends StatelessWidget {
           ],
         ),
         margin: EdgeInsets.all(5),
-        padding: EdgeInsets.all(25.0),
+        padding: EdgeInsets.all(10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

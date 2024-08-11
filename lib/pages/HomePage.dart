@@ -213,29 +213,59 @@ class _HomepageState extends State<Homepage> {
                                   Container(
                                     margin: const EdgeInsets.all(
                                         16.0), // Margen de 16 dp alrededor del GridView
-                                    child: GridView.builder(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                      ),
-                                      itemCount: favoriteTopics.length,
-                                      itemBuilder: (context, index) {
-                                        final topicId = favoriteTopics[index];
-                                        final topic = topics.firstWhere(
-                                            (t) => t.uid == topicId);
+                                    child: favoriteTopics.isNotEmpty
+                                        ? GridView.builder(
+                                            shrinkWrap: true,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount: 2,
+                                                    childAspectRatio: 3 / 2),
+                                            itemCount: favoriteTopics.length,
+                                            itemBuilder: (context, index) {
+                                              final topicId =
+                                                  favoriteTopics[index];
+                                              final topic = topics.firstWhere(
+                                                  (t) => t.uid == topicId);
 
-                                        return CustomCard(
-                                          title: topic.name,
-                                          borderColor: Colors.transparent,
-                                          bgcolor: Color(0xFFFFCC80),
-                                          onTap: () =>
-                                              _navigateToDetailScreen(topic),
-                                        );
-                                      },
-                                    ),
+                                              return SizedBox(
+                                                height:
+                                                    100, // Set the specific height here
+                                                child: CustomCard(
+                                                  title: topic.name,
+                                                  borderColor:
+                                                      Colors.transparent,
+                                                  bgcolor: Color(0xFFFFCC80),
+                                                  onTap: () =>
+                                                      _navigateToDetailScreen(
+                                                          topic),
+                                                ),
+                                              );
+                                            },
+                                          )
+                                        : Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Image.asset(
+                                                'assets/stat-ardilla1.png', // Reemplaza con la ruta de tu imagen
+                                                width: 100,
+                                                height: 100,
+                                              ),
+                                              const SizedBox(
+                                                  height:
+                                                      16.0), // Espacio entre la imagen y el texto
+                                              const Text(
+                                                'There are no favorite topics',
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.grey),
+                                              ),
+                                            ],
+                                          ),
                                   )
                                 ],
                               );

@@ -87,6 +87,8 @@ flutter:
     - .env
     - assets/trans/
     - assets/squirrel-svgrepo-com.svg
+    - assets/ardilla1.jpeg
+    - assets/stat-ardilla1.png
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
