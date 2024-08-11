@@ -104,7 +104,10 @@ class Menu extends StatefulWidget {
 class _MyHomePageState extends State<Menu> {
   final FirebaseDatabase db = FirebaseDatabase();
   int _currentIndex = 0;
-  final List<Widget> _children = [Homepage(),Topicspage(),Chatpage(),PerfilPage()];
+  //final List<Widget> _children = [Homepage(),Topicspage(),Chatpage(),PerfilPage()];
+
+  final List<Widget> _children = [Homepage(),Topicspage(),Chatpage(),IntroPage()];
+
   void _onTap(int index) {
     setState(() {
       _currentIndex = index;
@@ -166,7 +169,7 @@ class _MyHomePageState extends State<Menu> {
         children: _children,
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
+        color: const Color.fromARGB(0, 255, 255, 255),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [

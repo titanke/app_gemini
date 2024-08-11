@@ -48,7 +48,7 @@ class _TopicspageState extends State<Topicspage> {
 
   void _toggleFavorite(String topicId) {
     final favoritesProvider =
-        Provider.of<ThemeProvider>(context, listen: false);
+    Provider.of<ThemeProvider>(context, listen: false);
     if (favoritesProvider.favoriteTopics.contains(topicId)) {
       favoritesProvider.removeFavoriteTopic(topicId);
     } else {
@@ -66,25 +66,29 @@ class _TopicspageState extends State<Topicspage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Center(
-            child: Text(
-              'Topics',
-              style: TextStyle(
-                // color: Colors.white,
-                fontSize: 20,
-              ),
-            ).tr(),
-          ),
-          backgroundColor: Color(0xFFFFA500)),
+        automaticallyImplyLeading: false,
+        // ignore: prefer_const_constructors
+        title: Center(
+          // ignore: prefer_const_constructors
+          child: Text(
+            'Topics',
+            // ignore: prefer_const_constructors
+            style: TextStyle(
+              // color: Colors.white,
+              fontSize: 20,
+            ),
+          ).tr(),
+        ),
+        backgroundColor: Color(
+            0xFFFFA500),
+      ),
       body: Column(children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: CupertinoSearchTextField(
             controller: _searchController,
             placeholder: "Search".tr() + "...",
-            prefixIcon: Icon(CupertinoIcons.search,
-                color: CupertinoColors.systemOrange),
+            prefixIcon: Icon(CupertinoIcons.search, color: CupertinoColors.systemOrange),
             style: TextStyle(color: CupertinoColors.black),
           ),
         ),
@@ -107,8 +111,8 @@ class _TopicspageState extends State<Topicspage> {
               final List<Topic> topics = snapshot.data!;
               final filteredTopics = topics
                   .where((topic) => topic.name
-                      .toLowerCase()
-                      .contains(_searchText.toLowerCase()))
+                  .toLowerCase()
+                  .contains(_searchText.toLowerCase()))
                   .toList();
 
               return ListView.builder(
@@ -116,8 +120,7 @@ class _TopicspageState extends State<Topicspage> {
                 itemBuilder: (context, index) {
                   final topic = filteredTopics[index];
                   final favoritesProvider = Provider.of<ThemeProvider>(context);
-                  final isFavorite =
-                      favoritesProvider.favoriteTopics.contains(topic.uid);
+                  final isFavorite = favoritesProvider.favoriteTopics.contains(topic.uid);
                   return InkWell(
                     onTap: () => _navigateToDetailScreen(topic),
                     child: Padding(
@@ -147,9 +150,7 @@ class _TopicspageState extends State<Topicspage> {
                                     builder: (BuildContext context) {
                                       return AlertDialog(
                                         title: Text("Are you sure?").tr(),
-                                        content: Text(
-                                                "This action will remove this topic permanently")
-                                            .tr(),
+                                        content: Text("This action will remove this topic permanently").tr(),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
@@ -159,8 +160,7 @@ class _TopicspageState extends State<Topicspage> {
                                           ),
                                           TextButton(
                                             onPressed: () {
-                                              db.DeleteTopic(
-                                                  topic.uid, context);
+                                              db.DeleteTopic(topic.uid, context);
                                               Navigator.of(context).pop();
                                             },
                                             child: Text("Remove").tr(),
@@ -174,19 +174,16 @@ class _TopicspageState extends State<Topicspage> {
                             },
                             itemBuilder: (context) => [
                               PopupMenuItem(
+
                                 value: 0,
                                 child: Row(
                                   children: [
                                     Icon(
-                                      isFavorite
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
-                                      color:
-                                          isFavorite ? Colors.red : Colors.grey,
+                                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                                      color: isFavorite ? Colors.red : Colors.grey,
                                     ),
                                     SizedBox(width: 8),
-                                    Text(isFavorite ? "Unfavorite" : "Favorite")
-                                        .tr(),
+                                    Text(isFavorite ? "Unfavorite" : "Favorite").tr(),
                                   ],
                                 ),
                               ),
@@ -218,6 +215,7 @@ class _TopicspageState extends State<Topicspage> {
                   );
                 },
               );
+
             },
           ),
         ),

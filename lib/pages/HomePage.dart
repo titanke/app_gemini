@@ -164,9 +164,9 @@ class _HomepageState extends State<Homepage> {
                                             padding: EdgeInsets.only(
                                               left: index == 0
                                                   ? 16.0
-                                                  : 0, // Margen izquierdo de 16 dp solo para el primer chip
+                                                  : 0, 
                                               right:
-                                                  8.0, // Separación de 8 dp entre los chips
+                                                  8.0, 
                                             ),
                                             child: GestureDetector(
                                               onTap: () {
@@ -179,7 +179,7 @@ class _HomepageState extends State<Homepage> {
                                               child: Container(
                                                 constraints: BoxConstraints(
                                                   maxWidth:
-                                                      120, // Ajusta el ancho máximo del chip según sea necesario
+                                                      120, 
                                                 ),
                                                 child: Chip(
                                                   label: Text(
@@ -232,8 +232,7 @@ class _HomepageState extends State<Homepage> {
                                         crossAxisCount: 2,
                                         mainAxisExtent: 100,
                                         mainAxisSpacing: 5,
-                                        crossAxisSpacing:
-                                            .0, // Espacio horizontal entre los elementos
+                                        crossAxisSpacing: .0,
                                       ),
                                       itemCount: favoriteTopics.length,
                                       itemBuilder: (context, index) {

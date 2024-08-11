@@ -91,6 +91,10 @@ flutter:
     - assets/trans/
     - assets/squirrel-svgrepo-com.svg
     - assets/sq.png
+    - assets/chat.png
+    - assets/quiz.png
+    - assets/top.png
+
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

@@ -53,15 +53,6 @@ class OnBoardingPageState extends State<IntroPage> {
       allowImplicitScrolling: false,
       autoScrollDuration: null,
       infiniteAutoScroll: false,
-      globalHeader: Align(
-        alignment: Alignment.topRight,
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 16, right: 16),
-           // child: _buildImage('sq.png', 100),
-          ),
-        ),
-      ),
  
       pages: [
         PageViewModel(
@@ -75,21 +66,21 @@ class OnBoardingPageState extends State<IntroPage> {
           title: "Multiple Topics",
           body:
               "You can have multiple topics, each of them will have a personalized quiz, and you can add your favorites to the main screen.",
-          image: _buildImage('sq.png'),
+          image: _buildImage('top.png'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Custom quiz based on your notes",
           body:
               "Based on your notes, the application will generate a quiz with different types of questions",
-          image: _buildImage('sq.png'),
+          image: _buildImage('quiz.png'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Study Companion",
           body:
               "Custom chat that responds to you, based on the topic of your choice",
-          image: _buildImage('sq.png'),
+          image: _buildImage('chat.png'),
           decoration: pageDecoration,
         ),
     
