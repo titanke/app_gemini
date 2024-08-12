@@ -145,6 +145,30 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
     }
   }
 
+  Future<List<Topic>> getTopicsUser2() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('user_id');
+
+    if (userId == null) {
+      print("${"User ID not found".tr()}");
+      return [];
+    }
+
+    try {
+      CollectionReference topicsCollection = _firestore.collection('users').doc(userId).collection('topics');
+      QuerySnapshot snapshot = await topicsCollection.get();
+
+      List<Topic> topics = snapshot.docs.map((doc) {
+        return Topic(name: doc['name'], uid: doc.id);
+      }).toList();
+
+      return topics;
+    } catch (e) {
+      print("${"Error getting topics: ".tr()} $e");
+      return [];
+    }
+  }
+
   Future<void> pickAndUploadFiles2(String topicId) async {
     final GeminiService gem = GeminiService();
     FilePickerResult? result = await FilePicker.platform.pickFiles(

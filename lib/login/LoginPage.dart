@@ -63,9 +63,9 @@ class _LoginPageState extends State<LoginPage> {
       bool newUser = data['newUser'] as bool;
 
       if (user != null) {
-        showToast(message: "User is successfully signed in".tr());
+        //showToast(message: "User is successfully signed in".tr());
         if (newUser)
-          Navigator.pushReplacementNamed(context, "/ftpage");
+          Navigator.pushReplacementNamed(context, "/IntroPage");
         else
           Navigator.pushReplacementNamed(context, "/home");
       } else {

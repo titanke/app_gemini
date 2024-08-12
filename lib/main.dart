@@ -20,7 +20,8 @@ import 'package:provider/provider.dart';
 import 'package:app_gemini/widgets/theme_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:app_gemini/pages/IntroPage.dart';
-void main() async{
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
@@ -86,7 +87,6 @@ class MyApp extends StatelessWidget {
                 '/login': (context) => LoginPage(),
                 '/Addtopic': (context) => AddTopic(),
                 '/IntroPage': (context) => IntroPage(),
-
               },
             ),
           );
@@ -104,7 +104,12 @@ class Menu extends StatefulWidget {
 class _MyHomePageState extends State<Menu> {
   final FirebaseDatabase db = FirebaseDatabase();
   int _currentIndex = 0;
-  final List<Widget> _children = [Homepage(),Topicspage(),Chatpage(),PerfilPage()];
+  final List<Widget> _children = [
+    Homepage(),
+    Topicspage(),
+    Chatpage(),
+    PerfilPage()
+  ];
 
   void _onTap(int index) {
     setState(() {
@@ -159,46 +164,6 @@ class _MyHomePageState extends State<Menu> {
                 ],
               ),
             )));
-/*
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _children,
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: const Color.fromARGB(0, 255, 255, 255),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            buildNavBarItem(Icons.home, "Home".tr(), 0),
-            buildNavBarItem(Icons.book, "My Topics".tr(), 1),
-
-            // Add the icon with a circled border
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.orange[400], // Background color of the circle
-                border: Border.all(
-                  color: Colors.white, // Border color
-                  width: 2, // Border width
-                ),
-              ),
-              child: IconButton(
-                icon: Icon(Icons.add, color: Colors.white, size: 28),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/Addtopic');
-                },
-              ),
-            ),
-
-            buildNavBarItem(Icons.chat, "Chat".tr(), 2),
-            buildNavBarItem(Icons.person, "Profile".tr(), 3),
-          ],
-        ),
-      ),
-    );
-*/
   }
 
   Widget buildNavBarItem(IconData icon, String label, int index) {
@@ -235,4 +200,3 @@ class _MyHomePageState extends State<Menu> {
     );
   }
 }
-

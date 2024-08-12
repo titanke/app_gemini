@@ -205,4 +205,28 @@ class GeminiService {
     }
   }
 
+  Future<String> chatResponse(String answer, String context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final locale = prefs.getString('locale');
+
+    final prompt = """
+    Eres un asistente que ayuda al usuario a repasar temas en base a este contexto:
+    ${context}
+    responde esta pregunta: ${answer} en este lenguage${locale=='es_ES'? "Español": "English"}""";
+
+    final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: apiKey!);
+    final content = [
+      Content.multi([
+        TextPart(prompt),
+      ])
+    ];
+
+    try {
+      final response = await model.generateContent(content);
+      return response.text!;
+    } catch(e) {
+      return '';
+    }
+  }
+
 }

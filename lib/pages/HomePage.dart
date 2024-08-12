@@ -146,8 +146,6 @@ class _HomepageState extends State<Homepage> {
                                       children:
                                           List.generate(topics.length, (index) {
                                         final topic = topics[index];
-
-                                        // Crear la forma del chip con un borde vacío
                                         final shape = RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(8.0),

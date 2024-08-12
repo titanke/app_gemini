@@ -72,6 +72,7 @@ class _AddTopicState extends State<AddTopic> {
       canPop: true,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Center(
             child: Text(
               'Add Topic',
