@@ -172,7 +172,7 @@ class _AddTopicState extends State<AddTopic> {
     setState(() {
       _isLoadingUpload = false;
     });
-    Navigator.pop(context);
+    nexts();
   }
   void _guardarTema() {
     if (_formKey.currentState!.validate()) {
