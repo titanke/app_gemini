@@ -49,7 +49,7 @@ class FirebaseDatabase {
     return metadata.size! > 0;
   }
 
-  void SaveTranscript(String markdownContent, String filePath) async {
+  Future<void> SaveTranscript(String markdownContent, String filePath) async {
     String fileName = "transcript.txt";
     String newContent = markdownContent;
     final storageRef = _storage.ref().child(filePath).child(fileName);
@@ -206,71 +206,11 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
         }
       }
 
-      SaveTranscript(markdownContent, fileTxtPath);
+      await SaveTranscript(markdownContent, fileTxtPath);
     } else {
       showToast(message: "No files selected".tr());
     }
   }
-
-
-  /*Future<void> pickAndUploadFiles(String topicId) async {
-    final GeminiService gem = GeminiService();
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
-      allowMultiple: true,
-    );
-
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('user_id');
-
-    String fileTxtPath = 'users/$userId/topics/$topicId/';
-    String markdownContent = '';
-
-    if (result != null && userId != null) {
-      for (var file in result.files) {
-        if (file.path != null) {
-          File selectedFile = File(file.path!);
-
-          String fileName = file.name;
-          String filePath = 'users/$userId/topics/$topicId/$fileName';
-
-          try {
-            await _storage.ref(filePath).putFile(selectedFile);
-            String downloadURL= await _storage.ref(filePath).getDownloadURL();
-
-            DocumentReference docRef = _firestore
-                .collection('users')
-                .doc(userId)
-                .collection('topics')
-                .doc(topicId)
-                .collection('documents')
-                .doc();
-
-            await docRef.set({
-              'fileName': fileName,
-              'url': downloadURL,
-              'uploadedAt': Timestamp.now(),
-            });
-
-            String transcriptContent = await gem.transcriptDocument(selectedFile, downloadURL);
-            String documentId = docRef.id;
-            print(documentId);
-
-            markdownContent = '$markdownContent\n======$documentId\n$transcriptContent\n======$documentId';
-
-          } catch (e) {
-            showToast(message: "${"Error in save document: ".tr()} $e");
-            print(e);
-          }
-        }
-      }
-
-      SaveTranscript(markdownContent, fileTxtPath);
-    } else {
-      showToast(message: "No files selected".tr());
-    }
-  }*/
 
   Stream<List<Document>> loadDocuments(String topicId) async* {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

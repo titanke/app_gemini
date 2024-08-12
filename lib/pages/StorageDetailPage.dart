@@ -1,9 +1,11 @@
 import 'package:app_gemini/interfaces/DocumentInterface.dart';
+import 'package:app_gemini/pages/FileUploaderScreen.dart';
 import 'package:app_gemini/services/Firebase_database.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const iconsTypes = {
   'application/pdf': Icons.picture_as_pdf,
@@ -46,7 +48,9 @@ class _FileStorageScreenState extends State<FileStorageScreen> {
     }
 
     void onAdd() async {
-      setState(() {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getString('user_id');
+      /*setState(() {
         isUploading = true;
       });
 
@@ -54,7 +58,13 @@ class _FileStorageScreenState extends State<FileStorageScreen> {
 
       setState(() {
         isUploading = false;
-      });
+      });*/
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FileUploaderScreen(topicId: topicId,userId: userId!,),
+        ),
+      );
     }
 
     return Scaffold(

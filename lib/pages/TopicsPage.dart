@@ -48,7 +48,7 @@ class _TopicspageState extends State<Topicspage> {
 
   void _toggleFavorite(String topicId) {
     final favoritesProvider =
-        Provider.of<ThemeProvider>(context, listen: false);
+    Provider.of<ThemeProvider>(context, listen: false);
     if (favoritesProvider.favoriteTopics.contains(topicId)) {
       favoritesProvider.removeFavoriteTopic(topicId);
     } else {
@@ -80,17 +80,17 @@ class _TopicspageState extends State<Topicspage> {
           ).tr(),
         ),
         backgroundColor: Color(
-            0xFFFFA500), 
+            0xFFFFA500),
       ),
       body: Column(children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-       child: CupertinoSearchTextField(
-          controller: _searchController,
-          placeholder: "Search".tr() + "...",
-          prefixIcon: Icon(CupertinoIcons.search, color: CupertinoColors.systemOrange),
-          style: TextStyle(color: CupertinoColors.black),
-        ),
+          child: CupertinoSearchTextField(
+            controller: _searchController,
+            placeholder: "Search".tr() + "...",
+            prefixIcon: Icon(CupertinoIcons.search, color: CupertinoColors.systemOrange),
+            style: TextStyle(color: CupertinoColors.black),
+          ),
         ),
         Expanded(
           child: StreamBuilder<List<Topic>>(
@@ -111,109 +111,110 @@ class _TopicspageState extends State<Topicspage> {
               final List<Topic> topics = snapshot.data!;
               final filteredTopics = topics
                   .where((topic) => topic.name
-                      .toLowerCase()
-                      .contains(_searchText.toLowerCase()))
+                  .toLowerCase()
+                  .contains(_searchText.toLowerCase()))
                   .toList();
 
-          return ListView.builder(
-  itemCount: filteredTopics.length,
-  itemBuilder: (context, index) {
-    final topic = filteredTopics[index];
-    final favoritesProvider = Provider.of<ThemeProvider>(context);
-    final isFavorite = favoritesProvider.favoriteTopics.contains(topic.uid);
-    return InkWell(
-      onTap: () => _navigateToDetailScreen(topic),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text(
-                topic.name,
-                style: const TextStyle(fontSize: 20),
-              ),
-            ),
-            PopupMenuButton<int>(
-              icon: Icon(Icons.more_vert),
-              onSelected: (value) {
-                switch (value) {
-                  case 0:
-                    _toggleFavorite(topic.uid);
-                    break;
-                  case 1:
-                    _showEditModal(topic.uid, topic.name);
-                    break;
-                  case 2:
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text("Are you sure?").tr(),
-                          content: Text("This action will remove this topic permanently").tr(),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text("Cancel").tr(),
+              return ListView.builder(
+                itemCount: filteredTopics.length,
+                itemBuilder: (context, index) {
+                  final topic = filteredTopics[index];
+                  final favoritesProvider = Provider.of<ThemeProvider>(context);
+                  final isFavorite = favoritesProvider.favoriteTopics.contains(topic.uid);
+                  return InkWell(
+                    onTap: () => _navigateToDetailScreen(topic),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              topic.name,
+                              style: const TextStyle(fontSize: 20),
                             ),
-                            TextButton(
-                              onPressed: () {
-                                db.DeleteTopic(topic.uid, context);
-                                Navigator.of(context).pop();
-                              },
-                              child: Text("Remove").tr(),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                    break;
-                }
-              },
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  value: 0,
-                  child: Row(
-                    children: [
-                      Icon(
-                        isFavorite ? Icons.favorite : Icons.favorite_border,
-                        color: isFavorite ? Colors.red : Colors.grey,
+                          ),
+                          PopupMenuButton<int>(
+                            icon: Icon(Icons.more_vert),
+                            onSelected: (value) {
+                              switch (value) {
+                                case 0:
+                                  _toggleFavorite(topic.uid);
+                                  break;
+                                case 1:
+                                  _showEditModal(topic.uid, topic.name);
+                                  break;
+                                case 2:
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text("Are you sure?").tr(),
+                                        content: Text("This action will remove this topic permanently").tr(),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text("Cancel").tr(),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              db.DeleteTopic(topic.uid, context);
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text("Remove").tr(),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                  break;
+                              }
+                            },
+                            itemBuilder: (context) => [
+                              PopupMenuItem(
+
+                                value: 0,
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                                      color: isFavorite ? Colors.red : Colors.grey,
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(isFavorite ? "Unfavorite" : "Favorite").tr(),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem(
+                                value: 1,
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.edit),
+                                    SizedBox(width: 8),
+                                    Text("Edit").tr(),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem(
+                                value: 2,
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.delete),
+                                    SizedBox(width: 8),
+                                    Text("Delete").tr(),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      SizedBox(width: 8),
-                      Text(isFavorite ? "Unfavorite" : "Favorite").tr(),
-                    ],
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 1,
-                  child: Row(
-                    children: [
-                      Icon(Icons.edit),
-                      SizedBox(width: 8),
-                      Text("Edit").tr(),
-                    ],
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 2,
-                  child: Row(
-                    children: [
-                      Icon(Icons.delete),
-                      SizedBox(width: 8),
-                      Text("Delete").tr(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  },
-);
+                    ),
+                  );
+                },
+              );
 
             },
           ),

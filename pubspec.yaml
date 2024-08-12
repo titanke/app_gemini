@@ -60,6 +60,8 @@ dependencies:
   langchain_core: ^0.3.4
   langchain_community: ^0.3.0
   firebase_messaging: ^14.9.4
+  font_awesome_flutter: ^10.7.0
+  image_picker: ^1.1.2
   introduction_screen: ^3.1.14
 
 dev_dependencies:
@@ -98,6 +100,11 @@ flutter:
     - assets/bundle-ardilla4.png
     - assets/bundle-ardilla5.png
     - assets/bundle-ardilla6.png
+    - assets/sq.png
+    - assets/chat.png
+    - assets/quiz.png
+    - assets/top.png
+
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

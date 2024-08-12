@@ -19,9 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class GeminiService {
   final String? apiKey = dotenv.env['API_KEY'];
-  //final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseDatabase db = FirebaseDatabase();
-  //final FirebaseStorage _storage = FirebaseStorage.instance;
   final Errorservice err = Errorservice();
 
 
@@ -38,9 +36,9 @@ class GeminiService {
 
     final prompt = """
     Transcribe the following file into Markdown format unless
-    if the file is an image and it hasn't text, generate a title and below it the URL: $newurl in this format:
+    if the file is an image and it hasn't text, generate a title and description, and below it the URL: $newurl in this format:
     title
-    ![title]($newurl)
+    ![description]($newurl)
     if the file isn't an image only transcribe it into Markdown format without include the previous format of url.
     """;
 
@@ -110,11 +108,10 @@ class GeminiService {
   Future<bool> evaluateAnswer(String question, String answer, String correctAnswer) async{
     print(question +'\n' + answer+'\n' + correctAnswer);
     final prompt = """Con esta pregunta: $question y su respuesta: $correctAnswer 
-    Evalua la respuesta del usuario: $answer, dame solo true o false en este objeto JSON:
+    Evalua la respuesta del usuario: $answer, si la respuesta es aproximada o parecida calficalo bien, dame solo true o false en este objeto JSON:
     {
       isCorrect = true o false,
-    }
-      """;
+    }""";
 
     final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: apiKey!);
     final content = [

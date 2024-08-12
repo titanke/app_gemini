@@ -35,7 +35,6 @@ class _HomepageState extends State<Homepage> {
     double screenHeight = MediaQuery.of(context).size.height;
     return mounted
         ? Scaffold(
-            // HEADER
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(150),
               child: AppBar(
@@ -90,7 +89,6 @@ class _HomepageState extends State<Homepage> {
                 ),
               ),
             ),
-
             body: Column(
               children: [
                 mounted
@@ -163,11 +161,8 @@ class _HomepageState extends State<Homepage> {
 
                                         return Padding(
                                             padding: EdgeInsets.only(
-                                              left: index == 0
-                                                  ? 16.0
-                                                  : 0, // Margen izquierdo de 16 dp solo para el primer chip
-                                              right:
-                                                  8.0, // Separación de 8 dp entre los chips
+                                              left: index == 0 ? 16.0 : 0,
+                                              right: 8.0,
                                             ),
                                             child: GestureDetector(
                                               onTap: () {
@@ -179,8 +174,7 @@ class _HomepageState extends State<Homepage> {
                                               },
                                               child: Container(
                                                 constraints: BoxConstraints(
-                                                  maxWidth:
-                                                      120, // Ajusta el ancho máximo del chip según sea necesario
+                                                  maxWidth: 120,
                                                 ),
                                                 child: Chip(
                                                   label: Text(
@@ -309,4 +303,4 @@ class _HomepageState extends State<Homepage> {
 }
 /*
 
-*/ 
+*/
