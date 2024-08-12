@@ -90,7 +90,8 @@ class FirebaseAuthService {
         return { "user":credentialUser.user,"newUser":newUser};
       }
     } catch (e) {
-      showToast(message: "Some error occurred: $e".tr());
+      print(e);
+      throw e;
     }
 
     return null;

@@ -92,20 +92,20 @@ class FirebaseDatabase {
 void DeleteTopic(String topicId,BuildContext context) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final userId = prefs.getString('user_id');
-    final favoritesProvider = Provider.of<ThemeProvider>(context, listen: false);
+  final favoritesProvider = Provider.of<ThemeProvider>(context, listen: false);
 
   try {
-      final stream = loadDocuments(topicId);
-      await for (final documents in stream) {
-        for (final document in documents) {
-          final documentId = document.id;
-          await deleteDocument(topicId, documentId, document.fileName); 
-        }
-        favoritesProvider.removeFavoriteTopic(topicId);
+    DocumentReference documentRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('topics')
+        .doc(topicId);
+    favoritesProvider.removeFavoriteTopic(topicId);
+    await _firestore.collection('users').doc(userId).collection('topics').doc(topicId).delete();
+    await documentRef.delete();
 
-      await _firestore.collection('users').doc(userId).collection('topics').doc(topicId).delete();
-      showToast(message: "${"Topic successfully removed".tr()}");
-    }
+    showToast(message: "${"Topic successfully removed".tr()}");
+
   } catch (error) {
     showToast(message: "${"Error deleting topic: ".tr()} ${error.toString().tr()}");
   }
@@ -142,6 +142,30 @@ void EditTopic(String topicId, String newName, GlobalKey<FormState> _formKey,Bui
     } catch (e) {
       print("${"Error getting topics: ".tr()} $e");
       yield [];
+    }
+  }
+
+  Future<List<Topic>> getTopicsUser2() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('user_id');
+
+    if (userId == null) {
+      print("${"User ID not found".tr()}");
+      return [];
+    }
+
+    try {
+      CollectionReference topicsCollection = _firestore.collection('users').doc(userId).collection('topics');
+      QuerySnapshot snapshot = await topicsCollection.get();
+
+      List<Topic> topics = snapshot.docs.map((doc) {
+        return Topic(name: doc['name'], uid: doc.id);
+      }).toList();
+
+      return topics;
+    } catch (e) {
+      print("${"Error getting topics: ".tr()} $e");
+      return [];
     }
   }
 

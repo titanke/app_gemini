@@ -55,7 +55,13 @@ class _QuizIntroductionState extends State<QuizIntroduction> {
       //appBar: AppBar(title: Text('Quiz Introduction')),
       body: Center(
         child: _isLoading
-            ? CircularProgressIndicator()
+            ?
+            Column(
+              children: [
+                CircularProgressIndicator(),
+                Text("load_questions".tr()),
+              ],
+            )
             : Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

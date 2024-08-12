@@ -1,9 +1,11 @@
+import 'package:app_gemini/global/common/toast.dart';
+import 'package:app_gemini/interfaces/TopicInterface.dart';
+import 'package:app_gemini/services/Firebase_database.dart';
 import 'package:app_gemini/services/Gemini_service.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-
-import 'package:langchain/langchain.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Chatpage extends StatefulWidget {
   const Chatpage({super.key});
@@ -21,11 +23,19 @@ class Message {
 
 class _ChatpageState extends State<Chatpage>
     with SingleTickerProviderStateMixin {
-  List<Message> messages = [];
+  final FirebaseDatabase db = FirebaseDatabase();
+  List<Message> messages = [
+    Message("chat introduction".tr(),
+        false)
+  ];
   TextEditingController prompt = TextEditingController();
   final GeminiService gem = GeminiService();
-  RetrievalQAChain? rag;
+  String contextTopic = "";
   bool isLoading = false;
+  bool isLoadingContext = false;
+
+  List<Topic> listTopics = [];
+  Topic selectedTopic = Topic(name: '', uid: '');
 
   late AnimationController _animationController;
 
@@ -34,14 +44,18 @@ class _ChatpageState extends State<Chatpage>
   void didChangeDependencies() {
     super.didChangeDependencies();
     context.locale;
-    _initializeRag();
+    messages = [
+      Message("chat introduction".tr(),
+          false)
+    ];
   }
 
   @override
   void initState() {
     if (mounted) {
       super.initState();
-      //_initializeRag();
+      _initializeRag();
+
       _animationController = AnimationController(
         duration: const Duration(seconds: 1),
         vsync: this,
@@ -50,7 +64,11 @@ class _ChatpageState extends State<Chatpage>
   }
 
   Future<void> _initializeRag() async {
-    try {
+    final temp = await db.getTopicsUser2();
+    setState(() {
+      listTopics = temp;
+    });
+    /*try {
       final retrievalQAChain = await gem.initRag();
       print('initializing RAG');
       setState(() {
@@ -58,7 +76,7 @@ class _ChatpageState extends State<Chatpage>
       });
     } catch (e) {
       print('Error initializing RAG: $e');
-    }
+    }*/
   }
 
   @override
@@ -79,13 +97,13 @@ class _ChatpageState extends State<Chatpage>
     });
   }
 
-  Future<void> getRes(String query) async {
+  Future<void> getRes(String asnwer) async {
     setState(() {
       isLoading = true;
     });
 
     try {
-      String response = await gem.ragResponse(rag!, query);
+      String response = await gem.chatResponse(asnwer, contextTopic);
       setState(() {
         messages.add(Message(response, false));
         isLoading = false;
@@ -102,117 +120,202 @@ class _ChatpageState extends State<Chatpage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        // ignore: prefer_const_constructors
-        title: Center(
-          // ignore: prefer_const_constructors
-          child: Text(
-            "Study Companion",
-            // ignore: prefer_const_constructors
-            style: TextStyle(
-              // color: Colors.white,
-              fontSize: 20,
-            ),
-          ).tr(),
+        appBar: AppBar(
+          leading: SizedBox(height: 12),
+          title: Center(
+            child: Text(
+              "Study Companion",
+              style: TextStyle(
+                // color: Colors.white,
+                fontSize: 20,
+              ),
+            ).tr(),
+          ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  if (messages.length > 1)
+                    setState(() {
+                      contextTopic= "";
+                      messages = [
+                        Message("chat introduction".tr(),false)
+                      ];
+                    });
+                },
+                icon: Icon(Icons.delete_forever))
+          ],
+          backgroundColor: const Color(
+              0xFFFFA500), // Set the background color for the AppBar if needed
         ),
-        backgroundColor: const Color(
-            0xFFFFA500), // Set the background color for the AppBar if needed
-      ),
-      body: rag == null
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    reverse: false,
-                    itemCount: messages.length + (isLoading ? 1 : 0),
-                    itemBuilder: (context, index) {
-                      if (index == messages.length) {
-                        return FadeTransition(
-                          opacity: _animationController,
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text("Writting...".tr()),
-                            ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  controller: _scrollController,
+                  reverse: false,
+                  itemCount: messages.length + (isLoading ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (index == messages.length) {
+                      return FadeTransition(
+                        opacity: _animationController,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.all(1.0),
+                            child: Text("Writting...".tr()),
                           ),
-                        );
-                      }
-                      final message = messages[index];
-                      return Align(
-                        alignment: message.isUserMessage
-                            ? Alignment.centerRight
-                            : Alignment.centerLeft,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Flexible(
-                              child: Container(
-                                padding: const EdgeInsets.all(8.0),
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 16.0, vertical: 8.0),
-                                decoration: BoxDecoration(
-                                  color: message.isUserMessage
-                                      ? const Color(0xFFF2AA00)
-                                      : const Color(0xFFBF8600),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                child: MarkdownBody(
-                                  data: message.text,
-                                ),
-                              ),
-                            ),
-                          ],
                         ),
                       );
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: prompt,
-                          decoration: InputDecoration(
-                            hintText: "Writte your answer...".tr(),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.black, // Color del borde
-                                width: 24.0, // Grosor del borde
+                    }
+                    final message = messages[index];
+                    return Align(
+                      alignment: message.isUserMessage
+                          ? Alignment.centerRight
+                          : Alignment.centerLeft,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 8.0),
+                              decoration: BoxDecoration(
+                                color: message.isUserMessage
+                                    ? const Color(0xFFF2AA00)
+                                    : const Color(0xFFBF8600),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
-                              borderRadius: BorderRadius.circular(
-                                  12.0), // Radio de las esquinas (opcional)
+                              child: MarkdownBody(
+                                data: message.text,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Column(
+                children: [
+                  if (contextTopic == "")
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: List.generate(listTopics.length, (index) {
+                          final topic = listTopics[index];
+
+                          return Padding(
+                              padding: EdgeInsets.only(
+                                left: index == 0 ? 16.0 : 0,
+                                right: 8.0,
+                              ),
+                              child: GestureDetector(
+                                onTap: () async {
+                                  final SharedPreferences prefs = await SharedPreferences.getInstance();
+                                  final userId = prefs.getString('user_id');
+
+                                  setState(() {
+                                    messages.add(Message(topic.name, true));
+                                    isLoading = true;
+                                  });
+                                  contextTopic = await db.getTranscriptContent(userId!, topic.uid);
+
+                                  if (contextTopic == "")
+                                    setState(() {
+                                      messages.add(Message(
+                                          "${"no_topics".tr()}",
+                                          false));
+                                      selectedTopic = topic;
+                                    });
+                                  else {
+                                    setState(() {
+                                      messages.add(Message(
+                                          "${"chat_what".tr()} ${topic.name}?",
+                                          false));
+                                      selectedTopic = topic;
+                                    });
+                                  }
+
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                },
+
+                                child: Container(
+                                  constraints: BoxConstraints(
+                                    maxWidth: 120,
+                                  ),
+                                  child: Chip(
+                                    label: Text(
+                                      topic.name,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: 'JosefinSans',
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.transparent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      side: BorderSide(
+                                          color: Color(0xFFFFB84D), width: 2.5),
+                                    ),
+                                  ),
+                                ),
+                              ));
+                        }),
+                      ),
+                    ),
+                  SizedBox(height: 12),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.0),
+                      border: Border.all(color: Colors.black, width: 1.0),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: prompt,
+                            decoration: InputDecoration(
+                              hintText: "Writte your answer...".tr(),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          final text = prompt.text;
-                          if (text.isNotEmpty) {
-                            setState(() {
-                              messages.add(Message(text, true));
-                            });
-                            prompt.clear();
-                            getRes(text);
-                            _scrollToBottom();
-                          }
-                        },
-                        icon: const Icon(Icons.arrow_circle_right_rounded),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-    );
-  }
+                        IconButton(
+                          onPressed: () {
+                            if (contextTopic == "") {
+                              showToast(message: "error_context".tr());
+                              return;
+                            }
 
+                            final text = prompt.text;
+                            if (text.isNotEmpty) {
+                              setState(() {
+                                messages.add(Message(text, true));
+                              });
+                              prompt.clear();
+                              getRes(text);
+                              _scrollToBottom();
+                            }
+                          },
+                          icon: const Icon(Icons.send),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ));
+  }
 }

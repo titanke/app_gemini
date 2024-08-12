@@ -175,30 +175,6 @@ class _MyHomePageState extends State<Menu> {
                 ],
               ),
             )));
-/*
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _children,
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: const Color.fromARGB(0, 255, 255, 255),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            buildNavBarItem(Icons.home, "Home".tr(), 0),
-            buildNavBarItem(Icons.book, "My Topics".tr(), 1),
-
-            
-
-            buildNavBarItem(Icons.chat, "Chat".tr(), 2),
-            buildNavBarItem(Icons.person, "Profile".tr(), 3),
-          ],
-        ),
-      ),
-    );
-*/
   }
 
   Widget buildNavBarItem(IconData icon, String label, int index) {

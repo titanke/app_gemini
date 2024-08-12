@@ -170,7 +170,7 @@ class _FileUploaderScreenState extends State<FileUploaderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Upload Notes'),
+        title: Text("upload_notes".tr()),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -178,7 +178,7 @@ class _FileUploaderScreenState extends State<FileUploaderScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             
-            Text('Add your topic notes (PDF/Pictures)'),
+            Text("notes_desc".tr()),
             SizedBox(height: 20),
             GestureDetector(
               onTap: _uploadFile,
@@ -205,7 +205,7 @@ class _FileUploaderScreenState extends State<FileUploaderScreen> {
                         width: 12,
                       ),
                       Text(
-                        "Upload from your device",
+                        "btn_upload_device".tr(),
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -218,7 +218,7 @@ class _FileUploaderScreenState extends State<FileUploaderScreen> {
             ),
 
             SizedBox(height: 12),
-            Text('Or', textAlign: TextAlign.center, style: TextStyle(fontSize: 18)),
+            Text("text_o".tr(), textAlign: TextAlign.center, style: TextStyle(fontSize: 18)),
             SizedBox(height: 12),
 
             GestureDetector(
@@ -246,7 +246,7 @@ class _FileUploaderScreenState extends State<FileUploaderScreen> {
                               width: 12,
                             ),
                             Text(
-                              "Take a Picture",
+                              "btn_upload_photo".tr(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -306,7 +306,7 @@ class _FileUploaderScreenState extends State<FileUploaderScreen> {
                         width: 12,
                       ),
                       Text(
-                        "Save Notes",
+                        "save_notes".tr(),
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

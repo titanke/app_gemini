@@ -57,23 +57,27 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _isSigningGoogle = true;
     });
-    Map<String, Object?>? data = await _auth.signInWithGoogle();
-    if (data != null) {
-      User? user = data['user'] as User?;
-      bool newUser = data['newUser'] as bool;
+    try {
+      Map<String, Object?>? data = await _auth.signInWithGoogle();
+      if (data != null) {
+        User? user = data['user'] as User?;
+        bool newUser = data['newUser'] as bool;
 
-      if (user != null) {
-        showToast(message: "User is successfully signed in".tr());
-        if (newUser)
-          Navigator.pushReplacementNamed(context, "/ftpage");
-        else
-          Navigator.pushReplacementNamed(context, "/home");
+        if (user != null) {
+          if (newUser)
+            Navigator.pushReplacementNamed(context, "/IntroPage");
+          else
+            Navigator.pushReplacementNamed(context, "/home");
+        } else {
+          showToast(message: "Some error occurred".tr());
+        }
       } else {
-        showToast(message: "Some error occurred".tr());
+        showToast(message: "Failed to sign in with Google".tr());
       }
-    } else {
-      showToast(message: "Failed to sign in with Google".tr());
+    } catch (e){
+      showToast(message: "Some error occurred: $e".tr());
     }
+
     setState(() {
       _isSigningGoogle = false;
     });
@@ -81,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Expanded(
       child: Scaffold(
         resizeToAvoidBottomInset: false,

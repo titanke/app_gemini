@@ -87,7 +87,7 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(
                 height: 10,
               ),
-              FormContainerWidget(
+              /*FormContainerWidget(
                 controller: _interestController,
                 hintText: "Interest".tr(),
               ),
@@ -97,7 +97,7 @@ class _SignUpPageState extends State<SignUpPage> {
               FormContainerWidget(
                 controller: _countryController,
                 hintText: "Country".tr(),
-              ),
+              ),*/
               SizedBox(
                 height: 30,
               ),
@@ -175,7 +175,7 @@ class _SignUpPageState extends State<SignUpPage> {
       });
       if (user != null) {
         showToast(message: "User is successfully created".tr());
-        Navigator.pushNamed(context, "/IntroPage");
+        Navigator.pushReplacementNamed(context, "/IntroPage");
       } else {
         showToast(message: "Some error happend in register".tr());
       }

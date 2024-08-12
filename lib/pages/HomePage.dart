@@ -36,7 +36,7 @@ class _HomepageState extends State<Homepage> {
     return mounted
         ? Scaffold(
             appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(150),
+              preferredSize: const Size.fromHeight(130),
               child: AppBar(
                 backgroundColor: Color(0xFFFFA500),
                 automaticallyImplyLeading: false,
@@ -45,24 +45,23 @@ class _HomepageState extends State<Homepage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment
-                            .start, // Asegura alineación a la izquierda
+                        crossAxisAlignment: CrossAxisAlignment.start, // Asegura alineación a la izquierda
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(left: 16, top: 60),
                             child: Text(
-                              "Greetings!",
+                              "greetings".tr(),
                               style: TextStyle(
                                 fontSize: 24,
                               ),
                             ).tr(),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 16, bottom: 5),
+                            padding: const EdgeInsets.only(left: 14, bottom: 5),
                             child: Text(
-                              'Which topic would you like to review today?',
+                              "home_desc".tr(),
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: 16,
                               ),
                             ).tr(),
                           ),
@@ -99,9 +98,7 @@ class _HomepageState extends State<Homepage> {
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                // ignore: prefer_const_constructors
-                                return Center(
-                                    // ignore: prefer_const_constructors
+                                return const Center(
                                     child: CircularProgressIndicator());
                               }
 
@@ -129,8 +126,8 @@ class _HomepageState extends State<Homepage> {
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.all(15),
-                                    child: const Text(
-                                      "Recent Topics",
+                                    child: Text(
+                                      "recents".tr(),
                                       textAlign: TextAlign.left,
                                     ).tr(),
                                   ),
@@ -139,14 +136,12 @@ class _HomepageState extends State<Homepage> {
                                   // CHIPS INICIO
                                   // ignore: prefer_const_constructors
                                   SingleChildScrollView(
-                                    scrollDirection: Axis
-                                        .horizontal, // Permite desplazamiento horizontal
+                                    scrollDirection: Axis.horizontal,
                                     child: Row(
                                       children:
                                           List.generate(topics.length, (index) {
                                         final topic = topics[index];
 
-                                        // Crear la forma del chip con un borde vacío
                                         RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(8.0),
@@ -174,13 +169,15 @@ class _HomepageState extends State<Homepage> {
                                               },
                                               child: Container(
                                                 constraints: BoxConstraints(
-                                                  maxWidth: 120,
+                                                  maxWidth: 150,
                                                 ),
                                                 child: Chip(
                                                   label: Text(
                                                     topic.name,
-                                                    overflow: TextOverflow
-                                                        .ellipsis, // Abrevia el texto con puntos suspensivos si es necesario
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontFamily: 'JosefinSans',
+                                                    ),
                                                   ),
                                                   backgroundColor:
                                                       Colors.transparent,
@@ -189,10 +186,8 @@ class _HomepageState extends State<Homepage> {
                                                         BorderRadius.circular(
                                                             8.0),
                                                     side: BorderSide(
-                                                        color:
-                                                            Color(0xFFFFB84D),
-                                                        width:
-                                                            2.5), // Borde transparente
+                                                        color: Color(0xFFFFB84D),
+                                                        width: 2.5), // Borde transparente
                                                   ),
                                                 ),
                                               ),

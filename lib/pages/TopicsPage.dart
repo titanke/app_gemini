@@ -67,12 +67,9 @@ class _TopicspageState extends State<Topicspage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        // ignore: prefer_const_constructors
         title: Center(
-          // ignore: prefer_const_constructors
           child: Text(
-            'Topics',
-            // ignore: prefer_const_constructors
+            "My Topics".tr(),
             style: TextStyle(
               // color: Colors.white,
               fontSize: 20,

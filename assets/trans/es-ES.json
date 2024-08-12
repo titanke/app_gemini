@@ -93,5 +93,19 @@
     "Home":"Inicio",
     "My Topics":"Mis Temas",
     "Profile":"Perfil",
-    "The file exceeds the maximum allowed size of 2 MB": "El archivo excede el tamaño máximo permitido de 8 MB"
+    "The file exceeds the maximum allowed size of 2 MB": "El archivo excede el tamaño máximo permitido de 8 MB",
+    "chat introduction": " Hola, soy tu acompañante de estudio. ¿Qué tema deseas repasar?",
+    "chat_what":"¿Que quieres saber del tema",
+    "no_topics": "No tienes contenido en este tema, elige otro",
+    "error_context": "Debes escoger un tema",
+    "load_questions": "Cargando preguntas",
+    "upload_notes": "Subir apuntes",
+    "btn_upload_device": "Subir archivos desde el dispositivo",
+    "btn_upload_photo": "Tomar una Foto",
+    "text_o": "O",
+    "notes_desc": "Sube tus apuntes de tu tema (PDF/Fotos)",
+    "save_notes": "Guardar Apuntes",
+    "greetings": "¡Saludos!",
+    "home_desc": "¿Que tema deseas revisar hoy?",
+    "recents": "Temas recientes"
 }
