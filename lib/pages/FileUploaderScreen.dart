@@ -29,6 +29,8 @@ class _FileUploaderScreenState extends State<FileUploaderScreen> {
   bool _isLoadingCamera = false;
   bool _isLoadingFile = false;
   bool _isLoadingUpload = false;
+  bool _isUploaded = false;
+
   GeminiService gem = GeminiService();
   FirebaseDatabase db = FirebaseDatabase();
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -142,6 +144,7 @@ class _FileUploaderScreenState extends State<FileUploaderScreen> {
     String fileTxtPath = 'users/${widget.userId}/topics/${widget.topicId}/';
     setState(() {
       _isLoadingUpload = true;
+      _isUploaded = true;
     });
 
     final List<Future<void>> uploadTasks = [];
@@ -271,10 +274,17 @@ class _FileUploaderScreenState extends State<FileUploaderScreen> {
                     subtitle: file.isUploaded
                         ? Text('${file.size} - Uploaded',
                             style: TextStyle(color: Colors.green))
-                        : LinearProgressIndicator(value: file.progress),
+                        : _isUploaded? LinearProgressIndicator(value: file.progress): null,
                     trailing: file.isUploaded
                         ? Icon(Icons.check, color: Colors.green)
-                        : Text('${(file.progress * 100).toStringAsFixed(0)}%'),
+                        : _isUploaded
+                        ? Text('${(file.progress * 100).toStringAsFixed(0)}%')
+                        : IconButton(onPressed: (){
+                          setState(() {
+                            uploadedFiles.removeWhere((item)=> (item.fileName == file.fileName));
+                          });
+                          },
+                        icon: Icon(Icons.close)),
                   );
                 },
               ),
@@ -317,7 +327,6 @@ class _FileUploaderScreenState extends State<FileUploaderScreen> {
                 ),
               ),
             ),
-
           ],
         ),
       ),
@@ -340,30 +349,3 @@ class UploadFile {
     required this.file,
   });
 }
-
-
-/*
-*
-* GestureDetector(
-              onTap: _uploadFile,
-              child: Container(
-                height: 150,
-                decoration: BoxDecoration(
-                  color: Colors.blue[50],
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.blue, width: 2),
-                ),
-                child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.upload_file, color: Colors.blue, size: 50),
-                    SizedBox(height: 10),
-                    Text(
-                      'Subir Archivos',
-                      style: TextStyle(color: Colors.blue, fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-* */
