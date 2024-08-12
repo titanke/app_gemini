@@ -224,21 +224,38 @@ class _AddTopicState extends State<AddTopic> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return PopScope(
       canPop: true,
       child: Scaffold(
-        appBar: AppBar(
-          title: Center(
-            child: Text(
-              'Add Topic',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
+        appBar: PreferredSize(
+          preferredSize:
+              Size.fromHeight(kToolbarHeight), // Altura estándar del AppBar
+          child: AppBar(
+            backgroundColor: Color(0xFFFFA500), // Color de fondo del AppBar
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color:
+                    theme.iconTheme.color, // Color del ícono basado en el tema
               ),
+              onPressed: () {
+                Navigator.pop(context); // Regresa a la pantalla anterior
+              },
             ),
+            title: Stack(
+              children: [
+                Center(
+                  child: Text(
+                    'Add Topic',
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              SizedBox(width: kToolbarHeight), // Espacio para alinear el título
+            ],
           ),
-          backgroundColor: Color(
-              0xFFFFA500), 
         ),
         body: Form(
           key: _formKey,
@@ -267,16 +284,15 @@ class _AddTopicState extends State<AddTopic> {
                    // crossAxisAlignment: CrossAxisAlignment.start,  
                     children: <Widget>[
                       Container(
-                         margin: EdgeInsets.all(20),
-                        child:    
-                        Text("Add the topic name",
-                              style: TextStyle(
-                              fontSize: 18, 
-                              fontWeight: FontWeight.bold,
-                            ),
+                        margin: EdgeInsets.all(20),
+                        child: Text(
+                          "Add the topic name",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                           textAlign: TextAlign.left,
-                          
-                          ).tr(),
+                        ).tr(),
                       ),
                       TextFormField(
                         controller: _nameController,

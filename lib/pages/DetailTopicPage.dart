@@ -23,21 +23,21 @@ class _DetailScreenState extends State<DetailScreen> {
       appBar: AppBar(
         title: Text(
           topic.name,
-          style: TextStyle(color: Colors.white), // Set the text color to white
+          style: TextStyle(
+              color: Theme.of(context).appBarTheme.titleTextStyle?.color),
         ),
         backgroundColor:
-            Color(0xFFFFA500), // Set the background color of the AppBar
+            Theme.of(context).appBarTheme.backgroundColor ?? Color(0xFFFFA500),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back,
-              color: Colors.white), // Set the icon color to white
+          icon:
+              Icon(Icons.arrow_back, color: Theme.of(context).iconTheme.color),
           onPressed: () {
             Navigator.pushNamed(context, '/home', arguments: 1);
           },
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.storage,
-                color: Colors.white), // Set the icon color to white
+            icon: Icon(Icons.storage, color: Theme.of(context).iconTheme.color),
             onPressed: () {
               Navigator.pushNamed(context, '/storage', arguments: topic.uid);
             },
@@ -48,7 +48,7 @@ class _DetailScreenState extends State<DetailScreen> {
               if (snapshot.hasData && snapshot.data == true) {
                 return IconButton(
                   icon: Icon(Icons.play_arrow,
-                      color: Colors.white), // Set the icon color to white
+                      color: Theme.of(context).iconTheme.color),
                   onPressed: () {
                     Navigator.pushNamed(context, '/quiz', arguments: topic);
                   },
@@ -56,7 +56,7 @@ class _DetailScreenState extends State<DetailScreen> {
               } else {
                 return IconButton(
                   icon: Icon(Icons.play_arrow,
-                      color: Colors.white), // Set the icon color to white
+                      color: Theme.of(context).iconTheme.color),
                   onPressed: null,
                 );
               }

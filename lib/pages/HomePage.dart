@@ -35,7 +35,6 @@ class _HomepageState extends State<Homepage> {
     double screenHeight = MediaQuery.of(context).size.height;
     return mounted
         ? Scaffold(
-
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(150),
               child: AppBar(
@@ -46,22 +45,22 @@ class _HomepageState extends State<Homepage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment
+                            .start, // Asegura alineación a la izquierda
                         children: [
                           Padding(
-                            padding: EdgeInsets.fromLTRB(0, 60, 0, 5),
+                            padding: const EdgeInsets.only(left: 16, top: 60),
                             child: Text(
-                              "What's up :)",
-                              textAlign: TextAlign.left,
+                              "Greetings!",
                               style: TextStyle(
                                 fontSize: 24,
                               ),
                             ).tr(),
                           ),
                           Padding(
-                            padding: EdgeInsets.fromLTRB(24, 0, 0, 5),
+                            padding: const EdgeInsets.only(left: 16, bottom: 5),
                             child: Text(
-                              'What topic you wanna review today..?',
-                              textAlign: TextAlign.left,
+                              'Which topic would you like to review today?',
                               style: TextStyle(
                                 fontSize: 12,
                               ),
@@ -71,25 +70,25 @@ class _HomepageState extends State<Homepage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: SvgPicture.asset(
-                          'assets/squirrel-svgrepo-com.svg',
-                          width: 80,
-                          height: 80,
-
-                          // Color responsiveness, en caso de que sea necesario
-
-                          // colorFilter: ColorFilter.mode(
-                          //   Theme.of(context).iconTheme.color!,
-                          //   BlendMode.srcIn,
-                          // ),
+                        child: Builder(
+                          builder: (context) {
+                            bool isDarkMode =
+                                Theme.of(context).brightness == Brightness.dark;
+                            return Image.asset(
+                              isDarkMode
+                                  ? 'assets/bundle-ardilla0blanco.png' // Imagen para tema oscuro
+                                  : 'assets/bundle-ardilla0.png', // Imagen para tema claro
+                              width: 80,
+                              height: 80,
+                            );
+                          },
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
               ),
             ),
-
             body: Column(
               children: [
                 mounted
@@ -148,7 +147,7 @@ class _HomepageState extends State<Homepage> {
                                         final topic = topics[index];
 
                                         // Crear la forma del chip con un borde vacío
-                                        final shape = RoundedRectangleBorder(
+                                        RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(8.0),
                                           side: const BorderSide(
@@ -162,11 +161,8 @@ class _HomepageState extends State<Homepage> {
 
                                         return Padding(
                                             padding: EdgeInsets.only(
-                                              left: index == 0
-                                                  ? 16.0
-                                                  : 0, 
-                                              right:
-                                                  8.0, 
+                                              left: index == 0 ? 16.0 : 0,
+                                              right: 8.0,
                                             ),
                                             child: GestureDetector(
                                               onTap: () {
@@ -178,8 +174,7 @@ class _HomepageState extends State<Homepage> {
                                               },
                                               child: Container(
                                                 constraints: BoxConstraints(
-                                                  maxWidth:
-                                                      120, 
+                                                  maxWidth: 120,
                                                 ),
                                                 child: Chip(
                                                   label: Text(
