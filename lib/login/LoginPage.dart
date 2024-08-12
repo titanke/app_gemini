@@ -94,10 +94,26 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // Ícono encima del título
+                  Image.asset(
+                    'assets/bundle-ardilla1.png', // Ruta del archivo del ícono
+                    width:
+                        150, // Ajusta el tamaño del ícono según sea necesario
+                    height: 150,
+                  ),
+                  Text(
+                    "Nombre",
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 20),
+
                   Text(
                     "Login",
                     style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
                   ).tr(),
+
+                  // Building
+
                   SizedBox(
                     height: 30,
                   ),
