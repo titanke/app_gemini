@@ -86,8 +86,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
 
-    return Expanded(
-      child: Scaffold(
+    return Scaffold(
         resizeToAvoidBottomInset: false,
           appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -238,7 +237,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-          )),
+          ),
     );
   }
 }

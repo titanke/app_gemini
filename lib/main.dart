@@ -14,6 +14,7 @@ import 'package:app_gemini/login/LoginPage.dart';
 import 'package:app_gemini/widgets/AddTopic.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +34,8 @@ void main() async{
   final String defaultLocale = Platform.localeName;
   final localeList = defaultLocale.split('_');
   final deviceLocale = Locale(localeList[0]);
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('locale', '${deviceLocale}');
 
   runApp(
     EasyLocalization(
@@ -79,21 +82,19 @@ class _MyAppState extends State<MyApp> {
           return Center(
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
-                  Colors.black), 
+                  Colors.black),
             ),
           );
         } else {
           String initialRoute = snapshot.hasData ? '/home' : '/login';
-          print(initialRoute);
-          return PopScope(
-            canPop: false,
-            child: MaterialApp(
+
+          return MaterialApp(
               title: 'App Gemini',
               theme: Provider.of<ThemeProvider>(context).themeData,
               locale: context.locale,
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,
-              initialRoute: initialRoute,
+              home: snapshot.hasData ? Menu(): LoginPage(),
               routes: <String, WidgetBuilder>{
                 '/home': (context) => Menu(),
                 '/detail': (context) => DetailScreen(),
@@ -106,7 +107,6 @@ class _MyAppState extends State<MyApp> {
                 '/Addtopic': (context) => AddTopic(),
                 '/IntroPage': (context) => IntroPage(),
               },
-            ),
           );
         }
       },

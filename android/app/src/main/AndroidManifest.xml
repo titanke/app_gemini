@@ -3,9 +3,9 @@
     <application
         android:label="WalNotes"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon">
         android:enableOnBackInvokedCallback="true"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
