@@ -25,7 +25,7 @@ class _ChatpageState extends State<Chatpage>
     with SingleTickerProviderStateMixin {
   final FirebaseDatabase db = FirebaseDatabase();
   List<Message> messages = [
-    Message("Hola, soy tu acompañante de estudio. ¿Qué tema quisieras repasar?",
+    Message("chat introduction".tr(),
         false)
   ];
   TextEditingController prompt = TextEditingController();
@@ -133,9 +133,7 @@ class _ChatpageState extends State<Chatpage>
                   if (messages.length > 1)
                     setState(() {
                       messages = [
-                        Message(
-                            "Hola, soy tu acompañante de estudio. ¿Qué tema quisieras repasar?",
-                            false)
+                        Message("chat introduction".tr(),false)
                       ];
                     });
                 },
@@ -224,7 +222,7 @@ class _ChatpageState extends State<Chatpage>
                                     setState(() {
                                       messages.add(Message(topic.name, true));
                                       messages.add(Message(
-                                          "¿Que quieres saber del tema ${topic.name}?",
+                                          "${"chat_what".tr()} ${topic.name}?",
                                           false));
                                       selectedTopic = topic;
                                     });

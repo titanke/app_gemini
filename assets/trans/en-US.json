@@ -93,5 +93,7 @@
     "Home": "Home",
     "My Topics": "My Topics",
     "Profile": "Profile",
-    "The file exceeds the maximum allowed size of 2 MB": "The file exceeds the maximum allowed size of 8 MB"
+    "The file exceeds the maximum allowed size of 2 MB": "The file exceeds the maximum allowed size of 8 MB",
+    "chat introduction": "Hello, I am your study companion. Which topic would you like to review?",
+    "chat_what": "What do you want to know about the topic"
 }
