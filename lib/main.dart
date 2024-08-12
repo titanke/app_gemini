@@ -125,8 +125,8 @@ class _MyHomePageState extends State<Menu> {
   final List<Widget> _children = [
     Homepage(),
     Topicspage(),
-    Chatpage(),
-    PerfilPage()
+    PerfilPage(),
+    IntroPage()
   ];
 
   void _onTap(int index) {

@@ -103,8 +103,8 @@ class _LoginPageState extends State<LoginPage> {
                       height: 150,
                     ),
                     Text(
-                      "Nombre",
-                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                      "Nutty Notes",
+                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,color: Colors.orangeAccent),
                     ),
                     SizedBox(height: 20),
       
@@ -206,7 +206,7 @@ class _LoginPageState extends State<LoginPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Don't have an account?").tr(),
+                        Text(" Don't have an account?").tr(),
                         SizedBox(
                           width: 5,
                         ),

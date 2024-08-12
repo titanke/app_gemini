@@ -64,6 +64,7 @@ dependencies:
   image_picker: ^1.1.2
   introduction_screen: ^3.1.14
   permission_handler:
+  flutter_launcher_icons:
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -74,6 +75,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.0
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/ardilla_mayor-Photoroom.jpg"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -100,10 +105,12 @@ flutter:
     - assets/bundle-ardilla4.png
     - assets/bundle-ardilla5.png
     - assets/bundle-ardilla6.png
+    - assets/ardilla_mayor-Photoroom.jpg
     - assets/sq.png
     - assets/chat.png
     - assets/quiz.png
     - assets/top.png
+    - assets/Add.jpg
 
   # assets:
   #   - images/a_dot_burr.jpeg
