@@ -38,6 +38,11 @@ class _TopicOverviewScreen extends State<TopicOverviewScreen> {
                   final updatedUri = uri.toString().replaceAll('*75', '%2F');
                   return Image.network(updatedUri);
                 },
+                styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(
+                    fontFamily: 'Roboto',
+                  ),
+                ),
               ),
             );
           }
