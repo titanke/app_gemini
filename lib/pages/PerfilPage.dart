@@ -77,7 +77,9 @@ class _PerfilPageState extends State<PerfilPage> {
         backgroundColor: const Color(
             0xFFFFA500), // Set the background color for the AppBar if needed
       ),
-      body: SingleChildScrollView(
+      body: PopScope(
+        canPop: false,
+        child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -209,7 +211,8 @@ class _PerfilPageState extends State<PerfilPage> {
             ],
           ),
         ),
-      ),
+      ), 
+      )
     );
   }
 }

@@ -18,10 +18,10 @@ import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:app_gemini/widgets/theme_provider.dart';
-import 'package:app_gemini/widgets/FirstTPage.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:app_gemini/pages/IntroPage.dart';
+void main() async{
 
-void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
@@ -76,8 +76,10 @@ class MyApp extends StatelessWidget {
               '/quiz/start': (context) => QuizPage(),
               '/quiz/result': (context) => ResultsPage(),
               '/login': (context) => LoginPage(),
-              '/ftpage': (context) => FirstTopicsPage(),
               '/Addtopic': (context) => AddTopic(),
+              '/IntroPage': (context) => IntroPage(),
+
+
             },
           );
         }
@@ -96,13 +98,7 @@ class _MyHomePageState extends State<Menu> {
   final FirebaseDatabase db = FirebaseDatabase();
   final TextEditingController _nameController = TextEditingController();
   int _currentIndex = 0;
-  final List<Widget> _children = [
-    Homepage(),
-    Topicspage(),
-    Chatpage(),
-    PerfilPage(),
-    FirstTopicsPage()
-  ];
+  final List<Widget> _children = [Homepage(),Topicspage(),Chatpage(),PerfilPage()];
 
   void _onTap(int index) {
     setState(() {
@@ -124,7 +120,7 @@ class _MyHomePageState extends State<Menu> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             buildNavBarItem(Icons.home, "Home".tr(), 0),
-            buildNavBarItem(Icons.book, "Topics".tr(), 1),
+            buildNavBarItem(Icons.book, "My Topics".tr(), 1),
 
             // Add the icon with a circled border
             Container(

@@ -35,7 +35,9 @@ class _LoginPageState extends State<LoginPage> {
    appBar: AppBar(
     automaticallyImplyLeading: false,
    ),
-   body: Center(
+   body: PopScope(
+     canPop: false,
+    child: Center(
     child: Padding(
      padding: const EdgeInsets.symmetric(horizontal: 15),
      child: Column(
@@ -153,6 +155,7 @@ class _LoginPageState extends State<LoginPage> {
      ),
     ),
    ),
+    )
   );
  }
 
