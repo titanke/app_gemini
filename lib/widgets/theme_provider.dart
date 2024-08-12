@@ -80,22 +80,22 @@ class ThemeProvider with ChangeNotifier {
   }
   
   //languaje
-  Locale _locale = Locale('es', 'ES');
+  Locale _locale = Locale('es');
 
   Locale get locale => _locale;
 
   Future<void> _loadLocale() async {
     final prefs = await SharedPreferences.getInstance();
-    final localeCode = prefs.getString('locale') ?? 'en_US';
+    final localeCode = prefs.getString('locale') ?? 'en';
     final localeList = localeCode.split('_');
-    _locale = Locale(localeList[0], localeList[1]);
+    _locale = Locale(localeList[0]);
     notifyListeners();
   }
 
   Future<void> setLocale(Locale locale) async {
     _locale = locale;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('locale', '${locale.languageCode}_${locale.countryCode}');
+    await prefs.setString('locale', '${locale.languageCode}');
     notifyListeners();
   }
 

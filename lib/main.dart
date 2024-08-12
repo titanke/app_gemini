@@ -36,9 +36,9 @@ void main() async{
 
   runApp(
     EasyLocalization(
-      supportedLocales: [Locale('en', 'US'), Locale('es', 'ES')],
+      supportedLocales: [Locale('en'), Locale('es')],
       path: 'assets/trans',
-      fallbackLocale: Locale('en', 'US'),
+      fallbackLocale: deviceLocale,
       child: ChangeNotifierProvider(
         create: (context) => ThemeProvider(),
         child: MyApp(),
@@ -125,8 +125,8 @@ class _MyHomePageState extends State<Menu> {
   final List<Widget> _children = [
     Homepage(),
     Topicspage(),
+    Chatpage(),
     PerfilPage(),
-    IntroPage()
   ];
 
   void _onTap(int index) {

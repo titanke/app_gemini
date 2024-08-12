@@ -68,7 +68,6 @@ class _PerfilPageState extends State<PerfilPage> {
           child: Text(
             "Profile".tr(),
             style: TextStyle(
-              // color: Colors.white,
               fontSize: 20,
             ),
           ),
@@ -181,11 +180,11 @@ class _PerfilPageState extends State<PerfilPage> {
                                 },
                                 items: [
                                   DropdownMenuItem(
-                                    value: Locale('en', 'US'),
+                                    value: Locale('en'),
                                     child: Text('English'),
                                   ),
                                   DropdownMenuItem(
-                                    value: Locale('es', 'ES'),
+                                    value: Locale('es'),
                                     child: Text('Español'),
                                   ),
                                 ],
