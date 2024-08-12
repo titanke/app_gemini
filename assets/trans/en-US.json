@@ -95,5 +95,17 @@
     "Profile": "Profile",
     "The file exceeds the maximum allowed size of 2 MB": "The file exceeds the maximum allowed size of 8 MB",
     "chat introduction": "Hello, I am your study companion. Which topic would you like to review?",
-    "chat_what": "What do you want to know about the topic"
+    "chat_what": "What do you want to know about the topic",
+    "no_topics": "You have no content on this topic, choose another one,",
+    "error_context": "You must choose a topic",
+    "load_questions": "Loading questions",
+    "upload_notes": "Upload Notes",
+    "btn_upload_device": "Upload files from the device",
+    "btn_upload_photo": "Take a Picture",
+    "text_o": "Or",
+    "notes_desc": "Upload your notes on the topic (PDF/Photos)",
+    "save_notes": "Save Notes",
+    "greetings": "Greetings!",
+    "home_desc": "Which topic would you like to \\nreview today?",
+    "recents": "Recent Topics"
 }

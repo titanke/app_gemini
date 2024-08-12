@@ -67,12 +67,9 @@ class _TopicspageState extends State<Topicspage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        // ignore: prefer_const_constructors
         title: Center(
-          // ignore: prefer_const_constructors
           child: Text(
-            'Topics',
-            // ignore: prefer_const_constructors
+            "My Topics".tr(),
             style: TextStyle(
               // color: Colors.white,
               fontSize: 20,
@@ -123,93 +120,96 @@ class _TopicspageState extends State<Topicspage> {
                   final isFavorite = favoritesProvider.favoriteTopics.contains(topic.uid);
                   return InkWell(
                     onTap: () => _navigateToDetailScreen(topic),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              topic.name,
-                              style: const TextStyle(fontSize: 20),
+                    child: Container(
+                      color: isFavorite ? Color(0xFFFFA500) : const Color.fromARGB(0, 255, 255, 255), 
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                topic.name,
+                                style: const TextStyle(fontSize: 20),
+                              ),
                             ),
-                          ),
-                          PopupMenuButton<int>(
-                            icon: Icon(Icons.more_vert),
-                            onSelected: (value) {
-                              switch (value) {
-                                case 0:
-                                  _toggleFavorite(topic.uid);
-                                  break;
-                                case 1:
-                                  _showEditModal(topic.uid, topic.name);
-                                  break;
-                                case 2:
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text("Are you sure?").tr(),
-                                        content: Text("This action will remove this topic permanently").tr(),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text("Cancel").tr(),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              db.DeleteTopic(topic.uid, context);
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text("Remove").tr(),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                  break;
-                              }
-                            },
-                            itemBuilder: (context) => [
-                              PopupMenuItem(
-
-                                value: 0,
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                                      color: isFavorite ? Colors.red : Colors.grey,
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(isFavorite ? "Unfavorite" : "Favorite").tr(),
-                                  ],
+                            PopupMenuButton<int>(
+                              icon: Icon(Icons.more_vert),
+                              onSelected: (value) {
+                                switch (value) {
+                                  case 0:
+                                    _toggleFavorite(topic.uid);
+                                    break;
+                                  case 1:
+                                    _showEditModal(topic.uid, topic.name);
+                                    break;
+                                  case 2:
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text("Are you sure?").tr(),
+                                          content: Text("This action will remove this topic permanently").tr(),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text("Cancel").tr(),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                db.DeleteTopic(topic.uid, context);
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text("Remove").tr(),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                    break;
+                                }
+                              },
+                              itemBuilder: (context) => [
+                                PopupMenuItem(
+                      
+                                  value: 0,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                                        color: isFavorite ? Colors.deepOrangeAccent : Colors.grey,
+                                      ),
+                                      SizedBox(width: 8),
+                                      Text(isFavorite ? "Unfavorite" : "Favorite").tr(),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              PopupMenuItem(
-                                value: 1,
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.edit),
-                                    SizedBox(width: 8),
-                                    Text("Edit").tr(),
-                                  ],
+                                PopupMenuItem(
+                                  value: 1,
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.edit),
+                                      SizedBox(width: 8),
+                                      Text("Edit").tr(),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              PopupMenuItem(
-                                value: 2,
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.delete),
-                                    SizedBox(width: 8),
-                                    Text("Delete").tr(),
-                                  ],
+                                PopupMenuItem(
+                                  value: 2,
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.delete),
+                                      SizedBox(width: 8),
+                                      Text("Delete").tr(),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );

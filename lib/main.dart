@@ -20,8 +20,9 @@ import 'package:provider/provider.dart';
 import 'package:app_gemini/widgets/theme_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:app_gemini/pages/IntroPage.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-void main() async {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
@@ -46,12 +47,29 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   Future<User?> _getUser() async {
     return FirebaseAuth.instance.currentUser;
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _requestCameraPermission();
+  }
+  Future<void> _requestCameraPermission() async {
+    var status = await Permission.camera.status;
+    if (!status.isGranted) {
+      await Permission.camera.request();
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<User?>(
@@ -61,7 +79,7 @@ class MyApp extends StatelessWidget {
           return Center(
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
-                  Colors.black), // Color blanco, si lo deseas
+                  Colors.black), 
             ),
           );
         } else {
@@ -127,30 +145,6 @@ class _MyHomePageState extends State<Menu> {
               index: _currentIndex,
               children: _children,
             ),
-            floatingActionButton: Transform.translate(
-              offset: const Offset(0, 24),
-              child: ClipOval(
-                child: Material(
-                  color: Colors.orange[400],
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/Addtopic');
-                    },
-                    child: const SizedBox(
-                      width: 56,
-                      height: 56,
-                      child: Icon(
-                        Icons.add,
-                        size: 28,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
             bottomNavigationBar: BottomAppBar(
               color: Colors.transparent,
               child: Row(
@@ -158,7 +152,24 @@ class _MyHomePageState extends State<Menu> {
                 children: [
                   buildNavBarItem(Icons.home, "Home".tr(), 0),
                   buildNavBarItem(Icons.book, "Topics".tr(), 1),
-                  const SizedBox(width: 60),
+                  // Add the icon with a circled border
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color:
+                          Colors.orange[400], // Background color of the circle
+                      border: Border.all(
+                        color: Colors.transparent, // Border color
+                        width: 2, // Border width
+                      ),
+                    ),
+                    child: IconButton(
+                      icon: Icon(Icons.add, color: Colors.white, size: 28),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/Addtopic');
+                      },
+                    ),
+                  ),
                   buildNavBarItem(Icons.chat, "Chat".tr(), 2),
                   buildNavBarItem(Icons.person, "Profile".tr(), 3),
                 ],

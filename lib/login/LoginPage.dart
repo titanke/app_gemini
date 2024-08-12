@@ -57,23 +57,27 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _isSigningGoogle = true;
     });
-    Map<String, Object?>? data = await _auth.signInWithGoogle();
-    if (data != null) {
-      User? user = data['user'] as User?;
-      bool newUser = data['newUser'] as bool;
+    try {
+      Map<String, Object?>? data = await _auth.signInWithGoogle();
+      if (data != null) {
+        User? user = data['user'] as User?;
+        bool newUser = data['newUser'] as bool;
 
-      if (user != null) {
-        //showToast(message: "User is successfully signed in".tr());
-        if (newUser)
-          Navigator.pushReplacementNamed(context, "/IntroPage");
-        else
-          Navigator.pushReplacementNamed(context, "/home");
+        if (user != null) {
+          if (newUser)
+            Navigator.pushReplacementNamed(context, "/IntroPage");
+          else
+            Navigator.pushReplacementNamed(context, "/home");
+        } else {
+          showToast(message: "Some error occurred".tr());
+        }
       } else {
-        showToast(message: "Some error occurred".tr());
+        showToast(message: "Failed to sign in with Google".tr());
       }
-    } else {
-      showToast(message: "Failed to sign in with Google".tr());
+    } catch (e){
+      showToast(message: "Some error occurred: $e".tr());
     }
+
     setState(() {
       _isSigningGoogle = false;
     });
@@ -82,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: Colors.transparent,
@@ -94,10 +99,26 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // Ícono encima del título
+                  Image.asset(
+                    'assets/bundle-ardilla1.png', // Ruta del archivo del ícono
+                    width:
+                        150, // Ajusta el tamaño del ícono según sea necesario
+                    height: 150,
+                  ),
+                  Text(
+                    "Nombre",
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 20),
+
                   Text(
                     "Login",
                     style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
                   ).tr(),
+
+                  // Building
+
                   SizedBox(
                     height: 30,
                   ),

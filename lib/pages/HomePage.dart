@@ -35,9 +35,8 @@ class _HomepageState extends State<Homepage> {
     double screenHeight = MediaQuery.of(context).size.height;
     return mounted
         ? Scaffold(
-
             appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(150),
+              preferredSize: const Size.fromHeight(130),
               child: AppBar(
                 backgroundColor: Color(0xFFFFA500),
                 automaticallyImplyLeading: false,
@@ -46,24 +45,23 @@ class _HomepageState extends State<Homepage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start, // Asegura alineación a la izquierda
                         children: [
                           Padding(
-                            padding: EdgeInsets.fromLTRB(0, 60, 0, 5),
+                            padding: const EdgeInsets.only(left: 16, top: 60),
                             child: Text(
-                              "What's up :)",
-                              textAlign: TextAlign.left,
+                              "greetings".tr(),
                               style: TextStyle(
                                 fontSize: 24,
                               ),
                             ).tr(),
                           ),
                           Padding(
-                            padding: EdgeInsets.fromLTRB(24, 0, 0, 5),
+                            padding: const EdgeInsets.only(left: 14, bottom: 5),
                             child: Text(
-                              'What topic you wanna review today..?',
-                              textAlign: TextAlign.left,
+                              "home_desc".tr(),
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: 16,
                               ),
                             ).tr(),
                           ),
@@ -71,25 +69,25 @@ class _HomepageState extends State<Homepage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: SvgPicture.asset(
-                          'assets/squirrel-svgrepo-com.svg',
-                          width: 80,
-                          height: 80,
-
-                          // Color responsiveness, en caso de que sea necesario
-
-                          // colorFilter: ColorFilter.mode(
-                          //   Theme.of(context).iconTheme.color!,
-                          //   BlendMode.srcIn,
-                          // ),
+                        child: Builder(
+                          builder: (context) {
+                            bool isDarkMode =
+                                Theme.of(context).brightness == Brightness.dark;
+                            return Image.asset(
+                              isDarkMode
+                                  ? 'assets/bundle-ardilla0blanco.png' // Imagen para tema oscuro
+                                  : 'assets/bundle-ardilla0.png', // Imagen para tema claro
+                              width: 80,
+                              height: 80,
+                            );
+                          },
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
               ),
             ),
-
             body: Column(
               children: [
                 mounted
@@ -100,9 +98,7 @@ class _HomepageState extends State<Homepage> {
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                // ignore: prefer_const_constructors
-                                return Center(
-                                    // ignore: prefer_const_constructors
+                                return const Center(
                                     child: CircularProgressIndicator());
                               }
 
@@ -130,8 +126,8 @@ class _HomepageState extends State<Homepage> {
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.all(15),
-                                    child: const Text(
-                                      "Last Topics",
+                                    child: Text(
+                                      "recents".tr(),
                                       textAlign: TextAlign.left,
                                     ).tr(),
                                   ),
@@ -140,13 +136,13 @@ class _HomepageState extends State<Homepage> {
                                   // CHIPS INICIO
                                   // ignore: prefer_const_constructors
                                   SingleChildScrollView(
-                                    scrollDirection: Axis
-                                        .horizontal, // Permite desplazamiento horizontal
+                                    scrollDirection: Axis.horizontal,
                                     child: Row(
                                       children:
                                           List.generate(topics.length, (index) {
                                         final topic = topics[index];
-                                        final shape = RoundedRectangleBorder(
+
+                                        RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(8.0),
                                           side: const BorderSide(
@@ -160,11 +156,8 @@ class _HomepageState extends State<Homepage> {
 
                                         return Padding(
                                             padding: EdgeInsets.only(
-                                              left: index == 0
-                                                  ? 16.0
-                                                  : 0, 
-                                              right:
-                                                  8.0, 
+                                              left: index == 0 ? 16.0 : 0,
+                                              right: 8.0,
                                             ),
                                             child: GestureDetector(
                                               onTap: () {
@@ -176,14 +169,15 @@ class _HomepageState extends State<Homepage> {
                                               },
                                               child: Container(
                                                 constraints: BoxConstraints(
-                                                  maxWidth:
-                                                      120, 
+                                                  maxWidth: 150,
                                                 ),
                                                 child: Chip(
                                                   label: Text(
                                                     topic.name,
-                                                    overflow: TextOverflow
-                                                        .ellipsis, // Abrevia el texto con puntos suspensivos si es necesario
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontFamily: 'JosefinSans',
+                                                    ),
                                                   ),
                                                   backgroundColor:
                                                       Colors.transparent,
@@ -192,10 +186,8 @@ class _HomepageState extends State<Homepage> {
                                                         BorderRadius.circular(
                                                             8.0),
                                                     side: BorderSide(
-                                                        color:
-                                                            Color(0xFFFFB84D),
-                                                        width:
-                                                            2.5), // Borde transparente
+                                                        color: Color(0xFFFFB84D),
+                                                        width: 2.5), // Borde transparente
                                                   ),
                                                 ),
                                               ),
@@ -219,34 +211,72 @@ class _HomepageState extends State<Homepage> {
 
                                   // ##
                                   // Grid builder
-                                  Container(
-                                    margin: const EdgeInsets.all(2),
-                                    child: GridView.builder(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        mainAxisExtent: 100,
-                                        mainAxisSpacing: 5,
-                                        crossAxisSpacing: .0,
-                                      ),
-                                      itemCount: favoriteTopics.length,
-                                      itemBuilder: (context, index) {
-                                        final topicId = favoriteTopics[index];
-                                        final topic = topics.firstWhere(
-                                            (t) => t.uid == topicId);
+                                  Center(
+                                    child: Container(
+                                        margin: const EdgeInsets.all(
+                                            16.0), // Margen de 16 dp alrededor del GridView
+                                        child: favoriteTopics.isNotEmpty
+                                            ? GridView.builder(
+                                                shrinkWrap: true,
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                gridDelegate:
+                                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                                        crossAxisCount: 2,
+                                                        childAspectRatio:
+                                                            3 / 2),
+                                                itemCount:
+                                                    favoriteTopics.length,
+                                                itemBuilder: (context, index) {
+                                                  final topicId =
+                                                      favoriteTopics[index];
+                                                  final topic =
+                                                      topics.firstWhere((t) =>
+                                                          t.uid == topicId);
 
-                                        return CustomCard(
-                                          title: topic.name,
-                                          borderColor: Colors.transparent,
-                                          bgcolor: Color(0xFFFFCC80),
-                                          onTap: () =>
-                                              _navigateToDetailScreen(topic),
-                                        );
-                                      },
-                                    ),
+                                                  return SizedBox(
+                                                    height:
+                                                        100, // Set the specific height here
+                                                    child: CustomCard(
+                                                      title: topic.name,
+                                                      borderColor:
+                                                          Colors.transparent,
+                                                      bgcolor:
+                                                          Color(0xFFFFCC80),
+                                                      onTap: () =>
+                                                          _navigateToDetailScreen(
+                                                              topic),
+                                                    ),
+                                                  );
+                                                },
+                                              )
+                                            : Container(
+                                                margin: const EdgeInsets.only(
+                                                    top:
+                                                        80.0), // Margen de 90 dp en la parte superior
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Image.asset(
+                                                      'assets/bundle-ardilla2.png',
+                                                      width: 100,
+                                                      height: 100,
+                                                    ),
+                                                    const SizedBox(
+                                                        height:
+                                                            16.0), // Espacio entre la imagen y el texto
+                                                    const Text(
+                                                      'There are no favorite topics',
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          color: Colors.grey),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )),
                                   )
                                 ],
                               );

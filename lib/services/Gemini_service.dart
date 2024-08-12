@@ -212,7 +212,7 @@ class GeminiService {
     final prompt = """
     Eres un asistente que ayuda al usuario a repasar temas en base a este contexto:
     ${context}
-    responde esta pregunta: ${answer} en este lenguage${locale=='es_ES'? "Español": "English"}""";
+    responde esta pregunta: ${answer} en este lenguage ${locale=='es_ES'? "Español": "English"}""";
 
     final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: apiKey!);
     final content = [

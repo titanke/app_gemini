@@ -44,6 +44,10 @@ class _ChatpageState extends State<Chatpage>
   void didChangeDependencies() {
     super.didChangeDependencies();
     context.locale;
+    messages = [
+      Message("chat introduction".tr(),
+          false)
+    ];
   }
 
   @override
@@ -132,6 +136,7 @@ class _ChatpageState extends State<Chatpage>
                 onPressed: () {
                   if (messages.length > 1)
                     setState(() {
+                      contextTopic= "";
                       messages = [
                         Message("chat introduction".tr(),false)
                       ];
@@ -196,7 +201,7 @@ class _ChatpageState extends State<Chatpage>
               ),
               Column(
                 children: [
-                  if (messages.length == 1)
+                  if (contextTopic == "")
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -210,24 +215,36 @@ class _ChatpageState extends State<Chatpage>
                               ),
                               child: GestureDetector(
                                 onTap: () async {
-                                  final SharedPreferences prefs =
-                                      await SharedPreferences.getInstance();
+                                  final SharedPreferences prefs = await SharedPreferences.getInstance();
                                   final userId = prefs.getString('user_id');
-                                  contextTopic = await db.getTranscriptContent(
-                                      userId!, topic.uid);
+
+                                  setState(() {
+                                    messages.add(Message(topic.name, true));
+                                    isLoading = true;
+                                  });
+                                  contextTopic = await db.getTranscriptContent(userId!, topic.uid);
+
                                   if (contextTopic == "")
-                                    showToast(
-                                        message: "El tema no tiene contenido");
+                                    setState(() {
+                                      messages.add(Message(
+                                          "${"no_topics".tr()}",
+                                          false));
+                                      selectedTopic = topic;
+                                    });
                                   else {
                                     setState(() {
-                                      messages.add(Message(topic.name, true));
                                       messages.add(Message(
                                           "${"chat_what".tr()} ${topic.name}?",
                                           false));
                                       selectedTopic = topic;
                                     });
                                   }
+
+                                  setState(() {
+                                    isLoading = false;
+                                  });
                                 },
+
                                 child: Container(
                                   constraints: BoxConstraints(
                                     maxWidth: 120,
@@ -236,6 +253,9 @@ class _ChatpageState extends State<Chatpage>
                                     label: Text(
                                       topic.name,
                                       overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: 'JosefinSans',
+                                      ),
                                     ),
                                     backgroundColor: Colors.transparent,
                                     shape: RoundedRectangleBorder(
@@ -273,7 +293,7 @@ class _ChatpageState extends State<Chatpage>
                         IconButton(
                           onPressed: () {
                             if (contextTopic == "") {
-                              showToast(message: "Debes seleccionar un tema");
+                              showToast(message: "error_context".tr());
                               return;
                             }
 
