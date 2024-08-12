@@ -16,3 +16,19 @@ WalNotes utilizes the Gemini API in key functionalities. The API is used for con
   <img src="https://github.com/user-attachments/assets/a8b120d0-88ae-4e30-9351-ac5de56f1ce9" height="500"/>
 </p>
 
+### Technologies
+Flutter and Firebase, Gemini API.
+
+
+APK: https://drive.google.com/file/d/1HNeGmrd7xmQTXa2_I0JddaufxlpiSr3-/view?usp=sharing
+
+### Credits.
+Developers: 
+* Cruz Gonzalo | gonzalo0324@hotmail.com
+
+* Chambilla Josue | josuejob_galeno@hotmail.com 
+
+* Tuco Gabriel | gabriel_tuco@hotmail.com
+  
+Ilustrations:
+Squirrel ilustrations desinged by Freepik.
