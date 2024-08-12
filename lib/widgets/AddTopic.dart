@@ -248,7 +248,7 @@ class _AddTopicState extends State<AddTopic> {
                 Center(
                   child: Text(
                     'Add Topic',
-                  ),
+                  ).tr(),
                 ),
               ],
             ),
@@ -286,7 +286,7 @@ class _AddTopicState extends State<AddTopic> {
                       Container(
                         margin: EdgeInsets.all(20),
                         child: Text(
-                          "Add the topic name",
+                          "Add the Topic Name",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -297,7 +297,7 @@ class _AddTopicState extends State<AddTopic> {
                       TextFormField(
                         controller: _nameController,
                         decoration: InputDecoration(
-                          labelText: "Name",
+                          labelText: "Name".tr(),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -331,7 +331,7 @@ class _AddTopicState extends State<AddTopic> {
                 title: Text("".tr(), style: TextStyle(color: Colors.orange)),
                 content: Column(
                   children: [
-            Text('Add your topic notes (PDF/Pictures)'),
+            Text('Add your topic notes (PDF/Pictures)').tr(),
             SizedBox(height: 20),
           
             GestureDetector(
@@ -364,14 +364,14 @@ class _AddTopicState extends State<AddTopic> {
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                )
+                                ).tr()
                               ],
                             ),
                           ),
                         ),
                       ),
               SizedBox(height: 12),
-            Text('Or', textAlign: TextAlign.center, style: TextStyle(fontSize: 18)),
+            Text('Or', textAlign: TextAlign.center, style: TextStyle(fontSize: 18)).tr(),
             SizedBox(height: 12),
 
             GestureDetector(
@@ -404,7 +404,7 @@ class _AddTopicState extends State<AddTopic> {
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
-                            )
+                            ).tr()
                           ],
                         ),
                 ),
@@ -424,7 +424,7 @@ class _AddTopicState extends State<AddTopic> {
                     leading: Icon(Icons.insert_drive_file, color: Colors.black),
                     title: Text(file.fileName),
                     subtitle: file.isUploaded
-                        ? Text('${file.size} - Uploaded',
+                        ? Text('${file.size} - ${"Uploaded".tr()}',
                             style: TextStyle(color: Colors.green))
                         : LinearProgressIndicator(value: file.progress),
                     trailing: file.isUploaded
@@ -461,12 +461,12 @@ class _AddTopicState extends State<AddTopic> {
                         width: 12,
                       ),
                       Text(
-                        "Save Notes",
+                        "save_notes",
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
-                      )
+                      ).tr()
                     ],
                   ),
                 ),
