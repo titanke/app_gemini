@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -54,37 +55,37 @@ class OnBoardingPageState extends State<IntroPage> {
  
       pages: [
         PageViewModel(
-          title: "Would you like to quickly recall your notes?",
+          title: "Would you like to quickly recall your notes?".tr(),
           body:
-              "This app will take care of everything, just upload your notes (photos, pdfs) and we will prepare a quiz and a personalized chat for you.",
+              "This app will take care of everything, just upload your notes (photos, pdfs) and we will prepare a quiz and a personalized chat for you.".tr(),
           image: _buildImage('Add.jpg'),
           decoration: pageDecoration,
         ),
             PageViewModel(
-          title: "Multiple Topics",
+          title: "Multiple Topics".tr(),
           body:
-              "You can have multiple topics, each of them will have a personalized quiz, just tap on the topic and it will show you a page where you can take the quiz or see your notes",
+              "You can have multiple topics, each of them will have a personalized quiz, just tap on the topic and it will show you a page where you can take the quiz or see your notes".tr(),
           image: _buildImage('top.png'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Custom quiz based on your notes",
+          title: "Custom quiz based on your notes".tr(),
           body:
-              "Based on your notes, the application will generate a quiz with different types of questions",
+              "Based on your notes, the application will generate a quiz with different types of questions".tr(),
           image: _buildImage('quiz.png'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Study Companion",
+          title: "Study Companion".tr(),
           body:
-              "Custom chat that responds to you, based on the topic of your choice",
+              "Custom chat that responds to you, based on the topic of your choice".tr(),
           image: _buildImage('chat.png'),
           decoration: pageDecoration,
         ),
     
     
         PageViewModel(
-          title: "Are you ready?, start uploading the notes of your first topic",
+          title: "Are you ready?, start uploading the notes of your first topic".tr(),
           bodyWidget: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             
@@ -106,9 +107,9 @@ class OnBoardingPageState extends State<IntroPage> {
       nextFlex: 0,
       showBackButton: false,
       back: const Icon(Icons.arrow_back),
-      skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600)),
+      skip: const Text('Skip', style: TextStyle(fontWeight: FontWeight.w600)).tr(),
       next: const Icon(Icons.arrow_forward),
-      done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
+      done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)).tr(),
       curve: Curves.fastLinearToSlowEaseIn,
       controlsMargin: const EdgeInsets.all(16),
       controlsPadding: kIsWeb

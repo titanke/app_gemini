@@ -230,9 +230,7 @@ class _HomepageState extends State<Homepage> {
                                                 itemBuilder: (context, index) {
                                                   final topicId =
                                                       favoriteTopics[index];
-                                                  final topic =
-                                                      topics.firstWhere((t) =>
-                                                          t.uid == topicId);
+                                                     final topic = topics.firstWhere((t) => t.uid == topicId, orElse: () => Topic(uid: '', name: 'Unknown'));
 
                                                   return SizedBox(
                                                     height:

@@ -151,7 +151,7 @@ class _MyHomePageState extends State<Menu> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   buildNavBarItem(Icons.home, "Home".tr(), 0),
-                  buildNavBarItem(Icons.book, "Topics".tr(), 1),
+                  buildNavBarItem(Icons.book, "My Topics".tr(), 1),
                   // Add the icon with a circled border
                   Container(
                     decoration: BoxDecoration(
