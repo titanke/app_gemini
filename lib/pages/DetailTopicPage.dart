@@ -23,8 +23,6 @@ class _DetailScreenState extends State<DetailScreen> {
       appBar: AppBar(
         title: Text(
           topic.name,
-          style: TextStyle(
-              color: Theme.of(context).appBarTheme.titleTextStyle?.color),
         ),
         backgroundColor:
             Theme.of(context).appBarTheme.backgroundColor ?? Color(0xFFFFA500),

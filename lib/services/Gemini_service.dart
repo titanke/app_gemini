@@ -40,6 +40,7 @@ class GeminiService {
     title
     ![description]($newurl)
     if the file isn't an image only transcribe it into Markdown format without include the previous format of url.
+    if the file is huge, summarize it and use the Markdown format.
     """;
 
     final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: apiKey!);

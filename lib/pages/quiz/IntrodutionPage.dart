@@ -57,6 +57,8 @@ class _QuizIntroductionState extends State<QuizIntroduction> {
         child: _isLoading
             ?
             Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CircularProgressIndicator(),
                 Text("load_questions".tr()),
@@ -74,18 +76,31 @@ class _QuizIntroductionState extends State<QuizIntroduction> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+
                 ElevatedButton(
-                  onPressed: _startQuiz,
-                  child: Text("Continue").tr(),
-                ),
-                SizedBox(width: 20),
-                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                  ),
                   onPressed: () {
                    Navigator.pushNamed(context, '/detail', arguments: topic);
                        // Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(topic: topic)));
                   },
-                  child: Text("Cancel").tr(),
+                  child: Text(
+                      "Cancel",
+                    style: TextStyle(
+                      color: Colors.white
+                    ),
+                  ).tr(),
                 ),
+                SizedBox(width: 20),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFFFA500),
+                  ),
+                  onPressed: _startQuiz,
+                  child: Text("Continue").tr(),
+                ),
+
               ],
             ),
           ],
