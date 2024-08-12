@@ -126,7 +126,7 @@ class _MyHomePageState extends State<Menu> {
     Homepage(),
     Topicspage(),
     Chatpage(),
-    PerfilPage()
+    PerfilPage(),
   ];
 
   void _onTap(int index) {

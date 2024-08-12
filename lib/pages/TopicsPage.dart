@@ -121,29 +121,37 @@ class _TopicspageState extends State<Topicspage> {
                   return InkWell(
                     onTap: () => _navigateToDetailScreen(topic),
                     child: Container(
-                      color: isFavorite ? Color(0xFFFFA500) : const Color.fromARGB(0, 255, 255, 255), 
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                           
                             Expanded(
                               child: Text(
                                 topic.name,
                                 style: const TextStyle(fontSize: 20),
                               ),
                             ),
+                            IconButton(
+                                 icon: Icon(
+                                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                                        color: isFavorite ? Colors.deepOrangeAccent : Colors.grey,
+                                      ),
+                                 onPressed: () {
+                                  _toggleFavorite(topic.uid);
+
+                                 },
+                               ),
+                               
                             PopupMenuButton<int>(
                               icon: Icon(Icons.more_vert),
                               onSelected: (value) {
                                 switch (value) {
                                   case 0:
-                                    _toggleFavorite(topic.uid);
-                                    break;
-                                  case 1:
                                     _showEditModal(topic.uid, topic.name);
                                     break;
-                                  case 2:
+                                  case 1:
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -172,22 +180,9 @@ class _TopicspageState extends State<Topicspage> {
                                 }
                               },
                               itemBuilder: (context) => [
+                              
                                 PopupMenuItem(
-                      
                                   value: 0,
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        isFavorite ? Icons.favorite : Icons.favorite_border,
-                                        color: isFavorite ? Colors.deepOrangeAccent : Colors.grey,
-                                      ),
-                                      SizedBox(width: 8),
-                                      Text(isFavorite ? "Unfavorite" : "Favorite").tr(),
-                                    ],
-                                  ),
-                                ),
-                                PopupMenuItem(
-                                  value: 1,
                                   child: Row(
                                     children: [
                                       Icon(Icons.edit),
@@ -197,7 +192,7 @@ class _TopicspageState extends State<Topicspage> {
                                   ),
                                 ),
                                 PopupMenuItem(
-                                  value: 2,
+                                  value: 1,
                                   child: Row(
                                     children: [
                                       Icon(Icons.delete),

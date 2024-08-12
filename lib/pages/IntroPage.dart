@@ -31,8 +31,8 @@ class OnBoardingPageState extends State<IntroPage> {
   }
   
 
-  Widget _buildImage(String assetName, [double width = 350]) {
-    return Image.asset('assets/$assetName', width: width);
+  Widget _buildImage(String assetName, [double width = 350,double height = 350]) {
+    return Image.asset('assets/$assetName', width: width,height: height);
   }
 
   @override
@@ -43,13 +43,11 @@ class OnBoardingPageState extends State<IntroPage> {
       titleTextStyle: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
       bodyTextStyle: bodyStyle,
       bodyPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-      pageColor: Colors.white,
       imagePadding: EdgeInsets.zero,
     );
 
     return IntroductionScreen(
       key: introKey,
-      globalBackgroundColor: Colors.white,
       allowImplicitScrolling: false,
       autoScrollDuration: null,
       infiniteAutoScroll: false,
@@ -59,7 +57,7 @@ class OnBoardingPageState extends State<IntroPage> {
           title: "Would you like to quickly recall your notes?",
           body:
               "This app will take care of everything, just upload your notes (photos, pdfs) and we will prepare a quiz and a personalized chat for you.",
-          image: _buildImage('sq.png'),
+          image: _buildImage('Add.jpg'),
           decoration: pageDecoration,
         ),
             PageViewModel(
