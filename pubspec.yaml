@@ -94,6 +94,44 @@ flutter:
     - assets/chat.png
     - assets/quiz.png
     - assets/top.png
+  fonts:
+    - family: JosefinSans
+      fonts:
+        - asset: assets/fonts/JosefinSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/JosefinSans-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/JosefinSans-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/JosefinSans-ExtraLightItalic.ttf
+          weight: 200
+          style: italic
+        - asset: assets/fonts/JosefinSans-Italic.ttf
+          style: italic
+        - asset: assets/fonts/JosefinSans-Light.ttf
+          weight: 300
+        - asset: assets/fonts/JosefinSans-LightItalic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/JosefinSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/JosefinSans-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/JosefinSans-Regular.ttf
+        - asset: assets/fonts/JosefinSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/JosefinSans-SemiBoldItalic.ttf
+          weight: 600
+          style: italic
+        - asset: assets/fonts/JosefinSans-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/JosefinSans-ThinItalic.ttf
+          weight: 100
+          style: italic
+        - asset: assets/fonts/JosefinSans-VariableFont_wght.ttf
+
 
   # assets:
   #   - images/a_dot_burr.jpeg

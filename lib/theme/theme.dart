@@ -7,6 +7,9 @@ ThemeData lightMode = ThemeData(
       primary: Colors.black,
       secondary: Colors.black
   ),
+  textTheme: TextTheme(
+    bodyMedium: TextStyle(fontFamily: "JosefinSans")
+  ),
   progressIndicatorTheme: ProgressIndicatorThemeData(
     color: Colors.orangeAccent, // Color del CircularProgressIndicator en Light Mode
   ),
