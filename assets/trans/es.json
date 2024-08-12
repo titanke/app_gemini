@@ -4,6 +4,7 @@
     "File": "Doc",
     "Search":"Buscar",
     " Don't have an account?": "No tienes una cuenta?",
+    "error_login": "Correo o contraseña incorrecta",
     "Some error signing out occured":"Ocurrio un error al cerrar sesion",
     "Please enter a topic name":"Por favor ingrese el nombre del tema",
     "Sign Up": "Registrarse",
@@ -121,5 +122,11 @@
     "Custom quiz based on your notes":"Quiz personalizado basado en sus apuntes",
     "Based on your notes, the application will generate a quiz with different types of questions":"A partir de tus apuntes, la aplicación generará un cuestionario con diferentes tipos de preguntas",
     "Custom chat that responds to you, based on the topic of your choice":"Chat personalizado que te responde en función del tema que elijas",
-    "Are you ready?, start uploading the notes of your first topic":"¿Estás listo?, empieza a subir tus apuntes de tu primer tema"
+    "Are you ready?, start uploading the notes of your first topic":"¿Estás listo?, empieza a subir tus apuntes de tu primer tema",
+    "Please enter your age": "Ingresa tu edad",
+    "Please enter a valid number": "Ingresa un numero valido",
+    "Please enter your password": "Ingresa tu contraseña",
+    "Password must be at least 8 characters": "La constraseña debe tener almenos 8 caracteres",
+    "Please enter your email": "Ingresa tu correo",
+    "Please enter a valid email": "Ingresa un correo valido"
 }

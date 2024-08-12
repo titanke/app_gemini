@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
       showToast(message: "User is successfully signed in".tr());
       Navigator.pushReplacementNamed(context, "/home");
     } else {
-      showToast(message: "Some error occured".tr());
+      showToast(message: "error_login".tr());
     }
   }
 

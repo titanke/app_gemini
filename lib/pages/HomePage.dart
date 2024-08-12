@@ -45,7 +45,8 @@ class _HomepageState extends State<Homepage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.start, // Asegura alineación a la izquierda
+                        crossAxisAlignment: CrossAxisAlignment
+                            .start, // Asegura alineación a la izquierda
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(left: 16, top: 60),
@@ -92,193 +93,220 @@ class _HomepageState extends State<Homepage> {
               children: [
                 mounted
                     ? Expanded(
-                        child: SingleChildScrollView(
-                          child: StreamBuilder<List<Topic>>(
-                            stream: db.getTopicsUser(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              }
+                        child: StreamBuilder<List<Topic>>(
+                          stream: db.getTopicsUser(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
 
-                              if (snapshot.hasError) {
-                                return Center(
-                                    child: Text('Error: ${snapshot.error}'));
-                              }
+                            if (snapshot.hasError) {
+                              return Center(
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          top:20.0),
+                                      child: Text('Error: ${snapshot.error}')));
+                            }
 
-                              if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                                return Center(
-                                  child: Text(
-                                    "Don't have a topic?, add one".tr(),
-                                    textAlign: TextAlign.center,
-                                  ).tr(),
-                                );
-                              }
-                              final topics = snapshot.data!
-                                ..sort((a, b) => b.lastInteracted
-                                    .compareTo(a.lastInteracted));
-
-                              //
-                              return Column(
-                                crossAxisAlignment:CrossAxisAlignment.start, // Add this line
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.all(15),
-                                    child: Text(
-                                      "recents".tr(),
-                                      textAlign: TextAlign.left,
+                            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                              return Center(
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                    Text(
+                                      "Don't have a topic?, add one".tr(),
+                                      textAlign: TextAlign.center,
                                     ).tr(),
-                                  ),
 
-                                  // #//////////////////////////////////////////////////////////////////////////////////////////
-                                  // CHIPS INICIO
-                                  // ignore: prefer_const_constructors
-                                  SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      children:
-                                          List.generate(topics.length, (index) {
-                                        final topic = topics[index];
+                                    SizedBox(height: 20),
 
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                          side: const BorderSide(
-                                              color: Color(
-                                                  0xFFFFB84D)), // Eliminar el borde
+                                    Builder(
+                                      builder: (context) {
+                                        bool isDarkMode =
+                                            Theme.of(context).brightness ==
+                                                Brightness.dark;
+                                        return Image.asset(
+                                          isDarkMode
+                                              ? 'assets/arrow_white.png' // Imagen para tema oscuro
+                                              : 'assets/arrow.png', // Imagen para tema claro
+                                          width: 80,
+                                          height: 80,
                                         );
+                                      },
+                                    ),
+                                  ])
+                              );
+                            }
+                            final topics = snapshot.data!
+                              ..sort((a, b) =>
+                                  b.lastInteracted.compareTo(a.lastInteracted));
 
-                                        // Imprimir el color del borde actual en la consola
-                                        // print(
-                                        //     "Color del borde actual: ${shape.side.color}");
+                            //
+                            return Column(
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.start, // Add this line
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(15),
+                                  child: Text(
+                                    "recents".tr(),
+                                    textAlign: TextAlign.left,
+                                  ).tr(),
+                                ),
 
-                                        return Padding(
-                                            padding: EdgeInsets.only(
-                                              left: index == 0 ? 16.0 : 0,
-                                              right: 8.0,
-                                            ),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  topic.lastInteracted =
-                                                      DateTime.now();
-                                                });
-                                                _navigateToDetailScreen(topic);
-                                              },
-                                              child: Container(
-                                                constraints: BoxConstraints(
-                                                  maxWidth: 150,
+                                // #//////////////////////////////////////////////////////////////////////////////////////////
+                                // CHIPS INICIO
+                                // ignore: prefer_const_constructors
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children:
+                                        List.generate(topics.length, (index) {
+                                      final topic = topics[index];
+
+                                      RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        side: const BorderSide(
+                                            color: Color(
+                                                0xFFFFB84D)), // Eliminar el borde
+                                      );
+
+                                      // Imprimir el color del borde actual en la consola
+                                      // print(
+                                      //     "Color del borde actual: ${shape.side.color}");
+
+                                      return Padding(
+                                          padding: EdgeInsets.only(
+                                            left: index == 0 ? 16.0 : 0,
+                                            right: 8.0,
+                                          ),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                topic.lastInteracted =
+                                                    DateTime.now();
+                                              });
+                                              _navigateToDetailScreen(topic);
+                                            },
+                                            child: Container(
+                                              constraints: BoxConstraints(
+                                                maxWidth: 150,
+                                              ),
+                                              child: Chip(
+                                                label: Text(
+                                                  topic.name,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontFamily: 'JosefinSans',
+                                                  ),
                                                 ),
-                                                child: Chip(
-                                                  label: Text(
-                                                    topic.name,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      fontFamily: 'JosefinSans',
-                                                    ),
-                                                  ),
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
-                                                    side: BorderSide(
-                                                        color: Color(0xFFFFB84D),
-                                                        width: 2.5), // Borde transparente
-                                                  ),
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                  side: BorderSide(
+                                                      color: Color(0xFFFFB84D),
+                                                      width:
+                                                          2.5), // Borde transparente
                                                 ),
                                               ),
-                                            ));
-                                      }),
-                                    ),
+                                            ),
+                                          ));
+                                    }),
                                   ),
+                                ),
 
-                                  // CHIPS FIN
+                                // CHIPS FIN
 
-                                  // Sección de favoritos
-                                  // =>
-                                  Padding(
-                                    padding: const EdgeInsets.all(
-                                        15), // Margen superior de 8 dp
-                                    child: const Text(
-                                      "Favorite topics",
-                                      textAlign: TextAlign.left,
-                                    ).tr(),
-                                  ),
+                                // Sección de favoritos
+                                // =>
+                                Padding(
+                                  padding: const EdgeInsets.all(
+                                      15), // Margen superior de 8 dp
+                                  child: const Text(
+                                    "Favorite topics",
+                                    textAlign: TextAlign.left,
+                                  ).tr(),
+                                ),
 
-                                  // ##
-                                  // Grid builder
-                                  Center(
-                                    child: Container(
-                                        margin: const EdgeInsets.all(
-                                            16.0), // Margen de 16 dp alrededor del GridView
-                                        child: favoriteTopics.isNotEmpty
-                                            ? GridView.builder(
-                                                shrinkWrap: true,
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                gridDelegate:
-                                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                                        crossAxisCount: 2,
-                                                        childAspectRatio:
-                                                            3 / 2),
-                                                itemCount:
-                                                    favoriteTopics.length,
-                                                itemBuilder: (context, index) {
-                                                  final topicId =
-                                                      favoriteTopics[index];
-                                                     final topic = topics.firstWhere((t) => t.uid == topicId, orElse: () => Topic(uid: '', name: 'Unknown'));
+                                // ##
+                                // Grid builder
+                                Center(
+                                  child: Container(
+                                      margin: const EdgeInsets.all(
+                                          16.0), // Margen de 16 dp alrededor del GridView
+                                      child: favoriteTopics.isNotEmpty
+                                          ? GridView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              gridDelegate:
+                                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                                      crossAxisCount: 2,
+                                                      childAspectRatio: 3 / 2),
+                                              itemCount: favoriteTopics.length,
+                                              itemBuilder: (context, index) {
+                                                final topicId =
+                                                    favoriteTopics[index];
+                                                final topic = topics.firstWhere(
+                                                    (t) => t.uid == topicId,
+                                                    orElse: () => Topic(
+                                                        uid: '',
+                                                        name: 'Unknown'));
 
-                                                  return SizedBox(
-                                                    height:
-                                                        100, // Set the specific height here
-                                                    child: CustomCard(
-                                                      title: topic.name,
-                                                      borderColor:
-                                                          Colors.transparent,
-                                                      bgcolor:
-                                                          Color(0xFFFFCC80),
-                                                      onTap: () =>
-                                                          _navigateToDetailScreen(
-                                                              topic),
-                                                    ),
-                                                  );
-                                                },
-                                              )
-                                            : Container(
-                                                margin: const EdgeInsets.only(
-                                                    top:
-                                                        80.0), // Margen de 90 dp en la parte superior
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Image.asset(
-                                                      'assets/bundle-ardilla2.png',
-                                                      width: 100,
-                                                      height: 100,
-                                                    ),
-                                                    const SizedBox(
-                                                        height:
-                                                            16.0), // Espacio entre la imagen y el texto
-                                                    const Text(
-                                                      'There are no favorite topics',
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          color: Colors.grey),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )),
-                                  )
-                                ],
-                              );
-                            },
-                          ),
+                                                return SizedBox(
+                                                  height:
+                                                      100, // Set the specific height here
+                                                  child: CustomCard(
+                                                    title: topic.name,
+                                                    borderColor:
+                                                        Colors.transparent,
+                                                    bgcolor: Color(0xFFFFCC80),
+                                                    onTap: () =>
+                                                        _navigateToDetailScreen(
+                                                            topic),
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                          : Container(
+                                              margin: const EdgeInsets.only(
+                                                  top:
+                                                      80.0), // Margen de 90 dp en la parte superior
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Image.asset(
+                                                    'assets/bundle-ardilla2.png',
+                                                    width: 100,
+                                                    height: 100,
+                                                  ),
+                                                  const SizedBox(
+                                                      height:
+                                                          16.0), // Espacio entre la imagen y el texto
+                                                  const Text(
+                                                    'There are no favorite topics',
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        color: Colors.grey),
+                                                  ),
+                                                ],
+                                              ),
+                                            )),
+                                )
+                              ],
+                            );
+                          },
                         ),
                       )
                     : Text('Loading..').tr(),

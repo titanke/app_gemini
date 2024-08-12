@@ -111,6 +111,8 @@ flutter:
     - assets/quiz.png
     - assets/top.png
     - assets/Add.jpg
+    - assets/arrow.png
+    - assets/arrow_white.png
   fonts:
     - family: JosefinSans
       fonts:

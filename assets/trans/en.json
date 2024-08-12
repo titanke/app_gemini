@@ -6,6 +6,7 @@
     "Please enter a topic name":"Please enter a topic name",
     "Some error signing out occured":"Some error signing out occured",
     " Don't have an account?": "Don't have an account?",
+    "error_login": "Incorrect email or password",
     "Sign Up": "Sign Up",
     "Email": "Email",
     "Password": "Password",
@@ -121,5 +122,12 @@
     "Custom quiz based on your notes":"Custom quiz based on your notes",
     "Based on your notes, the application will generate a quiz with different types of questions":"Based on your notes, the application will generate a quiz with different types of questions",
     "Custom chat that responds to you, based on the topic of your choice":"Custom chat that responds to you, based on the topic of your choice",
-    "Are you ready?, start uploading the notes of your first topic":"Are you ready?, start uploading the notes of your first topic"
+    "Are you ready?, start uploading the notes of your first topic":"Are you ready?, start uploading the notes of your first topic",
+    "Please enter your age": "Please enter your age",
+    "Please enter a valid number": "Please enter a valid number",
+    "Please enter your password": "Please enter your password",
+    "Password must be at least 8 characters": "Password must be at least 8 characters",
+    "Please enter your email": "Please enter your email",
+    "Please enter a valid email": "Please enter a valid email"
+
 }

@@ -102,7 +102,34 @@ class _TopicspageState extends State<Topicspage> {
               }
 
               if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text("Don't have a topic?, add one").tr());
+                return Center(
+                    child: Column(
+                        mainAxisAlignment:
+                        MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Don't have a topic?, add one".tr(),
+                            textAlign: TextAlign.center,
+                          ).tr(),
+
+                          SizedBox(height: 20),
+
+                          Builder(
+                            builder: (context) {
+                              bool isDarkMode =
+                                  Theme.of(context).brightness ==
+                                      Brightness.dark;
+                              return Image.asset(
+                                isDarkMode
+                                    ? 'assets/arrow_white.png' // Imagen para tema oscuro
+                                    : 'assets/arrow.png', // Imagen para tema claro
+                                width: 80,
+                                height: 80,
+                              );
+                            },
+                          ),
+                        ])
+                );
               }
 
               final List<Topic> topics = snapshot.data!;
