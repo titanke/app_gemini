@@ -57,7 +57,7 @@
     "Correct answer":"Correct answer",
     "Incorrect answer":"Incorrect answer",
     "Next":"Next",
-    "Exit":"Salir",
+    "Exit":"Exit",
     "You have":"You have ",
     "answers of 5":"answers of 5",
     "File saved":"File saved",
@@ -106,6 +106,6 @@
     "notes_desc": "Upload your notes on the topic (PDF/Photos)",
     "save_notes": "Save Notes",
     "greetings": "Greetings!",
-    "home_desc": "Which topic would you like to \\nreview today?",
+    "home_desc": "Which topic would you like to \nreview today?",
     "recents": "Recent Topics"
 }
