@@ -35,10 +35,14 @@ class ThemeProvider with ChangeNotifier {
 
   Future<void> _loadThemeFromSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    _isDarkTheme = prefs.getBool('isDarkTheme') ?? false;
+    if (prefs.containsKey('isDarkTheme')) {
+      _isDarkTheme = prefs.getBool('isDarkTheme') ?? false;
+    } else {
+      final brightness = WidgetsBinding.instance.window.platformBrightness;
+      _isDarkTheme = brightness == Brightness.dark;
+    }
     notifyListeners();
   }
-
 //favorites 
   List<String> _favoriteTopics = [];
 

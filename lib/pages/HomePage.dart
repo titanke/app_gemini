@@ -223,7 +223,8 @@ class _HomepageState extends State<Homepage> {
                                   // Grid builder
                                   Container(
                                     margin: const EdgeInsets.all(2),
-                                    child: GridView.builder(
+                                    child: (topics.isNotEmpty && favoriteTopics.isNotEmpty)
+                                      ? GridView.builder(
                                       shrinkWrap: true,
                                       physics:
                                           const NeverScrollableScrollPhysics(),
@@ -237,8 +238,7 @@ class _HomepageState extends State<Homepage> {
                                       itemCount: favoriteTopics.length,
                                       itemBuilder: (context, index) {
                                         final topicId = favoriteTopics[index];
-                                        final topic = topics.firstWhere(
-                                            (t) => t.uid == topicId);
+                                        final topic = topics.firstWhere((t) => t.uid == topicId, orElse: () => Topic(uid: '', name: 'Unknown'));
 
                                         return CustomCard(
                                           title: topic.name,
@@ -248,8 +248,14 @@ class _HomepageState extends State<Homepage> {
                                               _navigateToDetailScreen(topic),
                                         );
                                       },
-                                    ),
-                                  )
+                                    )    : Container(
+                                  width: screenWidth,
+                                  height: screenHeight / 2,
+                                  child: Center(
+                                    child: Text('Add your favorite topic here').tr(),
+                                  ),
+                                ),       
+                            )
                                 ],
                               );
                             },

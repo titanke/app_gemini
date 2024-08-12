@@ -20,6 +20,8 @@ import 'package:provider/provider.dart';
 import 'package:app_gemini/widgets/theme_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:app_gemini/pages/IntroPage.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
@@ -45,12 +47,29 @@ void main() async{
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   Future<User?> _getUser() async {
     return FirebaseAuth.instance.currentUser;
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _requestCameraPermission();
+  }
+  Future<void> _requestCameraPermission() async {
+    var status = await Permission.camera.status;
+    if (!status.isGranted) {
+      await Permission.camera.request();
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<User?>(
@@ -60,7 +79,7 @@ class MyApp extends StatelessWidget {
           return Center(
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
-                  Colors.black), // Color blanco, si lo deseas
+                  Colors.black), 
             ),
           );
         } else {

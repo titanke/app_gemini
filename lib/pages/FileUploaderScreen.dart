@@ -170,7 +170,7 @@ class _FileUploaderScreenState extends State<FileUploaderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Subir Archivos'),
+        title: Text('Upload Notes'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -178,7 +178,7 @@ class _FileUploaderScreenState extends State<FileUploaderScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             
-            Text('Agrega contenido a tu tema subiendo archivos o tomando fotos de tu contenido:'),
+            Text('Add your topic notes (PDF/Pictures)'),
             SizedBox(height: 20),
             GestureDetector(
               onTap: _uploadFile,
@@ -205,7 +205,7 @@ class _FileUploaderScreenState extends State<FileUploaderScreen> {
                         width: 12,
                       ),
                       Text(
-                        "Subir Archivos",
+                        "Upload from your device",
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -218,7 +218,7 @@ class _FileUploaderScreenState extends State<FileUploaderScreen> {
             ),
 
             SizedBox(height: 12),
-            Text('o', textAlign: TextAlign.center, style: TextStyle(fontSize: 18)),
+            Text('Or', textAlign: TextAlign.center, style: TextStyle(fontSize: 18)),
             SizedBox(height: 12),
 
             GestureDetector(
@@ -246,7 +246,7 @@ class _FileUploaderScreenState extends State<FileUploaderScreen> {
                               width: 12,
                             ),
                             Text(
-                              "Tomar Fotos",
+                              "Take a Picture",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -306,7 +306,7 @@ class _FileUploaderScreenState extends State<FileUploaderScreen> {
                         width: 12,
                       ),
                       Text(
-                        "Subir archivos",
+                        "Save Notes",
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
