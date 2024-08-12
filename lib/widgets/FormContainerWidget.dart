@@ -45,28 +45,31 @@ class _FormContainerWidgetState extends State<FormContainerWidget> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: new TextFormField(
-        controller: widget.controller,
-        keyboardType: widget.inputType,
-        key: widget.fieldKey,
-        obscureText: widget.isPasswordField == true? _obscureText : false,
-        onSaved: widget.onSaved,
-        validator: widget.validator,
-        onFieldSubmitted: widget.onFieldSubmitted,
-        decoration: new InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          labelText: widget.hintText,
-          
-          suffixIcon: new GestureDetector(
-            onTap: () {
-              setState(() {
-                _obscureText = !_obscureText;
-              });
-            },
-            child:
-            widget.isPasswordField==true? Icon(_obscureText ? Icons.visibility_off : Icons.visibility, color: _obscureText == false ? Colors.blue : Color.fromARGB(0, 158, 158, 158),) : Text(""),
+      child: Padding(
+        padding: EdgeInsets.all(4),
+        child: new TextFormField(
+          controller: widget.controller,
+          keyboardType: widget.inputType,
+          key: widget.fieldKey,
+          obscureText: widget.isPasswordField == true? _obscureText : false,
+          onSaved: widget.onSaved,
+          validator: widget.validator,
+          onFieldSubmitted: widget.onFieldSubmitted,
+          decoration: new InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            labelText: widget.hintText,
+            
+            suffixIcon: new GestureDetector(
+              onTap: () {
+                setState(() {
+                  _obscureText = !_obscureText;
+                });
+              },
+              child:
+              widget.isPasswordField==true? Icon(_obscureText ? Icons.visibility_off : Icons.visibility, color: _obscureText == false ? Colors.blue : Color.fromARGB(0, 158, 158, 158),) : Text(""),
+            ),
           ),
         ),
       ),

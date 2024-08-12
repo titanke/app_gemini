@@ -85,159 +85,160 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+
+    return Expanded(
+      child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.transparent,
-        ),
-        body: PopScope(
-          canPop: false,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Ícono encima del título
-                  Image.asset(
-                    'assets/bundle-ardilla1.png', // Ruta del archivo del ícono
-                    width:
-                        150, // Ajusta el tamaño del ícono según sea necesario
-                    height: 150,
-                  ),
-                  Text(
-                    "Nombre",
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 20),
-
-                  Text(
-                    "Login",
-                    style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
-                  ).tr(),
-
-                  // Building
-
-                  SizedBox(
-                    height: 30,
-                  ),
-                  FormContainerWidget(
-                    controller: _emailController,
-                    hintText: "Email".tr(),
-                    isPasswordField: false,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  FormContainerWidget(
-                    controller: _passwordController,
-                    hintText: "Password".tr(),
-                    isPasswordField: true,
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      _signIn();
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: Colors.orange,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: _isSigning
-                            ? CircularProgressIndicator(
-                                color: Colors.white,
-                              )
-                            : Text(
-                                "Login",
-                                style: TextStyle(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.transparent,
+          ),
+          body: PopScope(
+            canPop: false,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/bundle-ardilla1.png', 
+                      width:
+                          150, 
+                      height: 150,
+                    ),
+                    Text(
+                      "Nombre",
+                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 20),
+      
+                    Text(
+                      "Login",
+                      style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
+                    ).tr(),
+      
+      
+                    SizedBox(
+                      height: 30,
+                    ),
+                    FormContainerWidget(
+                      controller: _emailController,
+                      hintText: "Email".tr(),
+                      isPasswordField: false,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    FormContainerWidget(
+                      controller: _passwordController,
+                      hintText: "Password".tr(),
+                      isPasswordField: true,
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _signIn();
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        height: 45,
+                        decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: _isSigning
+                              ? CircularProgressIndicator(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ).tr(),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      _signInWithGoogle();
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: _isSigningGoogle
-                            ? CircularProgressIndicator(
-                                color: Colors.white,
-                              )
-                            : Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    FontAwesomeIcons.google,
+                                )
+                              : Text(
+                                  "Login",
+                                  style: TextStyle(
                                     color: Colors.white,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  SizedBox(
-                                    width: 12,
-                                  ),
-                                  Text(
-                                    "Sign in with Google",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ).tr(),
-                                ],
-                              ),
+                                ).tr(),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Don't have an account?").tr(),
-                      SizedBox(
-                        width: 5,
+                    SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _signInWithGoogle();
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        height: 45,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: _isSigningGoogle
+                              ? CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      FontAwesomeIcons.google,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 12,
+                                    ),
+                                    Text(
+                                      "Sign in with Google",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ).tr(),
+                                  ],
+                                ),
+                        ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignUpPage()),
-                            (route) => false,
-                          );
-                        },
-                        child: Text(
-                          "Sign Up",
-                          style: TextStyle(
-                            color: Colors.orange,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ).tr(),
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Don't have an account?").tr(),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SignUpPage()),
+                              (route) => false,
+                            );
+                          },
+                          child: Text(
+                            "Sign Up",
+                            style: TextStyle(
+                              color: Colors.orange,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ).tr(),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 }
