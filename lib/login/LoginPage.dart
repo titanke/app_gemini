@@ -108,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 150,
                     ),
                     Text(
-                      "Nutty Notes",
+                      "WalNotes",
                       style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,color: Colors.orangeAccent),
                     ),
                     SizedBox(height: 20),

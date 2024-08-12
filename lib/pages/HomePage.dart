@@ -110,7 +110,7 @@ class _HomepageState extends State<Homepage> {
                               if (!snapshot.hasData || snapshot.data!.isEmpty) {
                                 return Center(
                                   child: Text(
-                                    "Don't have a topic?, add one",
+                                    "Don't have a topic?, add one".tr(),
                                     textAlign: TextAlign.center,
                                   ).tr(),
                                 );
@@ -121,8 +121,7 @@ class _HomepageState extends State<Homepage> {
 
                               //
                               return Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start, // Add this line
+                                crossAxisAlignment:CrossAxisAlignment.start, // Add this line
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.all(15),

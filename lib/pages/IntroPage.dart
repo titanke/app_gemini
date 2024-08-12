@@ -1,8 +1,10 @@
+import 'package:app_gemini/main.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:app_gemini/widgets/AddTopic.dart';
+import 'package:app_gemini/pages/HomePage.dart';
 
 
 class IntroPage extends StatefulWidget {
@@ -17,7 +19,7 @@ class OnBoardingPageState extends State<IntroPage> {
 
   void _onIntroEnd(context) {
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => AddTopic()),
+      MaterialPageRoute(builder: (_) => Menu()),
     );
   }
 
