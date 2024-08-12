@@ -130,7 +130,7 @@ class _HomepageState extends State<Homepage> {
                                   Padding(
                                     padding: EdgeInsets.all(15),
                                     child: const Text(
-                                      "Last Topics",
+                                      "Recent Topics",
                                       textAlign: TextAlign.left,
                                     ).tr(),
                                   ),
@@ -216,41 +216,73 @@ class _HomepageState extends State<Homepage> {
 
                                   // ##
                                   // Grid builder
-                                  Container(
-                                    margin: const EdgeInsets.all(2),
-                                    child: (topics.isNotEmpty && favoriteTopics.isNotEmpty)
-                                      ? GridView.builder(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        mainAxisExtent: 100,
-                                        mainAxisSpacing: 5,
-                                        crossAxisSpacing: .0,
-                                      ),
-                                      itemCount: favoriteTopics.length,
-                                      itemBuilder: (context, index) {
-                                        final topicId = favoriteTopics[index];
-                                        final topic = topics.firstWhere((t) => t.uid == topicId, orElse: () => Topic(uid: '', name: 'Unknown'));
+                                  Center(
+                                    child: Container(
+                                        margin: const EdgeInsets.all(
+                                            16.0), // Margen de 16 dp alrededor del GridView
+                                        child: favoriteTopics.isNotEmpty
+                                            ? GridView.builder(
+                                                shrinkWrap: true,
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                gridDelegate:
+                                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                                        crossAxisCount: 2,
+                                                        childAspectRatio:
+                                                            3 / 2),
+                                                itemCount:
+                                                    favoriteTopics.length,
+                                                itemBuilder: (context, index) {
+                                                  final topicId =
+                                                      favoriteTopics[index];
+                                                  final topic =
+                                                      topics.firstWhere((t) =>
+                                                          t.uid == topicId);
 
-                                        return CustomCard(
-                                          title: topic.name,
-                                          borderColor: Colors.transparent,
-                                          bgcolor: Color(0xFFFFCC80),
-                                          onTap: () =>
-                                              _navigateToDetailScreen(topic),
-                                        );
-                                      },
-                                    )    : Container(
-                                  width: screenWidth,
-                                  height: screenHeight / 2,
-                                  child: Center(
-                                    child: Text('Add your favorite topic here').tr(),
-                                  ),
-                                ),       
-                            )
+                                                  return SizedBox(
+                                                    height:
+                                                        100, // Set the specific height here
+                                                    child: CustomCard(
+                                                      title: topic.name,
+                                                      borderColor:
+                                                          Colors.transparent,
+                                                      bgcolor:
+                                                          Color(0xFFFFCC80),
+                                                      onTap: () =>
+                                                          _navigateToDetailScreen(
+                                                              topic),
+                                                    ),
+                                                  );
+                                                },
+                                              )
+                                            : Container(
+                                                margin: const EdgeInsets.only(
+                                                    top:
+                                                        80.0), // Margen de 90 dp en la parte superior
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Image.asset(
+                                                      'assets/bundle-ardilla2.png',
+                                                      width: 100,
+                                                      height: 100,
+                                                    ),
+                                                    const SizedBox(
+                                                        height:
+                                                            16.0), // Espacio entre la imagen y el texto
+                                                    const Text(
+                                                      'There are no favorite topics',
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          color: Colors.grey),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )),
+                                  )
                                 ],
                               );
                             },

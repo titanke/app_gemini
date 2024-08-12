@@ -124,7 +124,7 @@ class _TopicspageState extends State<Topicspage> {
                   return InkWell(
                     onTap: () => _navigateToDetailScreen(topic),
                     child: Container(
-                      color: isFavorite ? const Color.fromARGB(255, 255, 228, 196) : Colors.white, 
+                      color: isFavorite ? Color(0xFFFFA500) : const Color.fromARGB(0, 255, 255, 255), 
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Row(
